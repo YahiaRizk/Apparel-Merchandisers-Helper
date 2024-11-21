@@ -1,0 +1,7 @@
+Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
+
+Style view tab
+- Make scrollable frame (Horizontal, Vertical).
+- Make table Headers. Done
+- Change the value of color column until to handel its cells. Done
+- Make update_table function that update the table values .
