@@ -3,9 +3,9 @@ from lib.category_panels import *
 # from lib.panels import *
 from settings import *
 from lib.database_funcs import *
-from CTkTable import *
+from lib.table_panel import *
 import json
-from tkinter.ttk import Treeview, Style
+
 
 
 class Main_frame(CTkFrame):
@@ -202,68 +202,17 @@ class Create_style_frame(Main_frame):
 
         return data
 
-
 class View_styles_frame(Main_frame):
     def __init__(self, parent):
         super().__init__(parent=parent)
 
         #  Widget
-        self.frame = CTkFrame(self)
-        self.frame.pack(expand=True, fill="both", padx=10, pady=10)
-        self.create_table()
-        # self.table = Treeview(self.frame, columns=TABLE_HEADER, show= 'headings', height=5)
-        # self.table.pack(expand= True, fill= 'both')
+        self.table_panel = Table_panel(self)
 
-        # style = Style()
-
-        # # print(style.layout('Treeview.Heading'))
-        # new_style= [('Treeheading.cell', {'sticky': 'nswe'}), ('Treeheading.border', {'sticky': 'nswe', 'children': [('Treeheading.padding', {'sticky': 'n', 'children': [('Treeheading.image', {'side': 'right', 'sticky': ''}), ('Treeheading.text', {'sticky': 'we'})]})]})]
-        # style.layout('Treeview.Heading', new_style)
-        # style.theme_use("clam")
-        # style.configure("Treeview.Heading", font=('Helvetica', 8, 'bold'), padding=(10, 10), background="lightblue")
-
-        # self.table.insert('', index= 'end', values=('d', 'f','d','d','s'))
-        # self.table.insert('', index= 'end', values=('d', 'f','d','d','s'))
-        # self.table.insert('', index= 'end', values=('d', 'f','d','d','s'))
-        # self.table.insert('', index= 'end', values=('d', 'f','d','d','s'))
-        # self.table.insert('', index= 'end', values=('d', 'f','d','d','s'))
-
-        # style.configure('Treeview', rowheight=40, font=('Helvetica', 12, 'bold'))
-
-        # for name in TABLE_HEADER:
-        #     self.table.heading(name, text= name)
-
-        # for name in TABLE_HEADER:
-        #     self.table.column(name, width= 50)
-
-
-    def create_table(self):
-        # get the data from database
-        data = DATABASE_GET_DATA()
-        # add the header row to the data
-        data.insert(0, TABLE_HEADER)
-        table = CTkTable(
-            self.frame,
-            row=len(data),
-            column=15,
-            colors= [MAIN_CLR, SECONDARY_CLR],
-            text_color= FOURTH_CLR,
-            header_color=MAIN_CLR,
-            values=data,
-            corner_radius=6,
-            width= 1,
-            height=40,
-            wraplength= 60
-        )
-
-        # edit the header row
-        table.edit_row(0, font=(FONT_FAMILY, 18, 'bold'))
-
-        table.pack(fill= 'x', padx=10, pady=10)
 
 
 class Pricing_frame(Main_frame):
-    def __init__(self, parent, data_vars):
+    def __init__(self, parent):
         super().__init__(parent=parent)
 
         # Widget
@@ -274,9 +223,8 @@ class Pricing_frame(Main_frame):
             font=(FONT_FAMILY, TITLE_FONT_SIZE),
         ).pack(expand=True)
 
-
 class Dummy_info_frame(Main_frame):
-    def __init__(self, parent, data_vars):
+    def __init__(self, parent):
         super().__init__(parent=parent)
 
         # Widget

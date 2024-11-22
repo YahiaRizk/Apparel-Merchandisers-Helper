@@ -7,7 +7,6 @@ import ctypes  # to get the scale factor
 
 class App(CTk):
     def __init__(self):
-
         # Setup
         super().__init__(fg_color=BLACK_CLR)
         self.center_window()
@@ -50,7 +49,6 @@ class App(CTk):
         self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{left_point}+{top_point}")
 
     def init_parameters(self):
-
         self.main_frames_funcs= {
             'create style': self.create_style,
             'view styles': self.view_styles,
@@ -68,11 +66,11 @@ class App(CTk):
 
     def pricing(self):
         self.main_panel.pack_forget()
-        self.main_panel = Pricing_frame(self, self.create_style_vars)
+        self.main_panel = Pricing_frame(self)
 
     def dummy(self):
         self.main_panel.pack_forget()
-        self.main_panel = Dummy_info_frame(self, self.create_style_vars)
+        self.main_panel = Dummy_info_frame(self)
 
 
 if __name__ == "__main__":

@@ -49,7 +49,7 @@ def DATABASE_GET_DATA():
 
     for index, record in enumerate(data):
         data[index] = list(data[index])
-        data[index][-1] = 'color'
+        data[index].pop()
         
 
     db.commit()
