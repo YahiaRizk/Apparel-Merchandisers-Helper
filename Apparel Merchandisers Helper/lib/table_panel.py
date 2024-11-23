@@ -43,16 +43,16 @@ class Table_panel(CTkScrollableFrame):
             text_color=FOURTH_CLR,
             header_color=MAIN_CLR,
             hover=True,
+            hover_color= THIRD_CLR,
             corner_radius=6,
             width=1,
             height=60,
             # wraplength= 100,
-            command=lambda event: print(event),
+            command= self.handle_cell_click,
         )
 
         # edit the header row
         self.table.edit_row(0, font=(FONT_FAMILY, 18, "bold"))
-
 
         # pack the table in the scrollable frame
         self.table.pack(fill="x")
@@ -60,19 +60,22 @@ class Table_panel(CTkScrollableFrame):
         self.handle_scroll()
 
     def handle_scroll(self):
+        # update widgets from the root app to get real height
         self.master.master.update_idletasks()
 
-        # print(self.table.winfo_height())
-        # print(self._parent_canvas.winfo_height())
-
+        # if the table height is less than scroll frame height hide the scrollbar
         if self.table.winfo_height() <= self._parent_canvas.winfo_height():
             self._scrollbar.grid_forget()
             self.table.pack_configure(padx=(0, 7))
-
-        if self.table.winfo_height() > self._parent_canvas.winfo_height():
-            self._scrollbar.grid()
+        else: #else show it
+            self._scrollbar.grid(column=1)
             self.table.pack_configure(padx=0)
-            print('greater')
 
-        
+    def handle_cell_click(self, event):
+        # unselect all rows
+        for index in range(self.table.rows):
+            self.table.deselect_row(index)
+
+        # select clicked row
+        self.table.select_row(event['row'])
 

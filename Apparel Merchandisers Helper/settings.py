@@ -44,19 +44,3 @@ TABLE_HEADER = (
     'PCS\nFabric',
     'PCS\nGSM',
 )
-#     "Style",
-#     "PO",
-#     "PO QTY",
-#     "Brand",
-#     "Type",
-#     "PC1 Type",
-#     "PC2 Type",
-#     "Date RCVD",
-#     "Size Scale",
-#     'Ratio',
-#     'PC1 Fabric',
-#     'PC2 Fabric',
-#     'PC1 GSM',
-#     'PC2 GSM',
-# )
-

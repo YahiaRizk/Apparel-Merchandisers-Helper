@@ -207,9 +207,8 @@ class View_styles_frame(Main_frame):
         super().__init__(parent=parent)
 
         #  Widget
+        CTkButton(self).pack(side= 'bottom')
         self.table_panel = Table_panel(self)
-
-
 
 class Pricing_frame(Main_frame):
     def __init__(self, parent):
