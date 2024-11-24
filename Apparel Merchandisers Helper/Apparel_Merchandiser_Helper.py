@@ -45,15 +45,15 @@ class App(CTk):
         window_width = WINDOW_WIDTH * scale_factor
         window_height = WINDOW_HEIGHT * scale_factor
         left_point = int((screen_width - window_width) / 2)
-        top_point = int((screen_height - window_height) / 2)
+        top_point = int((screen_height - window_height) / 2) - 100
         self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{left_point}+{top_point}")
 
     def init_parameters(self):
-        self.main_frames_funcs= {
-            'create style': self.create_style,
-            'view styles': self.view_styles,
-            'pricing': self.pricing,
-            'dummy': self.dummy,
+        self.main_frames_funcs = {
+            "create style": self.create_style,
+            "view styles": self.view_styles,
+            "pricing": self.pricing,
+            "dummy": self.dummy,
         }
 
     def create_style(self):

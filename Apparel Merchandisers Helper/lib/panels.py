@@ -30,7 +30,7 @@ class Panel(CTkFrame):
 
 
 class Entry_panel(Panel):
-    def __init__(self, parent, label_str, data_var, entry_width=200, int_bool= False):
+    def __init__(self, parent, label_str, data_var, entry_width=200, int_bool=False):
         super().__init__(parent=parent, label_str=label_str)
         self.data_var = data_var
 
@@ -48,8 +48,8 @@ class Entry_panel(Panel):
 
         # bind a function to entry if int_bool is true
         if int_bool:
-            self.old_value = ''
-            self.entry.bind('<KeyRelease>', self.check_int)
+            self.old_value = ""
+            self.entry.bind("<KeyRelease>", self.check_int)
 
     def check_int(self, event):
         if self.entry.get().isdigit():
@@ -154,7 +154,7 @@ class Submit_panel(CTkFrame):
             font=(FONT_FAMILY, FONT_SIZE, "bold"),
             width=100,
             height=35,
-            command= submit_func,
+            command=submit_func,
         ).grid(column=0, row=0)
         CTkButton(
             self,
@@ -165,5 +165,39 @@ class Submit_panel(CTkFrame):
             font=(FONT_FAMILY, FONT_SIZE, "bold"),
             width=100,
             height=35,
-            command= reset_func,
+            command=reset_func,
         ).grid(column=1, row=0)
+
+
+class Buttons_panel(CTkFrame):  # for style view tab
+    def __init__(self, parent):
+        super().__init__(
+            master=parent,
+            fg_color="transparent",
+            # height= 100,
+            border_width=1,
+            border_color=FOURTH_CLR,
+        )
+        self.pack(
+            side="bottom", fill="x", padx=10
+        )  # side bottom to pack it before the table for scroll fix
+
+        # Widgets
+        buttons_container = CTkFrame(self, fg_color="transparent")
+        buttons_container.pack(pady= 20)
+
+        self.delete_button = Simple_button(buttons_container, text="Delete Selected")
+        self.archive_button = Simple_button(buttons_container, text="Archive Selected")
+
+
+class Simple_button(CTkButton):
+    def __init__(self, parent, text):
+        super().__init__(
+            master=parent,
+            text=text,
+            font=(FONT_FAMILY, MENU_BUTTONS_FONT_SIZE),
+            text_color=FOURTH_CLR,
+            fg_color=SECONDARY_CLR,
+            hover_color=THIRD_CLR,
+        )
+        self.pack(side= 'left', padx= 10, ipadx= 10, ipady= 5)

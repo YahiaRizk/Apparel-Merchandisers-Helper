@@ -5,7 +5,7 @@ Style create tab
 - Remove additional color widgets when reset.
 
 Style view tab
-- Make scrollable frame scrollbar hide when the table height is less than the frame height.
-- Select row when click cell.
+- Fix scrollbar scroll speed.
+
 
 

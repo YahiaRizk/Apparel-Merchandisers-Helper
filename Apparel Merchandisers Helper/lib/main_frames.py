@@ -1,6 +1,6 @@
 # from customtkinter import CTkFrame
 from lib.category_panels import *
-# from lib.panels import *
+# from lib.panels import
 from settings import *
 from lib.database_funcs import *
 from lib.table_panel import *
@@ -207,7 +207,7 @@ class View_styles_frame(Main_frame):
         super().__init__(parent=parent)
 
         #  Widget
-        CTkButton(self).pack(side= 'bottom')
+        self.buttons_panel = Buttons_panel(self)
         self.table_panel = Table_panel(self)
 
 class Pricing_frame(Main_frame):
