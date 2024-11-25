@@ -170,7 +170,7 @@ class Submit_panel(CTkFrame):
 
 
 class Buttons_panel(CTkFrame):  # for style view tab
-    def __init__(self, parent):
+    def __init__(self, parent, delete_func, archive_func):
         super().__init__(
             master=parent,
             fg_color="transparent",
@@ -186,15 +186,16 @@ class Buttons_panel(CTkFrame):  # for style view tab
         buttons_container = CTkFrame(self, fg_color="transparent")
         buttons_container.pack(pady= 20)
 
-        self.delete_button = Simple_button(buttons_container, text="Delete Selected")
-        self.archive_button = Simple_button(buttons_container, text="Archive Selected")
+        self.delete_button = Simple_button(buttons_container, text="Delete Selected", func= delete_func)
+        self.archive_button = Simple_button(buttons_container, text="Archive Selected", func= archive_func)
 
 
 class Simple_button(CTkButton):
-    def __init__(self, parent, text):
+    def __init__(self, parent, text, func):
         super().__init__(
             master=parent,
             text=text,
+            command= func,
             font=(FONT_FAMILY, MENU_BUTTONS_FONT_SIZE),
             text_color=FOURTH_CLR,
             fg_color=SECONDARY_CLR,

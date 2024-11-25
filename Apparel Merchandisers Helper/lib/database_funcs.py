@@ -56,3 +56,15 @@ def DATABASE_GET_DATA():
     db.close()
 
     return data
+
+def DB_DELETE_STYLE(style):
+    # Create/connect to data base
+    db = sqlite3.connect('DB/styles.db')
+    # Create a cursor
+    cr = db.cursor()
+
+    cr.execute("DELETE FROM styles WHERE style = ?", (style,))
+
+    db.commit()
+    db.close()
+

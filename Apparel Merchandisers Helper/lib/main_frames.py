@@ -207,8 +207,22 @@ class View_styles_frame(Main_frame):
         super().__init__(parent=parent)
 
         #  Widget
-        self.buttons_panel = Buttons_panel(self)
+        self.buttons_panel = Buttons_panel(self, self.delete_style, self.archive_style)
         self.table_panel = Table_panel(self)
+
+    def delete_style(self):
+        # The following appraoch when delete_row method give error
+        # if row is selected
+        if self.table_panel.table.get_selected_row()['row_index'] != None:
+            # get the style name for selected row
+            style= self.table_panel.table.get_selected_row()['values'][0]
+            # delete row from database
+            DB_DELETE_STYLE(style.strip())
+            # recreate the table
+            self.table_panel.create_table()
+
+    def archive_style(self):
+        print('Archive')
 
 class Pricing_frame(Main_frame):
     def __init__(self, parent):

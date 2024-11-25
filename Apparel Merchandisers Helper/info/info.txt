@@ -4,8 +4,12 @@ Style create tab
 - Fix piece name in color entry
 - Remove additional color widgets when reset.
 
-Style view tab
+Styles view tab
 - Fix scrollbar scroll speed.
+- Confirmation message before deleting a style.
+- Add view style button.
+- Add bind for double click to view style.
+- Create view style top level
 
 
 

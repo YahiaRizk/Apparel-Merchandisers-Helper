@@ -25,6 +25,10 @@ class Table_panel(CTkFrame):
         self.create_table()
 
     def create_table(self):
+        # Check if the table is already created and pack_forget it
+        if hasattr(self, 'table'):
+            self.table.pack_forget()
+
         # get the data from database
         data = DATABASE_GET_DATA()
 
@@ -50,8 +54,8 @@ class Table_panel(CTkFrame):
             colors=[MAIN_CLR, SECONDARY_CLR],
             text_color=FOURTH_CLR,
             header_color=MAIN_CLR,
-            # hover= False,
-            # hover_color= THIRD_CLR,
+            hover= True,
+            hover_color= THIRD_CLR,
             corner_radius=6,
             width=1,
             height=60,
@@ -87,4 +91,4 @@ class Table_panel(CTkFrame):
         # select clicked row
         self.table.select_row(event["row"])
         # Change selected row color
-        self.table.edit_row(event['row'], fg_color= THIRD_CLR)
+        # self.table.edit_row(event['row'], fg_color= THIRD_CLR)
