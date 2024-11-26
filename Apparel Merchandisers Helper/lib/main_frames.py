@@ -1,11 +1,10 @@
-# from customtkinter import CTkFrame
+from CTkMessagebox import CTkMessagebox
 from lib.category_panels import *
-# from lib.panels import
+from lib.style_top_level import View_style_top_level
 from settings import *
 from lib.database_funcs import *
 from lib.table_panel import *
 import json
-
 
 
 class Main_frame(CTkFrame):
@@ -202,27 +201,60 @@ class Create_style_frame(Main_frame):
 
         return data
 
+
 class View_styles_frame(Main_frame):
     def __init__(self, parent):
         super().__init__(parent=parent)
 
         #  Widget
-        self.buttons_panel = Buttons_panel(self, self.delete_style, self.archive_style)
-        self.table_panel = Table_panel(self)
+        self.buttons_panel = Buttons_panel(self, self.view_style, self.delete_style, self.archive_style)
+        self.table_panel = Table_panel(self, self.view_style)
+
+    def view_style(self):
+        if self.table_panel.table.get_selected_row()["row_index"] != None:
+            # get the style name for selected row
+            style = self.table_panel.table.get_selected_row()["values"][0]
+
+            # create the top level to view style details
+            self.view_style_top_level= View_style_top_level(style)
 
     def delete_style(self):
         # The following appraoch when delete_row method give error
         # if row is selected
-        if self.table_panel.table.get_selected_row()['row_index'] != None:
+        if self.table_panel.table.get_selected_row()["row_index"] != None:
             # get the style name for selected row
-            style= self.table_panel.table.get_selected_row()['values'][0]
-            # delete row from database
-            DB_DELETE_STYLE(style.strip())
-            # recreate the table
-            self.table_panel.create_table()
+            style = self.table_panel.table.get_selected_row()["values"][0]
+
+            # give confirm message before delete
+            msg = CTkMessagebox(
+                title="Warning!",
+                message=f"Style {style} will be deleted permanently,\nAre you sure ?",
+                wraplength= 400,
+                option_1= 'Yes',
+                option_2= 'No',
+                icon= 'warning',
+                text_color= FOURTH_CLR,
+                fg_color= MAIN_CLR,
+                bg_color= BLACK_CLR,
+                button_color= SECONDARY_CLR,
+                button_hover_color= THIRD_CLR,
+                button_text_color= FOURTH_CLR,
+                title_color= FOURTH_CLR,
+                cancel_button_color= FOURTH_CLR,
+                justify= 'center',
+            )
+
+            # Check if the user approved delete
+            if msg.get() == 'Yes':
+                # delete row from database
+                DB_DELETE_STYLE(style.strip())
+
+                # recreate the table
+                self.table_panel.create_table()
 
     def archive_style(self):
-        print('Archive')
+        print("Archive")
+
 
 class Pricing_frame(Main_frame):
     def __init__(self, parent):
@@ -235,6 +267,7 @@ class Pricing_frame(Main_frame):
             text_color=FOURTH_CLR,
             font=(FONT_FAMILY, TITLE_FONT_SIZE),
         ).pack(expand=True)
+
 
 class Dummy_info_frame(Main_frame):
     def __init__(self, parent):

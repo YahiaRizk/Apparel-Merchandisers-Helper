@@ -5,7 +5,7 @@ from lib.database_funcs import *
 
 
 class Table_panel(CTkFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, view_style_func):
         super().__init__(
             master=parent,
             fg_color="transparent",
@@ -23,6 +23,9 @@ class Table_panel(CTkFrame):
         )
         self.scrollable_frame.pack(expand= True, fill= 'both', padx= 2, pady= 2)
         self.create_table()
+
+        # events
+        self.table.bind('<Double-Button-1>', lambda event: view_style_func())
 
     def create_table(self):
         # Check if the table is already created and pack_forget it
