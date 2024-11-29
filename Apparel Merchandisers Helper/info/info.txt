@@ -1,14 +1,13 @@
 Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
 Style create tab
-- Fix piece name in color entry
-- Remove additional color widgets when reset.
+- Remove second piece color when set grament type to piece.
+- Fix piece name in color entry when add color. Done
+- Remove additional colors widgets when reset. try to recreate the create style widget Done
+
 
 Styles view tab
-- Fix scrollbar scroll speed.
-- Add view style button.
-- Add bind for double click to view style.
-- Create view style top level.
+
 
 
 

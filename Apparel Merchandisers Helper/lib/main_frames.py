@@ -74,27 +74,31 @@ class Create_style_frame(Main_frame):
         }
 
     def reset(self):
-        self.data_vars["style"].set("")
-        self.data_vars["po"].set("")
-        self.data_vars["po_qty"].set("")
-        self.data_vars["brand"].set(value=BRAND_OPT[0])
-        self.data_vars["type"].set(value=TYPE_OPT[0])
-        self.data_vars["piece1_type"].set(value=PIECE_OPT[0])
-        self.data_vars["piece2_type"].set(value=PIECE_OPT[0])
-        self.data_vars["date_rcvd"].set("")
-        self.data_vars["size_scale"].set(value=SIZE_SCALES_OPT[3])
-        self.data_vars["ratio"].set(value=RATIO_OPT[0])
-        self.data_vars["piece1_fabric"].set("")
-        self.data_vars["piece2_fabric"].set("")
-        self.data_vars["piece1_gsm"].set("")
-        self.data_vars["piece2_gsm"].set("")
+        self.master.create_style()
+        # self.data_vars["style"].set("")
+        # self.data_vars["po"].set("")
+        # self.data_vars["po_qty"].set("")
+        # self.data_vars["brand"].set(value=BRAND_OPT[0])
+        # self.data_vars["type"].set(value=TYPE_OPT[0])
+        # self.data_vars["piece1_type"].set(value=PIECE_OPT[0])
+        # self.data_vars["piece2_type"].set(value=PIECE_OPT[0])
+        # self.data_vars["date_rcvd"].set("")
+        # self.data_vars["size_scale"].set(value=SIZE_SCALES_OPT[3])
+        # self.data_vars["ratio"].set(value=RATIO_OPT[0])
+        # self.data_vars["piece1_fabric"].set("")
+        # self.data_vars["piece2_fabric"].set("")
+        # self.data_vars["piece1_gsm"].set("")
+        # self.data_vars["piece2_gsm"].set("")
 
-        # loop on colors dictionary to clear its values
-        for dict in self.data_vars["colors"]:
-            for value in dict.values():
-                value.set("")
+        # # loop on colors dictionary to clear its values
+        # for dict in self.data_vars["colors"]:
+        #     for value in dict.values():
+        #         value.set("")
 
-        self.data_vars["colors"].clear()
+        # self.data_vars["colors"].clear()
+
+        # for color in Fabric_color_panel.color1_list:
+        #     color.unpack()
 
     def handle_type_var(self, *arg):
         if self.data_vars["type"].get() == TYPE_OPT[2]:  # if garment type is piece
@@ -119,13 +123,17 @@ class Create_style_frame(Main_frame):
         piece1_type = self.data_vars["piece1_type"].get()
         self.fabric_color_panel.fabric1.change_label(f"{piece1_type} Fabric :")
         self.fabric_color_panel.gsm1.change_label(f"{piece1_type} GSM :")
-        self.fabric_color_panel.color1.change_label(f"{piece1_type} Color :")
+        # -loop on all color panels and change its label
+        for color_panel in Fabric_color_panel.color1_list:
+            color_panel.change_label(f"{piece1_type} Color :")
 
         # Change labels for piece 2
         piece2_type = self.data_vars["piece2_type"].get()
         self.fabric_color_panel.fabric2.change_label(f"{piece2_type}2 Fabric :")
         self.fabric_color_panel.gsm2.change_label(f"{piece2_type}2 GSM :")
-        self.fabric_color_panel.color2.change_label(f"{piece2_type}2 Color :")
+        # -loop on all color panels and change its label
+        for color_panel in Fabric_color_panel.color2_list:
+            color_panel.change_label(f"{piece2_type} Color :")
 
     def change_ratio(self, *args):
         if self.data_vars["size_scale"].get() in ("8-20", "S-XL"):

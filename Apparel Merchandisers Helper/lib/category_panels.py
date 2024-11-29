@@ -83,9 +83,15 @@ class Size_panel(Category_panel):
 
 
 class Fabric_color_panel(Category_panel):
+    # -list containes all created color related to class itself
+    color1_list = []
+    color2_list = []
+
     def __init__(self, parent, label_text, data_vars, scrollable=False):
         super().__init__(parent=parent, label_text=label_text, scrollable=scrollable)
         self.pack_configure(padx=0)
+
+        # data
         self.data_vars = data_vars
 
         # Widgets
@@ -127,16 +133,20 @@ class Fabric_color_panel(Category_panel):
         self.color_qty = Entry_panel(self.data_frame, "Color QTY :", color_vars["color_qty"], int_bool= True)
         self.color1 = Entry_panel(
             self.data_frame,
-            "T-Shirt Color :",
+            f'{self.data_vars['piece1_type'].get()} Color :',
             color_vars["piece1_color"],
             entry_width=100,
         )
         self.color2 = Entry_panel(
             self.data_frame,
-            "T-Shirt2 Color :",
+            f'{self.data_vars['piece2_type'].get()}2 Color :',
             color_vars["piece2_color"],
             entry_width=100,
         )
+
+        # add the created colors to the lists ability to acces them and modify its lables
+        Fabric_color_panel.color1_list.append(self.color1)
+        Fabric_color_panel.color2_list.append(self.color2)
 
         # Append the colors vars to the create_style_vars['colors']
         self.data_vars["colors"].append(color_vars)
