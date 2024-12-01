@@ -108,7 +108,9 @@ class Create_style_frame(Main_frame):
             # pack forget second fabric type, gsm and color
             self.fabric_color_panel.fabric2.unpack()
             self.fabric_color_panel.gsm2.unpack()
-            # self.fabric_color_panel.color2.unpack()
+            # loop on all colors for second pieces to remove them
+            for color_entry in Fabric_color_panel.color2_list:
+                color_entry.unpack()
         else:
             # repack second combobox for piece 2
             self.main_info_panel.piece_type.repack_sec_combobox()
@@ -116,7 +118,9 @@ class Create_style_frame(Main_frame):
             # repack second fabric type and color
             self.fabric_color_panel.fabric2.repack()
             self.fabric_color_panel.gsm2.repack()
-            # self.fabric_color_panel.color2.repack()
+            # loop on colors to repack the second piece
+            for color_entry in Fabric_color_panel.color2_list:
+                color_entry.repack()
 
     def handle_piece_type_var(self, *args):
         # Change labels for piece 1
@@ -124,16 +128,16 @@ class Create_style_frame(Main_frame):
         self.fabric_color_panel.fabric1.change_label(f"{piece1_type} Fabric :")
         self.fabric_color_panel.gsm1.change_label(f"{piece1_type} GSM :")
         # -loop on all color panels and change its label
-        for color_panel in Fabric_color_panel.color1_list:
-            color_panel.change_label(f"{piece1_type} Color :")
+        for color_entry in Fabric_color_panel.color1_list:
+            color_entry.change_label(f"{piece1_type} Color :")
 
         # Change labels for piece 2
         piece2_type = self.data_vars["piece2_type"].get()
         self.fabric_color_panel.fabric2.change_label(f"{piece2_type}2 Fabric :")
         self.fabric_color_panel.gsm2.change_label(f"{piece2_type}2 GSM :")
         # -loop on all color panels and change its label
-        for color_panel in Fabric_color_panel.color2_list:
-            color_panel.change_label(f"{piece2_type} Color :")
+        for color_entry in Fabric_color_panel.color2_list:
+            color_entry.change_label(f"{piece2_type} Color :")
 
     def change_ratio(self, *args):
         if self.data_vars["size_scale"].get() in ("8-20", "S-XL"):

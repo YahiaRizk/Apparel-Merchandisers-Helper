@@ -1,13 +1,14 @@
 Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
 Style create tab
-- Remove second piece color when set grament type to piece.
-- Fix piece name in color entry when add color. Done
-- Remove additional colors widgets when reset. try to recreate the create style widget Done
+- Add functionality for add size range in the same style.
+
 
 
 Styles view tab
-
+- View style Top level
+-- Find what details want to show
+-- detemine layout
 
 
 
