@@ -18,6 +18,9 @@ class App(CTk):
         # Initialize parameters
         self.init_parameters()
 
+        # create the database if not exists
+        DB_CREATE()
+
         # Grid layout
         self.columnconfigure(0, weight=2, uniform="a")
         self.columnconfigure(1, weight=10, uniform="a")

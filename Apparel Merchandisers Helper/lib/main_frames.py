@@ -25,7 +25,7 @@ class Create_style_frame(Main_frame):
         self.data_vars["piece2_type"].trace_add("write", self.handle_piece_type_var)
 
         # Database
-        CREATE_DATABASE(self.get_data())
+        # CREATE_DATABASE(self.get_data())
 
         # grid layot
         self.columnconfigure((0, 1), weight=4, uniform="a")
