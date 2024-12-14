@@ -5,7 +5,7 @@ from settings import *
 class Panel(CTkFrame):
     def __init__(self, parent, label_str):
         super().__init__(master=parent, fg_color="transparent")
-        self.pack(fill="x", padx=5, pady=7)
+        self.pack(fill="x", padx=5, pady=10)
 
         # widgets
         self.label1 = CTkLabel(
@@ -52,10 +52,13 @@ class Entry_panel(Panel):
             self.entry.bind("<KeyRelease>", self.check_int)
 
     def check_int(self, event):
-        if self.entry.get().isdigit():
-            self.old_value = self.entry.get()
+        if self.entry.get() == '':
+            pass
         else:
-            self.data_var.set(self.old_value)
+            if self.entry.get().isdigit():
+                self.old_value = self.entry.get()
+            else:
+                self.data_var.set(self.old_value)
 
     def unpack(self):
         super().unpack()
@@ -156,6 +159,7 @@ class Submit_panel(CTkFrame):
             height=35,
             command=submit_func,
         ).grid(column=0, row=0)
+
         CTkButton(
             self,
             text="Reset",

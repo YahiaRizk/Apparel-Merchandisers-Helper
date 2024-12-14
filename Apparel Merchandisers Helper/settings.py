@@ -18,6 +18,7 @@ WINDOW_HEIGHT = 650
 
 # variables
 BRAND_OPT = ["NBA", "NFL"]
+BRAND_TEAM_OPT = ["Brand", "Team"]
 TYPE_OPT = ["Set", "2PK", "Piece"]
 PIECE_OPT = ["T-Shirt", "Hoodie", "Short", "Pant"]
 SIZE_SCALES_OPT = ["12M-24M", "2T-4T", "4-7", "8-16", "8-20", "S-XL", "2XL-4XL"]
