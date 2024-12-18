@@ -33,19 +33,7 @@ class Table_panel(CTkFrame):
             self.table.pack_forget()
 
         # get the data from database
-        data = DATABASE_GET_DATA()
-
-        # Manipulate data to get 2 col in 1 col
-        for index, _ in enumerate(data):
-            # merge type in one entry
-            data[index][5] = f"{data[index][5]}\n\n{data[index][6]}"
-            data[index].pop(6)
-            # merge fabric type in one entry
-            data[index][9] = f"{data[index][9]}\n\n{data[index][10]}"
-            data[index].pop(10)
-            # merge fabric type in one entry
-            data[index][10] = f"{data[index][10]}\n\n{data[index][11]}"
-            data[index].pop(11)
+        data = DB_GET_TABLE_DATA()
 
         # add the header row to the data
         data.insert(0, TABLE_HEADER)

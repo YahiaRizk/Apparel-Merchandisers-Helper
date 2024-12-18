@@ -34,14 +34,14 @@ FABRICS_OPT = [
 GSM_OPT = ["155", "160", "220", "230"]
 TABLE_HEADER = (
     "Style",
-    "PO",
-    "PO QTY",
     "Brand",
-    "Type",
+    "Brand/Team",
+    "Garment\nType",
     "PCS\nType",
-    "Date\nRCVD",
+    "POs",
     "Size\nScale",
     'Ratio',
-    'PCS\nFabric',
-    'PCS\nGSM',
+    "POs QTY",
+    "Total QTY",
+    "Date RCVD",
 )

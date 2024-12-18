@@ -66,7 +66,11 @@ def DB_CREATE():
             )"""
     )
 
-    # cr.execute("INSERT INTO style_group (group_name, garment_type, total_qty, brand) VALUES ('', 'set', 1500, '')")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (7, 44315, '2T-4T', 1000)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (7, 44316, '4-7', 1500)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (7, 44317, '8-16', 2000)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (8, 54317, '8-16', 3000)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (9, 54318, '8-16', 4000)")
 
     db.commit()
     db.close()
@@ -118,18 +122,26 @@ def DB_SAVE_MAIN_INFO(data):
     db.close()
 
 
-def DATABASE_GET_DATA():
+def DB_GET_TABLE_DATA():
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
     # Create a cursor
     cr = db.cursor()
 
-    result = cr.execute("SELECT * FROM styles")
-    data = result.fetchall()
+    cr.execute(
+        """SELECT 
+                group_name, brand, brand_team, garment_type, 
+                piece1_type|| '\n' ||piece2_type, 
+                GROUP_CONCAT(po_num, '\n'), GROUP_CONCAT(size_range, '\n'), GROUP_CONCAT(ratio, '\n'), 
+                GROUP_CONCAT(po_qty, '\n'), total_qty, rcvd_date
+            FROM 
+                style_group AS g
+            LEFT JOIN 
+                pos AS p ON g.group_id = p.group_id
+            GROUP BY
+                g.group_id""")
 
-    for index, record in enumerate(data):
-        data[index] = list(data[index])
-        data[index].pop()
+    data = cr.fetchall()
 
     db.commit()
     db.close()
