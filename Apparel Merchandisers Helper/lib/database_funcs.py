@@ -165,4 +165,3 @@ def DB_DELETE_STYLE(id):
     db.close()
 
 
-#f3ece0

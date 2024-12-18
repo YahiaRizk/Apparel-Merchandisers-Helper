@@ -11,10 +11,11 @@ class Panel(CTkFrame):
         self.label1 = CTkLabel(
             self,
             text=label_str,
+            # font= (FONT_FAMILY, FORM_FONT_SIZE, "bold"),
             text_color=FOURTH_CLR,
-            width=60,
+            width=85,
             anchor="w",
-            wraplength=60,
+            # wraplength=60,
         )
         self.label1.pack(side="left", padx=10)
 
@@ -38,6 +39,7 @@ class Entry_panel(Panel):
         self.entry = CTkEntry(
             self,
             width=entry_width,
+            # font= (FONT_FAMILY, FONT_SIZE, "bold"),
             fg_color=THIRD_CLR,
             text_color=MAIN_CLR,
             border_color=SECONDARY_CLR,
@@ -88,6 +90,7 @@ class Combobox_panel(Panel):
             self,
             width=width,
             values=options1,
+            # font= (FONT_FAMILY, FONT_SIZE, "bold"),
             text_color=MAIN_CLR,
             fg_color=THIRD_CLR,
             button_color=SECONDARY_CLR,
@@ -106,6 +109,7 @@ class Combobox_panel(Panel):
                 self,
                 width=width,
                 values=options2,
+                # font= (FONT_FAMILY, FONT_SIZE, "bold"),
                 text_color=MAIN_CLR,
                 fg_color=THIRD_CLR,
                 button_color=SECONDARY_CLR,

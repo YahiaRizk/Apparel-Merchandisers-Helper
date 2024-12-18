@@ -120,7 +120,7 @@ class View_styles_frame(Main_frame):
     def view_style(self):
         if self.table_panel.table.get_selected_row()["row_index"] != None:
             # get the style name for selected row
-            style = self.table_panel.table.get_selected_row()["values"][0]
+            style = self.table_panel.table.get_selected_row()["values"][1]
 
             # create the top level to view style details
             self.view_style_top_level = View_style_top_level(style)
