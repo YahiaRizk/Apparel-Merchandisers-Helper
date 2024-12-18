@@ -33,6 +33,7 @@ FABRICS_OPT = [
 ]
 GSM_OPT = ["155", "160", "220", "230"]
 TABLE_HEADER = (
+    "ID",
     "Style",
     "Brand",
     "Brand/Team",

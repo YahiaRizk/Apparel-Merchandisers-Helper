@@ -4,6 +4,7 @@ import sqlite3
 def DB_CREATE():
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
     # Create a cursor
     cr = db.cursor()
 
@@ -79,6 +80,7 @@ def DB_CREATE():
 def DB_SAVE_MAIN_INFO(data):
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
     # Create a cursor
     cr = db.cursor()
 
@@ -125,12 +127,13 @@ def DB_SAVE_MAIN_INFO(data):
 def DB_GET_TABLE_DATA():
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
     # Create a cursor
     cr = db.cursor()
 
     cr.execute(
         """SELECT 
-                group_name, brand, brand_team, garment_type, 
+                g.group_id, group_name, brand, brand_team, garment_type, 
                 piece1_type|| '\n' ||piece2_type, 
                 GROUP_CONCAT(po_num, '\n'), GROUP_CONCAT(size_range, '\n'), GROUP_CONCAT(ratio, '\n'), 
                 GROUP_CONCAT(po_qty, '\n'), total_qty, rcvd_date
@@ -149,13 +152,17 @@ def DB_GET_TABLE_DATA():
     return data
 
 
-def DB_DELETE_STYLE(style):
+def DB_DELETE_STYLE(id):
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
     # Create a cursor
     cr = db.cursor()
 
-    cr.execute("DELETE FROM styles WHERE style = ?", (style,))
+    cr.execute("DELETE FROM style_group WHERE group_id = ?", (id,))
 
     db.commit()
     db.close()
+
+
+#f3ece0

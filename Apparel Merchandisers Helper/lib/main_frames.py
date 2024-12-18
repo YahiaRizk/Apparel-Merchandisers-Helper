@@ -130,12 +130,14 @@ class View_styles_frame(Main_frame):
         # if row is selected
         if self.table_panel.table.get_selected_row()["row_index"] != None:
             # get the style name for selected row
-            style = self.table_panel.table.get_selected_row()["values"][0]
+            style = self.table_panel.table.get_selected_row()["values"][1]
+            # get the id for selected row
+            id = self.table_panel.table.get_selected_row()["values"][0]
 
             # give confirm message before delete
             msg = CTkMessagebox(
                 title="Warning!",
-                message=f"Style {style} will be deleted permanently,\nAre you sure ?",
+                message=f"Style '{style}' will be deleted permanently,\nAre you sure ?",
                 wraplength=400,
                 option_1="Yes",
                 option_2="No",
@@ -154,7 +156,7 @@ class View_styles_frame(Main_frame):
             # Check if the user approved delete
             if msg.get() == "Yes":
                 # delete row from database
-                DB_DELETE_STYLE(style.strip())
+                DB_DELETE_STYLE(id)
 
                 # recreate the table
                 self.table_panel.create_table()
