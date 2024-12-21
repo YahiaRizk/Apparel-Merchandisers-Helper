@@ -3,7 +3,7 @@ from settings import *
 
 
 class Menu(CTkFrame):
-    def __init__(self, parent, main_frames):
+    def __init__(self, parent, main_frames_funcs):
         super().__init__(master=parent, fg_color=SECONDARY_CLR, corner_radius=4)
         self.grid(column=0, row=1, sticky="nsew")
 
@@ -11,10 +11,11 @@ class Menu(CTkFrame):
         main_buttons_container = CTkFrame(self, fg_color="transparent", corner_radius= 0)
         main_buttons_container.place(relx=0.5, rely=0.5, relwidth= 1, anchor="center")
 
-        Menu_button(main_buttons_container, 'Create Style', main_frames['create style'], activ_bool= True)
-        Menu_button(main_buttons_container, 'View Styles', main_frames['view styles'])
-        Menu_button(main_buttons_container, 'Pricing', main_frames['pricing'])
-        Menu_button(main_buttons_container, 'Dummy info', main_frames['dummy'])
+        Menu_button(main_buttons_container, 'Paths', main_frames_funcs['paths'])
+        Menu_button(main_buttons_container, 'Create Style', main_frames_funcs['create style'], activ_bool= True)
+        Menu_button(main_buttons_container, 'View Styles', main_frames_funcs['view styles'])
+        Menu_button(main_buttons_container, 'Pricing', main_frames_funcs['pricing'])
+        Menu_button(main_buttons_container, 'Dummy info', main_frames_funcs['dummy'])
 
 class Menu_button(CTkButton):
     def __init__(self, parent, text, main_frame_func, activ_bool= False):

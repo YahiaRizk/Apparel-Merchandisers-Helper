@@ -53,11 +53,16 @@ class App(CTk):
 
     def init_parameters(self):
         self.main_frames_funcs = {
+            "paths": self.paths,
             "create style": self.create_style,
             "view styles": self.view_styles,
             "pricing": self.pricing,
             "dummy": self.dummy,
         }
+
+    def paths(self):
+        self.main_panel.pack_forget()
+        self.main_panel = Paths_frame(self)
 
     def create_style(self):
         self.main_panel.pack_forget()

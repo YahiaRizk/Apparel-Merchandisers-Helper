@@ -1,9 +1,10 @@
 from customtkinter import *
 from settings import *
+from lib.database_funcs import DB_UPDATE_PATH
 
 
 class Panel(CTkFrame):
-    def __init__(self, parent, label_str):
+    def __init__(self, parent, label_str, label_width=85):
         super().__init__(master=parent, fg_color="transparent")
         self.pack(fill="x", padx=5, pady=10)
 
@@ -13,7 +14,7 @@ class Panel(CTkFrame):
             text=label_str,
             # font= (FONT_FAMILY, FORM_FONT_SIZE, "bold"),
             text_color=FOURTH_CLR,
-            width=85,
+            width=label_width,
             anchor="w",
             # wraplength=60,
         )
@@ -31,8 +32,16 @@ class Panel(CTkFrame):
 
 
 class Entry_panel(Panel):
-    def __init__(self, parent, label_str, data_var, entry_width=200, int_bool=False):
-        super().__init__(parent=parent, label_str=label_str)
+    def __init__(
+        self,
+        parent,
+        label_str,
+        data_var,
+        label_width=85,
+        entry_width=200,
+        int_bool=False,
+    ):
+        super().__init__(parent=parent, label_str=label_str, label_width=label_width)
         self.data_var = data_var
 
         # widgets
@@ -54,7 +63,7 @@ class Entry_panel(Panel):
             self.entry.bind("<KeyRelease>", self.check_int)
 
     def check_int(self, event):
-        if self.entry.get() == '':
+        if self.entry.get() == "":
             pass
         else:
             if self.entry.get().isdigit():
@@ -69,6 +78,52 @@ class Entry_panel(Panel):
     def repack(self):
         super().repack()
         self.entry.pack(side="left")
+
+
+class Path_panel(Entry_panel):
+    def __init__(
+        self,
+        parent,
+        label_str,
+        data_var,
+        customer,
+        label_width=20,
+        entry_width=500,
+        int_bool=False,
+    ):
+        super().__init__(
+            parent=parent,
+            label_str=label_str,
+            label_width=label_width,
+            data_var=data_var,
+            entry_width=entry_width,
+        )
+
+        # turn data_var and customer key into a property
+        self.entry_var = data_var
+        self.customer = customer
+
+        # widgets
+        button = CTkButton(
+            self,
+            text="...",
+            fg_color=SECONDARY_CLR,
+            text_color=FOURTH_CLR,
+            hover_color=THIRD_CLR,
+            width=30,
+            command=self.get_path,
+        )
+        button.pack(side="left", padx=10)
+
+    def get_path(self):
+        # get the path from the user
+        path = filedialog.askdirectory()
+
+        # set the path to entry var
+        self.entry_var.set(path)
+
+        # update the path in the database
+        DB_UPDATE_PATH(self.customer, path)
 
 
 class Combobox_panel(Panel):
@@ -192,11 +247,17 @@ class Buttons_panel(CTkFrame):  # for style view tab
 
         # Widgets
         buttons_container = CTkFrame(self, fg_color="transparent")
-        buttons_container.pack(pady= 20)
+        buttons_container.pack(pady=20)
 
-        self.delete_button = Simple_button(buttons_container, text="View Style", func= view_func)
-        self.delete_button = Simple_button(buttons_container, text="Delete Selected", func= delete_func)
-        self.archive_button = Simple_button(buttons_container, text="Archive Selected", func= archive_func)
+        self.delete_button = Simple_button(
+            buttons_container, text="View Style", func=view_func
+        )
+        self.delete_button = Simple_button(
+            buttons_container, text="Delete Selected", func=delete_func
+        )
+        self.archive_button = Simple_button(
+            buttons_container, text="Archive Selected", func=archive_func
+        )
 
 
 class Simple_button(CTkButton):
@@ -204,10 +265,38 @@ class Simple_button(CTkButton):
         super().__init__(
             master=parent,
             text=text,
-            command= func,
+            command=func,
             font=(FONT_FAMILY, MENU_BUTTONS_FONT_SIZE),
             text_color=FOURTH_CLR,
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,
         )
-        self.pack(side= 'left', padx= 10, ipadx= 10, ipady= 5)
+        self.pack(side="left", padx=10, ipadx=10, ipady=5)
+
+
+class Add_path_panel(CTkFrame):
+    def __init__(self, parent, entry_var, func):
+        super().__init__(master=parent, fg_color="transparent")
+        self.pack(side="bottom", pady=20)
+
+        # widgets
+        CTkEntry(
+            master=self,
+            fg_color=THIRD_CLR,
+            text_color=MAIN_CLR,
+            border_color=SECONDARY_CLR,
+            border_width=1,
+            textvariable=entry_var,
+        ).pack(side= 'left')
+
+        # add path button
+        CTkButton(
+            master=self,
+            text="Add Customer",
+            width= 50,
+            command=func,
+            font=(FONT_FAMILY, 17),
+            text_color=FOURTH_CLR,
+            fg_color=SECONDARY_CLR,
+            hover_color=THIRD_CLR,
+        ).pack(side= 'left', padx= 10)

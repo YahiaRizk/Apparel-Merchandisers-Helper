@@ -18,7 +18,7 @@ WINDOW_WIDTH = 1152
 WINDOW_HEIGHT = 650
 
 # variables
-BRAND_OPT = ["NBA", "NFL"]
+CUSTOMER_OPT = ["NBA", "NFL"]
 BRAND_TEAM_OPT = ["Brand", "Team"]
 TYPE_OPT = ["Set", "2PK", "Piece"]
 PIECE_OPT = ["T-Shirt", "Hoodie", "Short", "Pant"]

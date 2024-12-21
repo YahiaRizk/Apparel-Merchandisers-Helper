@@ -50,7 +50,7 @@ class Main_info_panel(Category_panel):
 
         # widgets
         Entry_panel(self.data_frame, "Style# :", data_vars["group_name"])
-        Combobox_panel(self.data_frame, "Brand :", BRAND_OPT, data_vars["brand"])
+        Combobox_panel(self.data_frame, "Customer :", CUSTOMER_OPT, data_vars["brand"])
         Combobox_panel(
             self.data_frame, "Brand / Team :", BRAND_TEAM_OPT, data_vars["brand_team"]
         )

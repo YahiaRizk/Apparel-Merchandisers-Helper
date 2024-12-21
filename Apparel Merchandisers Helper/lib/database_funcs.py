@@ -1,8 +1,9 @@
 import sqlite3
+from settings import CUSTOMER_OPT
 
 
 def DB_CREATE():
-    # Create/connect to data base
+    # Create/connect to styles database
     db = sqlite3.connect("DB/styles.db")
     db.execute("PRAGMA foreign_keys = ON;")
     # Create a cursor
@@ -76,6 +77,25 @@ def DB_CREATE():
     db.commit()
     db.close()
 
+    # Create/connect to paths database
+    db = sqlite3.connect("DB/paths.db")
+
+    # Create a cursor
+    cr = db.cursor()
+
+    # Create paths table
+    cr.execute(
+        """CREATE TABLE IF NOT EXISTS paths (
+                customer TEXT PRIMARY KEY,
+                path TEXT
+            )"""
+    )
+
+    cr.executemany("INSERT OR IGNORE INTO paths VALUES (?, ?)", [(customer,'') for customer in CUSTOMER_OPT])
+
+    db.commit()
+    db.close()
+
 
 def DB_SAVE_MAIN_INFO(data):
     # Create/connect to data base
@@ -142,7 +162,8 @@ def DB_GET_TABLE_DATA():
             LEFT JOIN 
                 pos AS p ON g.group_id = p.group_id
             GROUP BY
-                g.group_id""")
+                g.group_id"""
+    )
 
     data = cr.fetchall()
 
@@ -150,6 +171,54 @@ def DB_GET_TABLE_DATA():
     db.close()
 
     return data
+
+
+def DB_GET_PATHS_DATA():
+    # connect to paths database
+    db = sqlite3.connect("DB/paths.db")
+    # create cursor object
+    cr = db.cursor()
+
+    # get the data from database
+    cr.execute("SELECT * FROM paths")
+    result = cr.fetchall()
+
+    # convert the result into dict
+    data = {record[0]: record[1] for record in result}
+
+    db.commit()
+    db.close()
+
+    return data
+
+def DB_INSERT_PATH(customer):
+    # connect to paths database
+    db = sqlite3.connect("DB/paths.db")
+    # create cursor object
+    cr = db.cursor()
+
+    # try to insert the customer and return true otherwise return false
+    try:
+        cr.execute("INSERT INTO paths VALUES (?, ?)",(customer, ""))
+        db.commit()
+        db.close()
+        return True
+    except:
+        db.commit()
+        db.close()
+        return False
+
+
+def DB_UPDATE_PATH(customer, path):
+    # connect to paths database
+    db = sqlite3.connect("DB/paths.db")
+    # create cursor object
+    cr = db.cursor()
+
+    cr.execute("UPDATE paths SET path = ? WHERE customer = ?", (path, customer))
+
+    db.commit()
+    db.close()
 
 
 def DB_DELETE_STYLE(id):
@@ -163,5 +232,3 @@ def DB_DELETE_STYLE(id):
 
     db.commit()
     db.close()
-
-

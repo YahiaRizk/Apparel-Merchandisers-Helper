@@ -1,16 +1,70 @@
 from CTkMessagebox import CTkMessagebox
+from settings import *
+from tkinter import filedialog
 from lib.category_panels import *
 from lib.style_top_level import View_style_top_level
-from settings import *
 from lib.database_funcs import *
 from lib.table_panel import *
-import json
+
 
 
 class Main_frame(CTkFrame):
     def __init__(self, parent):
         super().__init__(master=parent, fg_color=MAIN_CLR, corner_radius=5)
         self.grid(column=1, row=1, sticky="nsew")
+
+
+class Paths_frame(Main_frame):
+    def __init__(self, parent):
+        super().__init__(parent=parent)
+
+        # get paths data from database
+        self.data = DB_GET_PATHS_DATA()
+
+        # intialize parameters
+        self.init_parameters()
+
+        # widgets
+        # the main container
+        self.container = CTkFrame(self, fg_color="transparent")
+        self.container.place(relx=0.5, rely=0.5, anchor="center")
+
+        # - paths panels
+        for key, value in self.paths_vars.items():
+            Path_panel(
+                parent=self.container,
+                label_str=f"{key} :",
+                label_width=50,
+                data_var=value,
+                customer = key
+            )
+
+        # the add_path_panel
+        # - string var to pass to add_path_panel
+        self.add_path_var = StringVar()
+        # - create the add path panel
+        Add_path_panel(parent=self, entry_var=self.add_path_var, func= self.add_path)
+
+    def init_parameters(self):
+        # create dict contains string vars for every coustomer in database to use with entry
+        self.paths_vars = {customer: StringVar(value=path) for customer, path in self.data.items()}
+
+    def add_path(self):
+        # get the customer name from the entry var
+        customer = self.add_path_var.get()
+        # add the customer to database and check if it added
+        if DB_INSERT_PATH(customer):
+            # append the customer in to self.paths_vars dict
+            self.paths_vars[customer]= StringVar()
+
+            # create a path panel for the new customer
+            Path_panel(
+                parent=self.container,
+                label_str=f"{customer} :",
+                label_width=50,
+                data_var=self.paths_vars[customer],
+                customer = customer
+            )
 
 
 class Create_style_frame(Main_frame):
@@ -53,7 +107,7 @@ class Create_style_frame(Main_frame):
         # main data vars to get the values from widgets
         self.main_data_vars = {
             "group_name": StringVar(),
-            "brand": StringVar(value=BRAND_OPT[0]),
+            "brand": StringVar(value=CUSTOMER_OPT[0]),
             "brand_team": StringVar(value=BRAND_TEAM_OPT[0]),
             "garment_type": StringVar(value=TYPE_OPT[0]),
             "piece1_type": StringVar(value=PIECE_OPT[0]),
@@ -98,9 +152,9 @@ class Create_style_frame(Main_frame):
         fabric_data = []
         for obj in self.fabric_data_vars:
             fabric_item = {
-            "fabric_type": obj["fabric_type"].get(),
-            "fabric_description": obj["fabric_description"].get(),
-            "fabric_gsm": obj["fabric_gsm"].get(),
+                "fabric_type": obj["fabric_type"].get(),
+                "fabric_description": obj["fabric_description"].get(),
+                "fabric_gsm": obj["fabric_gsm"].get(),
             }
             fabric_data.append(fabric_item)
 
