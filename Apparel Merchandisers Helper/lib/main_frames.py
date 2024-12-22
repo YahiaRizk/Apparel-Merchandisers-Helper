@@ -7,7 +7,6 @@ from lib.database_funcs import *
 from lib.table_panel import *
 
 
-
 class Main_frame(CTkFrame):
     def __init__(self, parent):
         super().__init__(master=parent, fg_color=MAIN_CLR, corner_radius=5)
@@ -36,18 +35,20 @@ class Paths_frame(Main_frame):
                 label_str=f"{key} :",
                 label_width=50,
                 data_var=value,
-                customer = key
+                customer=key,
             )
 
         # the add_path_panel
         # - string var to pass to add_path_panel
         self.add_path_var = StringVar()
         # - create the add path panel
-        Add_path_panel(parent=self, entry_var=self.add_path_var, func= self.add_path)
+        Add_path_panel(parent=self, entry_var=self.add_path_var, func=self.add_path)
 
     def init_parameters(self):
         # create dict contains string vars for every coustomer in database to use with entry
-        self.paths_vars = {customer: StringVar(value=path) for customer, path in self.data.items()}
+        self.paths_vars = {
+            customer: StringVar(value=path) for customer, path in self.data.items()
+        }
 
     def add_path(self):
         # get the customer name from the entry var
@@ -55,7 +56,7 @@ class Paths_frame(Main_frame):
         # add the customer to database and check if it added
         if DB_INSERT_PATH(customer):
             # append the customer in to self.paths_vars dict
-            self.paths_vars[customer]= StringVar()
+            self.paths_vars[customer] = StringVar()
 
             # create a path panel for the new customer
             Path_panel(
@@ -63,7 +64,7 @@ class Paths_frame(Main_frame):
                 label_str=f"{customer} :",
                 label_width=50,
                 data_var=self.paths_vars[customer],
-                customer = customer
+                customer=customer,
             )
 
 
@@ -101,7 +102,11 @@ class Create_style_frame(Main_frame):
         )
 
         # -Submit panel
-        Submit_panel(self, lambda: DB_SAVE_MAIN_INFO(self.get_data()), self.reset)
+        Submit_panel(
+            parent=self,
+            submit_func=lambda: DB_SAVE_MAIN_INFO(self.get_data()),
+            reset_func=self.reset,
+        )
 
     def init_parameters(self):
         # main data vars to get the values from widgets
@@ -167,9 +172,13 @@ class View_styles_frame(Main_frame):
 
         #  Widget
         self.buttons_panel = Buttons_panel(
-            self, self.view_style, self.delete_style, self.archive_style
+            parent=self,
+            view_func=self.view_style,
+            delete_func=self.delete_style,
+            archive_func=self.archive_style,
         )
-        self.table_panel = Table_panel(self, self.view_style)
+
+        self.table_panel = Table_panel(parent=self, view_style_func=self.view_style)
 
     def view_style(self):
         if self.table_panel.table.get_selected_row()["row_index"] != None:

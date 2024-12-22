@@ -35,8 +35,8 @@ class App(CTk):
             text_color=FOURTH_CLR,
             fg_color=BLACK_CLR,
         ).grid(column=0, columnspan=2, row=0, sticky="nsew")
-        self.menu = Menu(self, self.main_frames_funcs)
-        self.main_panel = Create_style_frame(self)
+        self.menu = Menu(parent=self, main_frame_funcs=self.main_frame_funcs)
+        self.main_panel = Create_style_frame(parent=self)
 
         self.mainloop()
 
@@ -52,7 +52,7 @@ class App(CTk):
         self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{left_point}+{top_point}")
 
     def init_parameters(self):
-        self.main_frames_funcs = {
+        self.main_frame_funcs = {
             "paths": self.paths,
             "create style": self.create_style,
             "view styles": self.view_styles,
@@ -62,23 +62,23 @@ class App(CTk):
 
     def paths(self):
         self.main_panel.pack_forget()
-        self.main_panel = Paths_frame(self)
+        self.main_panel = Paths_frame(parent=self)
 
     def create_style(self):
         self.main_panel.pack_forget()
-        self.main_panel = Create_style_frame(self)
+        self.main_panel = Create_style_frame(parent=self)
 
     def view_styles(self):
         self.main_panel.pack_forget()
-        self.main_panel = View_styles_frame(self)
+        self.main_panel = View_styles_frame(parent=self)
 
     def pricing(self):
         self.main_panel.pack_forget()
-        self.main_panel = Pricing_frame(self)
+        self.main_panel = Pricing_frame(parent=self)
 
     def dummy(self):
         self.main_panel.pack_forget()
-        self.main_panel = Dummy_info_frame(self)
+        self.main_panel = Dummy_info_frame(parent=self)
 
 
 if __name__ == "__main__":

@@ -160,6 +160,7 @@ class Combobox_panel(Panel):
                 self, text=label_str2, text_color=FOURTH_CLR, width=60
             )
             self.label2.pack(side="left", padx=10)
+
             self.combobox2 = CTkComboBox(
                 self,
                 width=width,
@@ -250,13 +251,13 @@ class Buttons_panel(CTkFrame):  # for style view tab
         buttons_container.pack(pady=20)
 
         self.delete_button = Simple_button(
-            buttons_container, text="View Style", func=view_func
+            parent=buttons_container, text="View Style", func=view_func
         )
         self.delete_button = Simple_button(
-            buttons_container, text="Delete Selected", func=delete_func
+            parent=buttons_container, text="Delete Selected", func=delete_func
         )
         self.archive_button = Simple_button(
-            buttons_container, text="Archive Selected", func=archive_func
+            parent=buttons_container, text="Archive Selected", func=archive_func
         )
 
 
@@ -287,16 +288,16 @@ class Add_path_panel(CTkFrame):
             border_color=SECONDARY_CLR,
             border_width=1,
             textvariable=entry_var,
-        ).pack(side= 'left')
+        ).pack(side="left")
 
         # add path button
         CTkButton(
             master=self,
             text="Add Customer",
-            width= 50,
+            width=50,
             command=func,
             font=(FONT_FAMILY, 17),
             text_color=FOURTH_CLR,
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,
-        ).pack(side= 'left', padx= 10)
+        ).pack(side="left", padx=10)

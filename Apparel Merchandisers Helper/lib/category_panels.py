@@ -2,6 +2,7 @@
 from settings import *
 from lib.panels import *
 from lib.Window_Separator import CTkWindowSeparator
+from lib.database_funcs import DB_GET_PATHS_DATA
 
 
 class Category_panel(CTkFrame):  # for create style frame
@@ -43,19 +44,35 @@ class Category_panel(CTkFrame):  # for create style frame
 
         self.data_frame.grid(column=1, row=0, sticky="nsew")
 
+
 class Main_info_panel(Category_panel):
     def __init__(self, parent, label_text, data_vars, scrollable=False):
         super().__init__(parent=parent, label_text=label_text, scrollable=scrollable)
         self.data_vars = data_vars
 
         # widgets
-        Entry_panel(self.data_frame, "Style# :", data_vars["group_name"])
-        Combobox_panel(self.data_frame, "Customer :", CUSTOMER_OPT, data_vars["brand"])
-        Combobox_panel(
-            self.data_frame, "Brand / Team :", BRAND_TEAM_OPT, data_vars["brand_team"]
+        Entry_panel(
+            parent=self.data_frame,
+            label_str="Style# :",
+            data_var=data_vars["group_name"],
         )
         Combobox_panel(
-            self.data_frame, "Garment Type :", TYPE_OPT, data_vars["garment_type"]
+            parent=self.data_frame,
+            label_str1="Customer :",
+            options1=DB_GET_PATHS_DATA().keys(),
+            data_var1=data_vars["brand"],
+        )
+        Combobox_panel(
+            parent=self.data_frame,
+            label_str1="Brand / Team :",
+            options1=BRAND_TEAM_OPT,
+            data_var1=data_vars["brand_team"],
+        )
+        Combobox_panel(
+            parent=self.data_frame,
+            label_str1="Garment Type :",
+            options1=TYPE_OPT,
+            data_var1=data_vars["garment_type"],
         )
         self.piece_type = Combobox_panel(
             parent=self.data_frame,
@@ -67,13 +84,18 @@ class Main_info_panel(Category_panel):
             data_var2=data_vars["piece2_type"],
         )
         Entry_panel(
-            self.data_frame,
-            "Total QTY :",
-            data_vars["total_qty"],
+            parent=self.data_frame,
+            label_str="Total QTY :",
+            data_var=data_vars["total_qty"],
             entry_width=120,
             int_bool=True,
         )
-        Entry_panel(self.data_frame, "Date RCVD :", data_vars["rcvd_date"])
+        Entry_panel(
+            parent=self.data_frame,
+            label_str="Date RCVD :",
+            data_var=data_vars["rcvd_date"],
+        )
+
 
 class Fabric_panel(Category_panel):
     def __init__(self, parent, label_text, data_vars, scrollable=False):
@@ -96,10 +118,11 @@ class Fabric_panel(Category_panel):
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,
             command=lambda: Fabric_item(
-                parnet= self.data_frame, data_vars= self.data_vars, fabric_panel= self
+                parnet=self.data_frame, data_vars=self.data_vars, fabric_panel=self
             ),
         )
         self.add_fabric_button.pack(pady=(0, 5))
+
 
 class Fabric_item(CTkFrame):  # for fabric panel
     # variable to keep track of the number of created fabric

@@ -191,6 +191,7 @@ def DB_GET_PATHS_DATA():
 
     return data
 
+
 def DB_INSERT_PATH(customer):
     # connect to paths database
     db = sqlite3.connect("DB/paths.db")

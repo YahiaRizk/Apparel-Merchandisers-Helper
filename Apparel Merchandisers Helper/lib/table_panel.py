@@ -17,7 +17,7 @@ class Table_panel(CTkFrame):
 
         #  Widget
         self.scrollable_frame = CTkScrollableFrame(
-            self,
+            master=self,
             scrollbar_button_color=SECONDARY_CLR,
             scrollbar_button_hover_color=THIRD_CLR,
         )
