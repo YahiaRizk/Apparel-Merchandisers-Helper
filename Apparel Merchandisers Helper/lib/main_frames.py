@@ -1,6 +1,4 @@
 from CTkMessagebox import CTkMessagebox
-from settings import *
-from tkinter import filedialog
 from lib.category_panels import *
 from lib.style_top_level import View_style_top_level
 from lib.database_funcs import *
@@ -128,9 +126,8 @@ class Create_style_frame(Main_frame):
         self.master.create_style()
 
     def handle_type_var(self, *arg):
-        if (
-            self.data_vars["garment_type"].get() == TYPE_OPT[2]
-        ):  # if garment type is piece
+        # if garment type is piece
+        if (self.main_data_vars["garment_type"].get() == TYPE_OPT[2]):  
             # pack forget the second combobox for piece 2 type
             self.main_info_panel.piece_type.unpack_sec_combobox()
         else:

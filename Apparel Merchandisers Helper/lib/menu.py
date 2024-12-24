@@ -1,4 +1,4 @@
-from customtkinter import *
+from customtkinter import CTkFrame, CTkButton
 from settings import *
 
 
@@ -46,7 +46,7 @@ class Menu_button(CTkButton):
             master=parent,
             command=self.handle_button_click,
             text=text,
-            font=(FONT_FAMILY, MENU_BUTTONS_FONT_SIZE, "bold"),
+            font=MENU_BUTTONS_FONT,
             text_color=FOURTH_CLR,
             fg_color=MAIN_CLR if activ_bool else "transparent",
             hover_color=MAIN_CLR,

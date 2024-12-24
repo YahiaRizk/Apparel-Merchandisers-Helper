@@ -1,7 +1,13 @@
 Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
-Style create tab
-- Add functionality for add size range in the same style.
+Change font vars 
+- Font for panel label
+- Font for form_entry
+_ Font for menu buttons
+
+
+
+- Add dark light theme switch
 
 
 

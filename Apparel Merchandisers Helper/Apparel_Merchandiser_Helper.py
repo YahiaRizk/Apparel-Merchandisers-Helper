@@ -1,5 +1,4 @@
-from customtkinter import *
-from settings import *
+from customtkinter import CTk, set_appearance_mode
 from lib.main_frames import *
 from lib.menu import *
 import ctypes  # to get the scale factor
@@ -14,6 +13,14 @@ class App(CTk):
         self.title("")
         self.iconbitmap("empty.ico")
         self.resizable(False, False)
+
+        self.button= CTkButton(
+            master=self,
+            text="Change",
+            fg_color="red",
+            command=lambda: self._set_appearance_mode("light"),
+        )
+        self.button.place(relx=0.0, rely=0.0, anchor="nw")
 
         # Initialize parameters
         self.init_parameters()
@@ -31,12 +38,14 @@ class App(CTk):
         CTkLabel(
             self,
             text="Apparel Merchandiser Helper",
-            font=(FONT_FAMILY, TITLE_FONT_SIZE),
+            font=APP_TITLE_FONT,
             text_color=FOURTH_CLR,
             fg_color=BLACK_CLR,
         ).grid(column=0, columnspan=2, row=0, sticky="nsew")
         self.menu = Menu(parent=self, main_frame_funcs=self.main_frame_funcs)
         self.main_panel = Create_style_frame(parent=self)
+
+        self.color_mode_panel = Color_mode_panel(self, self.toggle_mode)
 
         self.mainloop()
 
@@ -79,6 +88,9 @@ class App(CTk):
     def dummy(self):
         self.main_panel.pack_forget()
         self.main_panel = Dummy_info_frame(parent=self)
+
+    def toggle_mode(self):
+        set_appearance_mode(self.color_mode_panel.switch.get())
 
 
 if __name__ == "__main__":

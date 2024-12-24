@@ -1,5 +1,4 @@
-# from customtkinter import *
-from settings import *
+from customtkinter import CTkScrollableFrame, StringVar, IntVar
 from lib.panels import *
 from lib.Window_Separator import CTkWindowSeparator
 from lib.database_funcs import DB_GET_PATHS_DATA
@@ -23,7 +22,7 @@ class Category_panel(CTkFrame):  # for create style frame
             label_frame,
             text=label_text,
             text_color=FOURTH_CLR,
-            font=(FONT_FAMILY, FONT_SIZE, "bold"),
+            font=PANEL_LABLE_FONT,
             wraplength=75,
             justify="left",
             anchor="w",
@@ -113,7 +112,7 @@ class Fabric_panel(Category_panel):
         self.add_fabric_button = CTkButton(
             self.data_frame,
             text="Add Fabric",
-            font=(FONT_FAMILY, FONT_SIZE),
+            font=SMALL_BUTTON_FONT,
             text_color=FOURTH_CLR,
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,

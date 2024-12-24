@@ -55,7 +55,7 @@ class Table_panel(CTkFrame):
         )
 
         # edit the header row
-        self.table.edit_row(0, font=(FONT_FAMILY, 18, "bold"))
+        self.table.edit_row(0, font=TABLE_HEADER_FONT)
 
         # pack the table in the scrollable frame
         self.table.pack(fill="x")

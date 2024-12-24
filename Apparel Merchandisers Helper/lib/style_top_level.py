@@ -1,5 +1,5 @@
 from customtkinter import CTkToplevel, CTkLabel
-from settings import *
+from settings import MAIN_CLR
 
 class View_style_top_level(CTkToplevel):
     def __init__(self, s_name):

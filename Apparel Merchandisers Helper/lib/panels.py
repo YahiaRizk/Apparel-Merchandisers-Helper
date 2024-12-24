@@ -1,10 +1,19 @@
-from customtkinter import *
+from customtkinter import (
+    CTkFrame,
+    CTkLabel,
+    CTkEntry,
+    CTkButton,
+    CTkComboBox,
+    CTkSwitch,
+)
+from tkinter import filedialog
 from settings import *
 from lib.database_funcs import DB_UPDATE_PATH
+import tkinter.font as tkFont
 
 
 class Panel(CTkFrame):
-    def __init__(self, parent, label_str, label_width=85):
+    def __init__(self, parent, label_str, label_width=95):
         super().__init__(master=parent, fg_color="transparent")
         self.pack(fill="x", padx=5, pady=10)
 
@@ -12,13 +21,13 @@ class Panel(CTkFrame):
         self.label1 = CTkLabel(
             self,
             text=label_str,
-            # font= (FONT_FAMILY, FORM_FONT_SIZE, "bold"),
+            font=PANEL_LABLE_FONT,
             text_color=FOURTH_CLR,
             width=label_width,
             anchor="w",
             # wraplength=60,
         )
-        self.label1.pack(side="left", padx=10)
+        self.label1.pack(side="left", padx=7)
 
     def unpack(self):
         self.configure(height=0)
@@ -37,7 +46,7 @@ class Entry_panel(Panel):
         parent,
         label_str,
         data_var,
-        label_width=85,
+        label_width=95,
         entry_width=200,
         int_bool=False,
     ):
@@ -48,7 +57,7 @@ class Entry_panel(Panel):
         self.entry = CTkEntry(
             self,
             width=entry_width,
-            # font= (FONT_FAMILY, FONT_SIZE, "bold"),
+            font=FORM_ENTRY_FONT,
             fg_color=THIRD_CLR,
             text_color=MAIN_CLR,
             border_color=SECONDARY_CLR,
@@ -133,19 +142,20 @@ class Combobox_panel(Panel):
         label_str1,
         options1,
         data_var1,
+        label_width=95,
         label_str2=None,
         options2=None,
         data_var2=None,
         width=90,
     ):
-        super().__init__(parent=parent, label_str=label_str1)
+        super().__init__(parent=parent, label_str=label_str1, label_width=label_width)
 
         # widgets
         self.combobox1 = CTkComboBox(
             self,
             width=width,
             values=options1,
-            # font= (FONT_FAMILY, FONT_SIZE, "bold"),
+            font=FORM_ENTRY_FONT,
             text_color=MAIN_CLR,
             fg_color=THIRD_CLR,
             button_color=SECONDARY_CLR,
@@ -157,7 +167,7 @@ class Combobox_panel(Panel):
 
         if label_str2:
             self.label2 = CTkLabel(
-                self, text=label_str2, text_color=FOURTH_CLR, width=60
+                self, text=label_str2, text_color=FOURTH_CLR, font=PANEL_LABLE_FONT
             )
             self.label2.pack(side="left", padx=10)
 
@@ -165,7 +175,7 @@ class Combobox_panel(Panel):
                 self,
                 width=width,
                 values=options2,
-                # font= (FONT_FAMILY, FONT_SIZE, "bold"),
+                font=FORM_ENTRY_FONT,
                 text_color=MAIN_CLR,
                 fg_color=THIRD_CLR,
                 button_color=SECONDARY_CLR,
@@ -214,7 +224,7 @@ class Submit_panel(CTkFrame):
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,
             text_color=FOURTH_CLR,
-            font=(FONT_FAMILY, FONT_SIZE, "bold"),
+            font=BUTTON_FONT,
             width=100,
             height=35,
             command=submit_func,
@@ -226,7 +236,7 @@ class Submit_panel(CTkFrame):
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,
             text_color=FOURTH_CLR,
-            font=(FONT_FAMILY, FONT_SIZE, "bold"),
+            font=BUTTON_FONT,
             width=100,
             height=35,
             command=reset_func,
@@ -267,7 +277,7 @@ class Simple_button(CTkButton):
             master=parent,
             text=text,
             command=func,
-            font=(FONT_FAMILY, MENU_BUTTONS_FONT_SIZE),
+            font=BUTTON_FONT,
             text_color=FOURTH_CLR,
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,
@@ -284,6 +294,7 @@ class Add_path_panel(CTkFrame):
         CTkEntry(
             master=self,
             fg_color=THIRD_CLR,
+            font=FORM_ENTRY_FONT,
             text_color=MAIN_CLR,
             border_color=SECONDARY_CLR,
             border_width=1,
@@ -296,8 +307,46 @@ class Add_path_panel(CTkFrame):
             text="Add Customer",
             width=50,
             command=func,
-            font=(FONT_FAMILY, 17),
+            font=SMALL_BUTTON_FONT,
             text_color=FOURTH_CLR,
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,
         ).pack(side="left", padx=10)
+
+
+class Color_mode_panel(CTkFrame):
+    def __init__(self, parent, mode_func):
+        super().__init__(parent, fg_color="transparent")
+        self.place(x=20, y=0, anchor="nw")
+
+        # widgets
+        CTkLabel(
+            master=self,
+            text="Dark",
+            font=("Calibri", 11, "bold"),
+            fg_color="transparent",
+            text_color=FOURTH_CLR,
+        ).pack(side="left")
+
+        self.switch = CTkSwitch(
+            master=self,
+            text="",
+            fg_color=SECONDARY_CLR,
+            progress_color=SECONDARY_CLR,
+            button_color=THIRD_CLR,
+            button_hover_color=FOURTH_CLR,
+            width=20,
+            onvalue="light",
+            offvalue="dark",
+            command=mode_func,
+        )
+        self.switch.pack(side="left", padx=(10, 0))
+
+        CTkLabel(
+            master=self,
+            text="Light",
+            font=("Calibri", 11, "bold"),
+            fg_color="transparent",
+            text_color=FOURTH_CLR,
+            anchor="w",
+        ).pack(side="left")
