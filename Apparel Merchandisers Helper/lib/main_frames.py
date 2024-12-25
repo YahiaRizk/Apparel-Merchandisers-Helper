@@ -132,7 +132,7 @@ class Create_style_frame(Main_frame):
 
         # get the needed data for make_folders_files
         main_data = data[0] #dict
-        style_name = main_data["group_name"]
+        style_name = main_data["group_name"] if main_data["group_name"] else "Temp"
         customer = main_data["customer"]
         path = DB_GET_PATH(customer)
 
@@ -246,7 +246,7 @@ class View_styles_frame(Main_frame):
                 text_color=FOURTH_CLR,
                 fg_color=MAIN_CLR,
                 bg_color=BLACK_CLR,
-                button_color=SECONDARY_CLR,
+                button_color=(SECONDARY_CLR, SECONDARY_CLR),
                 button_hover_color=THIRD_CLR,
                 button_text_color=FOURTH_CLR,
                 title_color=FOURTH_CLR,
