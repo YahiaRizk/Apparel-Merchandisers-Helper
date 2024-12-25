@@ -3,6 +3,7 @@ from lib.category_panels import *
 from lib.style_top_level import View_style_top_level
 from lib.database_funcs import *
 from lib.table_panel import *
+import os
 
 
 class Main_frame(CTkFrame):
@@ -102,7 +103,7 @@ class Create_style_frame(Main_frame):
         # -Submit panel
         Submit_panel(
             parent=self,
-            submit_func=lambda: DB_SAVE_MAIN_INFO(self.get_data()),
+            submit_func= self.submit,
             reset_func=self.reset,
         )
 
@@ -110,7 +111,7 @@ class Create_style_frame(Main_frame):
         # main data vars to get the values from widgets
         self.main_data_vars = {
             "group_name": StringVar(),
-            "brand": StringVar(value=CUSTOMER_OPT[0]),
+            "customer": StringVar(value=CUSTOMER_OPT[0]),
             "brand_team": StringVar(value=BRAND_TEAM_OPT[0]),
             "garment_type": StringVar(value=TYPE_OPT[0]),
             "piece1_type": StringVar(value=PIECE_OPT[0]),
@@ -121,6 +122,22 @@ class Create_style_frame(Main_frame):
 
         # empty list to append fabrics data from fabric panel
         self.fabric_data_vars = []
+
+    def submit(self):
+        # get the data from the form
+        data = self.get_data()
+
+        # Save the date to the database
+        DB_SAVE_MAIN_INFO(data)
+
+        # get the needed data for make_folders_files
+        main_data = data[0] #dict
+        style_name = main_data["group_name"]
+        customer = main_data["customer"]
+        path = DB_GET_PATH(customer)
+
+        # make the folder and files
+        self.make_folders_files(path, style_name)
 
     def reset(self):
         self.master.create_style()
@@ -138,7 +155,7 @@ class Create_style_frame(Main_frame):
         # manage the data to send to the database
         main_data = {
             "group_name": self.main_data_vars["group_name"].get().upper(),
-            "brand": self.main_data_vars["brand"].get(),
+            "customer": self.main_data_vars["customer"].get(),
             "brand_team": self.main_data_vars["brand_team"].get(),
             "garment_type": self.main_data_vars["garment_type"].get(),
             "piece1_type": self.main_data_vars["piece1_type"].get(),
@@ -161,6 +178,30 @@ class Create_style_frame(Main_frame):
             fabric_data.append(fabric_item)
 
         return main_data, fabric_data
+
+    def make_folders_files(self, path, style_name):
+        # Define Folders and Files names
+        folders = ["Fabric", "ACC", "PO", "TP", "ART", "Pattern", "Specs", "Production"]
+        files = ["QTY", "Recap", "Samples FollowUp"]
+
+        # Make style main folder if not exist
+        try:
+            os.mkdir(rf"{path}\{style_name}")
+        except FileExistsError:
+            print("Folder already Exist.")
+
+        # Loop on folders names and make the subfolders
+        for folder in folders:
+            try:
+                os.mkdir(rf"{path}\{style_name}\{folder}")
+            except FileExistsError:
+                print("Folder already Exist.")
+
+        # Loop on files names and create files in style main folder
+        for file in files:
+            filePath = rf"{path}\{style_name}\{file} {style_name}.xlsx"
+            if not os.path.exists(filePath):
+                open(filePath, "a").close()
 
 
 class View_styles_frame(Main_frame):
@@ -234,7 +275,7 @@ class Pricing_frame(Main_frame):
             master=self,
             text="Pricing",
             text_color=FOURTH_CLR,
-            font=(FONT_FAMILY, TITLE_FONT_SIZE),
+            font=APP_TITLE_FONT,
         ).pack(expand=True)
 
 
@@ -247,5 +288,5 @@ class Dummy_info_frame(Main_frame):
             master=self,
             text="Dummy info",
             text_color=FOURTH_CLR,
-            font=(FONT_FAMILY, TITLE_FONT_SIZE),
+            font=APP_TITLE_FONT,
         ).pack(expand=True)

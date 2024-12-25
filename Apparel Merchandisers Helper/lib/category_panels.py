@@ -59,7 +59,7 @@ class Main_info_panel(Category_panel):
             parent=self.data_frame,
             label_str1="Customer :",
             options1=DB_GET_PATHS_DATA().keys(),
-            data_var1=data_vars["brand"],
+            data_var1=data_vars["customer"],
         )
         Combobox_panel(
             parent=self.data_frame,

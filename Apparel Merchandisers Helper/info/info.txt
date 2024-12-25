@@ -1,13 +1,8 @@
 Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
-Change font vars 
-- Font for panel label
-- Font for form_entry
-_ Font for menu buttons
 
-
-
-- Add dark light theme switch
+- Fix color in popup message when delete style
+- Add make folders and files functionality to create style.
 
 
 

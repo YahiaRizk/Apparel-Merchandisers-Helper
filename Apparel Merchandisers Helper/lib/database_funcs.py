@@ -112,7 +112,7 @@ def DB_SAVE_MAIN_INFO(data):
         """INSERT INTO style_group VALUES(
                 NULL,
                 :group_name,
-                :brand,
+                :customer,
                 :brand_team,
                 :garment_type,
                 :piece1_type,
@@ -190,6 +190,22 @@ def DB_GET_PATHS_DATA():
     db.close()
 
     return data
+
+
+def DB_GET_PATH(customer):
+    # connect to paths database
+    db = sqlite3.connect("DB/paths.db")
+    # create cursor object
+    cr = db.cursor()
+
+    # get the data from database
+    cr.execute("SELECT path FROM paths WHERE customer = ?",(customer,))
+    result = cr.fetchone()
+
+    db.commit()
+    db.close()
+
+    return result[0]
 
 
 def DB_INSERT_PATH(customer):
