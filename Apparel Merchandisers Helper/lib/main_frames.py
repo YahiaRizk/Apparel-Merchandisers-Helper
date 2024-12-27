@@ -222,6 +222,8 @@ class View_styles_frame(Main_frame):
         if self.table_panel.table.get_selected_row()["row_index"] != None:
             # get the style name for selected row
             style = self.table_panel.table.get_selected_row()["values"][1]
+            id = self.table_panel.table.get_selected_row()["values"][0]
+            DB_GET_TOP_LEVEL_DATA(id)
 
             # create the top level to view style details
             self.view_style_top_level = View_style_top_level(style)

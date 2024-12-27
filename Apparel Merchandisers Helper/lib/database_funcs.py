@@ -29,10 +29,12 @@ def DB_CREATE():
         """CREATE TABLE IF NOT EXISTS pos (
                 po_num INTEGER PRIMARY KEY,
                 group_id INTEGER,
+                smu TEXT,
                 style_name TEXT,
                 size_range TEXT,
                 ratio TEXT,
                 po_qty INTEGER,
+                cost_price REAL,
                 shipping_date TEXT,
                 FOREIGN KEY (group_id) REFERENCES style_group(group_id) 
                 ON DELETE CASCADE
@@ -68,11 +70,29 @@ def DB_CREATE():
             )"""
     )
 
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (7, 44315, '2T-4T', 1000)")
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (7, 44316, '4-7', 1500)")
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (7, 44317, '8-16', 2000)")
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (8, 54317, '8-16', 3000)")
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (9, 54318, '8-16', 4000)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (3, 44315, '2T-4T', 1000)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (3, 44316, '4-7', 1500)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (3, 44317, '8-16', 2000)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (1, 54317, '8-16', 3000)")
+    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (2, 54318, '8-16', 4000)")
+
+    # cr.execute("INSERT INTO colors VALUES (44315, 'LL', 'PUBK', 'PUR', 'BLK', 500)")
+    # cr.execute("INSERT INTO colors VALUES (44315, 'BC', 'KLBK', 'KLY', 'BLK', 500)")
+    # cr.execute("INSERT INTO colors VALUES (44315, 'LL', 'RDBK', 'RED', 'BLK', 500)")
+
+    # cr.execute("INSERT INTO colors VALUES (44316, 'LL', 'PUBK', 'PUR', 'BLK', 500)")
+    # cr.execute("INSERT INTO colors VALUES (44316, 'BC', 'KLBK', 'KLY', 'BLK', 500)")
+    # cr.execute("INSERT INTO colors VALUES (44316, 'LL', 'RDBK', 'RED', 'BLK', 500)")
+
+    # cr.execute("INSERT INTO colors VALUES (44317, 'LL', 'PUBK', 'PUR', 'BLK', 500)")
+    # cr.execute("INSERT INTO colors VALUES (44317, 'BC', 'KLBK', 'KLY', 'BLK', 500)")
+    # cr.execute("INSERT INTO colors VALUES (44317, 'LL', 'RDBK', 'RED', 'BLK', 500)")
+
+    # cr.execute("INSERT INTO colors VALUES (54317, NULL, 'SND', 'SND', 'SND', 500)")
+
+    # cr.execute("INSERT INTO colors VALUES (54318, NULL, 'RED', 'RED', 'RED', 500)")
+
+    # cr.execute("INSERT INTO colors VALUES (54318, '', 'BLK', 'BLK', 'BLK', 500)")
 
     db.commit()
     db.close()
@@ -249,3 +269,37 @@ def DB_DELETE_STYLE(id):
 
     db.commit()
     db.close()
+
+
+def DB_GET_TOP_LEVEL_DATA(id):
+    # Create/connect to data base
+    db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
+    # Create a cursor
+    cr = db.cursor()
+
+    cr.execute(
+        """SELECT 
+                g.group_id, group_name, brand, brand_team, garment_type, 
+                piece1_type, piece2_type, total_qty, rcvd_date,
+                GROUP_CONCAT(po_num) AS po_nums, 
+                GROUP_CONCAT(size_range) AS size_ranges, 
+                GROUP_CONCAT(ratio) AS ratios, 
+                GROUP_CONCAT(po_qty) AS po_qtys 
+            FROM 
+                style_group AS g
+            LEFT JOIN 
+                pos AS p ON g.group_id = p.group_id
+            WHERE g.group_id = ?
+            GROUP BY g.group_id, group_name, brand, brand_team, garment_type, 
+            piece1_type, piece2_type, total_qty, rcvd_date""", (id,)
+    )
+
+    data = cr.fetchall()
+    for record in data:
+        print(record)
+
+    db.commit()
+    db.close()
+
+    return data

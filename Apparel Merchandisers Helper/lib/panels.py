@@ -323,7 +323,7 @@ class Color_mode_panel(CTkFrame):
         CTkLabel(
             master=self,
             text="Dark",
-            font=("Calibri", 11, "bold"),
+            font=("Calibri", 12, "bold"),
             fg_color="transparent",
             text_color=FOURTH_CLR,
         ).pack(side="left")
@@ -345,7 +345,7 @@ class Color_mode_panel(CTkFrame):
         CTkLabel(
             master=self,
             text="Light",
-            font=("Calibri", 11, "bold"),
+            font=("Calibri", 12, "bold"),
             fg_color="transparent",
             text_color=FOURTH_CLR,
             anchor="w",

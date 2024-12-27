@@ -1,13 +1,14 @@
 Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
 
-- Fix color in popup message when delete style. Done
+Style top level
+- Add SMU, Cost to pos table. Done
+- Add dummy data to pos, colors tables for test purpose. Done
+- Make function to get top level data from database.
+- Top level layout.
+- PO class.
 
 
-Styles view tab
-- View style Top level
--- Find what details want to show
--- detemine layout
 
 
 
