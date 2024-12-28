@@ -14,7 +14,7 @@ def DB_CREATE():
         """CREATE TABLE IF NOT EXISTS style_group (
                 group_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 group_name TEXT,
-                brand TEXT DEFAULT 'NON',
+                customer TEXT DEFAULT 'NON',
                 brand_team TEXT,
                 garment_type TEXT,
                 piece1_type TEXT,
@@ -93,6 +93,7 @@ def DB_CREATE():
     # cr.execute("INSERT INTO colors VALUES (54318, NULL, 'RED', 'RED', 'RED', 500)")
 
     # cr.execute("INSERT INTO colors VALUES (54318, '', 'BLK', 'BLK', 'BLK', 500)")
+    # cr.execute("ALTER TABLE style_group RENAME brand TO customer")
 
     db.commit()
     db.close()
@@ -173,7 +174,7 @@ def DB_GET_TABLE_DATA():
 
     cr.execute(
         """SELECT 
-                g.group_id, group_name, brand, brand_team, garment_type, 
+                g.group_id, group_name, customer, brand_team, garment_type, 
                 piece1_type|| '\n' ||piece2_type, 
                 GROUP_CONCAT(po_num, '\n'), GROUP_CONCAT(size_range, '\n'), GROUP_CONCAT(ratio, '\n'), 
                 GROUP_CONCAT(po_qty, '\n'), total_qty, rcvd_date
@@ -278,28 +279,81 @@ def DB_GET_TOP_LEVEL_DATA(id):
     # Create a cursor
     cr = db.cursor()
 
+    # get the main data from style_group table and fabrics table
     cr.execute(
         """SELECT 
-                g.group_id, group_name, brand, brand_team, garment_type, 
+                g.group_id, group_name, customer, brand_team, garment_type, 
                 piece1_type, piece2_type, total_qty, rcvd_date,
-                GROUP_CONCAT(po_num) AS po_nums, 
-                GROUP_CONCAT(size_range) AS size_ranges, 
-                GROUP_CONCAT(ratio) AS ratios, 
-                GROUP_CONCAT(po_qty) AS po_qtys 
+                GROUP_CONCAT(fabric_type) AS fabric_types, GROUP_CONCAT(description), GROUP_CONCAT(fabric_gsm)
             FROM 
                 style_group AS g
             LEFT JOIN 
-                pos AS p ON g.group_id = p.group_id
+                fabrics AS f ON g.group_id = f.group_id
             WHERE g.group_id = ?
-            GROUP BY g.group_id, group_name, brand, brand_team, garment_type, 
-            piece1_type, piece2_type, total_qty, rcvd_date""", (id,)
+            GROUP BY g.group_id""", (id,)
+    )
+
+    data = cr.fetchone()
+    # convert the data into dict
+    main_data = {
+        "group_id": data[0],
+        "group_name": data[1],
+        "customer": data[2],
+        "brand_team": data[3],
+        "garment_type": data[4],
+        "piece1_type": data[5],
+        "piece2_type": data[6],
+        "total_qty": data[7],
+        "rcvd_date": data[8],
+        "fabric_types": data[9].split(","),
+        "fabric_descriptions": data[10].split(","),
+        "fabric_gsms": list(map(int, data[11].split(","))),
+    }
+
+
+    cr.execute(
+        """SELECT 
+                p.po_num, style_name, smu, size_range, ratio,
+                GROUP_CONCAT(team), 
+                GROUP_CONCAT(color_code), 
+                GROUP_CONCAT(piece1_color), 
+                GROUP_CONCAT(piece2_color), 
+                GROUP_CONCAT(color_qty), 
+                po_qty, cost_price, shipping_date
+            FROM 
+                pos AS p
+            LEFT JOIN 
+                colors AS c ON p.po_num = c.po_num
+            WHERE p.group_id = ?
+            GROUP BY 
+                p.po_num, style_name, smu, size_range, ratio,
+                po_qty, cost_price, shipping_date
+                """, (id,)
     )
 
     data = cr.fetchall()
-    for record in data:
-        print(record)
+    # convert the data into dict
+    pos_data = [
+        {
+            "po_num": record[0],
+            "style_name": record[1],
+            "smu": record[2],
+            "size_range": record[3],
+            "ratio": record[4],
+            "teams": record[5].split(","),
+            "color_codes": record[6].split(","),
+            "piece1_colors": record[7].split(","),
+            "piece2_colors": record[8].split(","),
+            "color_qtys": list(map(int, record[9].split(","))),
+            "po_qty": record[10],
+            "cost_price": record[11],
+            "shipping_date": record[12],
+        }
+        for record in data
+    ]
 
-    db.commit()
-    db.close()
 
-    return data
+    # db.commit()
+    # db.close()
+
+    # return data
