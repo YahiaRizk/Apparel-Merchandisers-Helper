@@ -1,5 +1,7 @@
 from customtkinter import *
-from settings import *
+from lib.panels import *
+
+# from settings import *
 
 
 class View_style_top_level(CTkToplevel):
@@ -16,7 +18,10 @@ class View_style_top_level(CTkToplevel):
         self.pos_data = pos_data
 
         # widgets
+        # - main info panel
         self.main_info_panel = Main_info_panel(parent=self, data=self.main_data)
+        # - pos data panel
+        Po_data_panel(parent=self, data=self.pos_data[0])
 
 
 class Main_info_panel(CTkFrame):
@@ -70,6 +75,62 @@ class Main_info_panel(CTkFrame):
         Simple_label(self, text="\n".join(self.data["fabric_gsms"]), column=15, row=1, colspan=2, rowspan=2)
         Simple_label(self, text=self.data["total_qty"], column=17, row=1, colspan=2, rowspan=2)
         Simple_label(self, text=self.data["rcvd_date"], column=19, row=1, colspan=2, rowspan=2)
+
+
+class Po_data_panel(CTkFrame):
+    def __init__(self, parent, data):
+        super().__init__(parent, fg_color=SECONDARY_CLR)
+        self.pack(fill="x")
+
+        # data
+        self.data = data
+        # - calculate rows count with number of color codes  2 (for headers and po title)
+        self.data_rows_count = len(self.data["color_codes"])
+        self.header_rows_count = 2
+
+        # layout
+        self.columnconfigure(tuple(range(24)), weight=1, uniform="a")
+        self.rowconfigure(tuple(range(self.data_rows_count + self.header_rows_count)), weight=1, uniform="a")
+
+        # widgets
+        # -po header widgets
+        self.create_po_header_widgets()
+        # -po data widgets
+        self.create_po_data_widgets()
+
+    def create_po_header_widgets(self):
+        # title (po number)
+        CTkLabel(
+            self,
+            text=f"PO# {self.data['po_num']}",
+            font=MENU_BUTTONS_FONT,
+            text_color=FOURTH_CLR,
+            # anchor="w",
+        ).grid(column=0, row=0, columnspan=3, sticky="w")
+
+        # po headers
+        Simple_label(self, text="Style#", column=0, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="SMU", column=2, row=1, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Size Range", column=3, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Ratio", column=5, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Team", column=7, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Color Code", column=9, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Piece 1 Color", column=11, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Piece 2 Color", column=13, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Color QTY", column=15, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="PO Total QTY", column=17, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Price", column=19, row=1, colspan=2, font=TABLE_HEADER_FONT)
+        Simple_label(self, text="Shipping Date", column=21, row=1, colspan=2, font=TABLE_HEADER_FONT)
+
+    def create_po_data_widgets(self):
+        Simple_label(self, text=self.data["style_name"], column=0, row=2, colspan=2, rowspan=self.data_rows_count)
+        Simple_label(self, text=self.data["smu"], column=2, row=2, rowspan=self.data_rows_count)
+        Simple_label(self, text=self.data["size_range"], column=3, row=2, colspan=2, rowspan=self.data_rows_count)
+        Simple_label(self, text=self.data["ratio"], column=5, row=2, colspan=2, rowspan=self.data_rows_count)
+
+        Simple_label(self, text=self.data["po_qty"], column=17, row=2, colspan=2, rowspan=self.data_rows_count)
+        Simple_label(self, text=f"{self.data["price"]}$", column=19, row=2, colspan=2, rowspan=self.data_rows_count)
+        Simple_label(self,text=self.data["shipping_date"],column=21,row=2,colspan=2,rowspan=self.data_rows_count)
 
 
 class Simple_label(CTkLabel):

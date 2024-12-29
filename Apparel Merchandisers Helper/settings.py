@@ -15,10 +15,10 @@ WHITE_CLR = "##FFFFFF"
 APP_TITLE_FONT = ("Calibri", 40, "bold")
 PANEL_LABLE_FONT = ("Calibri", 15, "bold")
 FORM_ENTRY_FONT = ("Calibri", 16)
-BUTTON_FONT= ("Calibri", 20)
+BUTTON_FONT = ("Calibri", 20)
 SMALL_BUTTON_FONT = ("Calibri", 16)
 MENU_BUTTONS_FONT = ("Calibri", 20, "bold")
-TABLE_HEADER_FONT = (("Calibri", 18, "bold"))
+TABLE_HEADER_FONT = ("Calibri", 18, "bold")
 
 # Window setting
 WINDOW_WIDTH = 1152
@@ -49,7 +49,7 @@ TABLE_HEADER = (
     "PCS\nType",
     "POs",
     "Size\nScale",
-    'Ratio',
+    "Ratio",
     "POs QTY",
     "Total QTY",
     "Date RCVD",

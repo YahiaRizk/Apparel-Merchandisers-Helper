@@ -272,7 +272,7 @@ class Buttons_panel(CTkFrame):  # for style view tab
 
 
 class Simple_button(CTkButton):
-    def __init__(self, parent, text, func):
+    def __init__(self, parent, text, func, side="left"):
         super().__init__(
             master=parent,
             text=text,
@@ -282,7 +282,7 @@ class Simple_button(CTkButton):
             fg_color=SECONDARY_CLR,
             hover_color=THIRD_CLR,
         )
-        self.pack(side="left", padx=10, ipadx=10, ipady=5)
+        self.pack(side=side, padx=10, ipadx=10, ipady=5)
 
 
 class Add_path_panel(CTkFrame):

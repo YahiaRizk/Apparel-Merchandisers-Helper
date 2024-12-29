@@ -345,7 +345,7 @@ def DB_GET_TOP_LEVEL_DATA(id):
             "piece2_colors": record[8].split(","),
             "color_qtys": list(map(int, record[9].split(","))),
             "po_qty": record[10],
-            "cost_price": record[11],
+            "price": record[11],
             "shipping_date": record[12],
         }
         for record in data
