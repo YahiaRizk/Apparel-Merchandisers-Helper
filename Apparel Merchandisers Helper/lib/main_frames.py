@@ -223,10 +223,11 @@ class View_styles_frame(Main_frame):
             # get the style name for selected row
             style = self.table_panel.table.get_selected_row()["values"][1]
             id = self.table_panel.table.get_selected_row()["values"][0]
-            DB_GET_TOP_LEVEL_DATA(id)
+            # get the main data and pos data for selected row from database
+            main_data, pos_data = DB_GET_TOP_LEVEL_DATA(id)
 
             # create the top level to view style details
-            self.view_style_top_level = View_style_top_level(style)
+            self.view_style_top_level = View_style_top_level(main_data= main_data, pos_data= pos_data)
 
     def delete_style(self):
         # The following appraoch when delete_row method give error

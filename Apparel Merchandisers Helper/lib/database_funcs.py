@@ -353,7 +353,7 @@ def DB_GET_TOP_LEVEL_DATA(id):
     ]
 
 
-    # db.commit()
-    # db.close()
+    db.commit()
+    db.close()
 
-    # return data
+    return main_data, pos_data
