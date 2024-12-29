@@ -307,9 +307,8 @@ def DB_GET_TOP_LEVEL_DATA(id):
         "rcvd_date": data[8],
         "fabric_types": data[9].split(","),
         "fabric_descriptions": data[10].split(","),
-        "fabric_gsms": list(map(int, data[11].split(","))),
+        "fabric_gsms": data[11].split(","),
     }
-
 
     cr.execute(
         """SELECT 
@@ -351,7 +350,6 @@ def DB_GET_TOP_LEVEL_DATA(id):
         }
         for record in data
     ]
-
 
     db.commit()
     db.close()

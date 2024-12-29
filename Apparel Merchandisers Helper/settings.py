@@ -12,7 +12,7 @@ WHITE_CLR = "##FFFFFF"
 # FONT_SIZE = 14
 # MENU_BUTTONS_FONT_SIZE = 20
 
-APP_TITLE_FONT = ("Calibri", 30, "bold")
+APP_TITLE_FONT = ("Calibri", 40, "bold")
 PANEL_LABLE_FONT = ("Calibri", 15, "bold")
 FORM_ENTRY_FONT = ("Calibri", 16)
 BUTTON_FONT= ("Calibri", 20)
