@@ -1,0 +1,14 @@
+Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
+
+- Change column brand to customer and alter all it resulting.
+
+
+Style top level
+- Make function to get top level data from database.
+- Top level layout.
+- PO class.
+
+
+
+
+
