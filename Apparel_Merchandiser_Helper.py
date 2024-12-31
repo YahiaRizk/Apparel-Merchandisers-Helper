@@ -12,7 +12,8 @@ class App(CTk):
         self._set_appearance_mode("dark")
         self.title("")
         self.iconbitmap("empty.ico")
-        # self.resizable(False, False)
+        self.state("zoomed")
+        self.resizable(False, False)
 
         self.button= CTkButton(
             master=self,

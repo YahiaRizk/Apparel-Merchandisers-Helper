@@ -1,12 +1,20 @@
 Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
-- Change column brand to customer and alter all it resulting.
-
 
 Style top level
-- Make function to get top level data from database.
-- Top level layout.
-- PO class.
+- Handle add color to po:
+add button for add color,
+form top level to get the data from the user,
+function to add the data row to the po layout,
+function to add the data to database.
+
+- Handle add po:
+Create a button to add po,
+top level form to get po data from user,
+function to append the po panel to the layout,
+function to add the po data to the database.
+
+
 
 
 
