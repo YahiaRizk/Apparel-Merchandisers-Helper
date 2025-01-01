@@ -22,7 +22,7 @@ class View_style_top_level(CTkToplevel):
         # - main info panel
         self.main_info_panel = Main_info_panel(parent=self, data=self.main_data)
         # - rest of the data container
-        self.container = CTkScrollableFrame(self, fg_color='transparent')
+        self.container = CTkScrollableFrame(self, fg_color="transparent")
         self.container.pack(fill="both", expand=True)
         # - pos data panels
         for po in self.pos_data:
@@ -88,7 +88,7 @@ class Main_info_panel(CTkFrame):
 
 class Po_data_panel(CTkFrame):
     def __init__(self, parent, data):
-        super().__init__(parent, fg_color=SECONDARY_CLR)
+        super().__init__(parent, fg_color="transparent")
         self.pack(fill="x", pady=2)
 
         # data
@@ -98,21 +98,22 @@ class Po_data_panel(CTkFrame):
         self.header_rows = 1
 
         # widgets
-        # -container widget for handle a little padding
-        self.container = CTkFrame(self, fg_color="transparent")
-        self.container.pack(fill="both", padx=5)
         # -title (po number)
         CTkLabel(
-            self.container,
+            self,
             text=f"PO# {self.data['po_num']}",
             font=MENU_BUTTONS_FONT,
             text_color=FOURTH_CLR,
             anchor="w",
         ).pack(fill="x")
 
+        # -container widget for handle a little padding
+        self.container = CTkFrame(self, fg_color=SECONDARY_CLR)
+        self.container.pack(fill="both", padx=5)
+
         # data container for the grid layout
-        self.data_container = CTkFrame(self.container, fg_color=MAIN_CLR)
-        self.data_container.pack(fill="both", pady=1)
+        self.data_container = CTkFrame(self.container, fg_color="transparent")
+        self.data_container.pack(fill="both", padx=5)
 
         # -layout
         self.data_container.columnconfigure(tuple(range(24)), weight=1, uniform="a")
@@ -126,30 +127,52 @@ class Po_data_panel(CTkFrame):
         self.create_po_data_widgets()
 
     def create_po_header_widgets(self):
+
         # po headers
         Simple_label(
-            self.data_container, text="Style#", column=0, row=0, colspan=2, font=TABLE_HEADER_FONT
-        )
-        Simple_label(self.data_container, text="SMU", column=2, row=0, font=TABLE_HEADER_FONT)
-        Simple_label(
             self.data_container,
-            text="Size Range",
-            column=3,
-            row=0,
+            text="Style#",
+            column=0,
+            row=self.header_rows - 1,
             colspan=2,
             font=TABLE_HEADER_FONT,
         )
         Simple_label(
-            self.data_container, text="Ratio", column=5, row=0, colspan=2, font=TABLE_HEADER_FONT
+            self.data_container,
+            text="SMU",
+            column=2,
+            row=self.header_rows - 1,
+            font=TABLE_HEADER_FONT,
         )
         Simple_label(
-            self.data_container, text="Team", column=7, row=0, colspan=2, font=TABLE_HEADER_FONT
+            self.data_container,
+            text="Size Range",
+            column=3,
+            row=self.header_rows - 1,
+            colspan=2,
+            font=TABLE_HEADER_FONT,
+        )
+        Simple_label(
+            self.data_container,
+            text="Ratio",
+            column=5,
+            row=self.header_rows - 1,
+            colspan=2,
+            font=TABLE_HEADER_FONT,
+        )
+        Simple_label(
+            self.data_container,
+            text="Team",
+            column=7,
+            row=self.header_rows - 1,
+            colspan=2,
+            font=TABLE_HEADER_FONT,
         )
         Simple_label(
             self.data_container,
             text="Color Code",
             column=9,
-            row=0,
+            row=self.header_rows - 1,
             colspan=2,
             font=TABLE_HEADER_FONT,
         )
@@ -157,7 +180,7 @@ class Po_data_panel(CTkFrame):
             self.data_container,
             text="Piece 1 Color",
             column=11,
-            row=0,
+            row=self.header_rows - 1,
             colspan=2,
             font=TABLE_HEADER_FONT,
         )
@@ -165,7 +188,7 @@ class Po_data_panel(CTkFrame):
             self.data_container,
             text="Piece 2 Color",
             column=13,
-            row=0,
+            row=self.header_rows - 1,
             colspan=2,
             font=TABLE_HEADER_FONT,
         )
@@ -173,7 +196,7 @@ class Po_data_panel(CTkFrame):
             self.data_container,
             text="Color QTY",
             column=15,
-            row=0,
+            row=self.header_rows - 1,
             colspan=2,
             font=TABLE_HEADER_FONT,
         )
@@ -181,18 +204,23 @@ class Po_data_panel(CTkFrame):
             self.data_container,
             text="PO Total QTY",
             column=17,
-            row=0,
+            row=self.header_rows - 1,
             colspan=2,
             font=TABLE_HEADER_FONT,
         )
         Simple_label(
-            self.data_container, text="Price", column=19, row=0, colspan=2, font=TABLE_HEADER_FONT
+            self.data_container,
+            text="Price",
+            column=19,
+            row=self.header_rows - 1,
+            colspan=2,
+            font=TABLE_HEADER_FONT,
         )
         Simple_label(
             self.data_container,
             text="Shipping Date",
             column=21,
-            row=0,
+            row=self.header_rows - 1,
             colspan=3,
             font=TABLE_HEADER_FONT,
         )
@@ -235,39 +263,39 @@ class Po_data_panel(CTkFrame):
         # need to be repeated for each data on the list
         for i in range(self.data_rows):
             Simple_label(
-            self.data_container,
-            text=self.data["teams"][i],
-            column=7,
-            row=self.header_rows + i,
-            colspan=2,
+                self.data_container,
+                text=self.data["teams"][i],
+                column=7,
+                row=self.header_rows + i,
+                colspan=2,
             )
             Simple_label(
-            self.data_container,
-            text=self.data["color_codes"][i],
-            column=9,
-            row=self.header_rows + i,
-            colspan=2,
+                self.data_container,
+                text=self.data["color_codes"][i],
+                column=9,
+                row=self.header_rows + i,
+                colspan=2,
             )
             Simple_label(
-            self.data_container,
-            text=self.data["piece1_colors"][i],
-            column=11,
-            row=self.header_rows + i,
-            colspan=2,
+                self.data_container,
+                text=self.data["piece1_colors"][i],
+                column=11,
+                row=self.header_rows + i,
+                colspan=2,
             )
             Simple_label(
-            self.data_container,
-            text=self.data["piece2_colors"][i],
-            column=13,
-            row=self.header_rows + i,
-            colspan=2,
+                self.data_container,
+                text=self.data["piece2_colors"][i],
+                column=13,
+                row=self.header_rows + i,
+                colspan=2,
             )
             Simple_label(
-            self.data_container,
-            text=self.data["color_qtys"][i],
-            column=15,
-            row=self.header_rows + i,
-            colspan=2,
+                self.data_container,
+                text=self.data["color_qtys"][i],
+                column=15,
+                row=self.header_rows + i,
+                colspan=2,
             )
 
         # last 3 columns(po total qty, price, shipping date)
@@ -303,7 +331,7 @@ class Simple_label(CTkLabel):
             parent,
             text=text,
             font=font,
-            fg_color=SECONDARY_CLR,
+            # fg_color=SECONDARY_CLR,
             text_color=FOURTH_CLR,
         )
         self.grid(
@@ -312,6 +340,6 @@ class Simple_label(CTkLabel):
             columnspan=colspan,
             rowspan=rowspan,
             sticky="nsew",
-            padx=1,
-            pady=1,
+            # padx=1,
+            # pady=1,
         )
