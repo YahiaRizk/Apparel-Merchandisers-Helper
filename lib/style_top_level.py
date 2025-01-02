@@ -1,5 +1,6 @@
 from customtkinter import *
 from lib.panels import *
+from PIL import Image
 
 # from settings import *
 
@@ -70,7 +71,7 @@ class Main_info_panel(CTkFrame):
         Simple_label(self, text=self.data["garment_type"], column=8, row=1, colspan=2, rowspan=2)
         Simple_label(
             self,
-            text=f"{self.data['piece1_type']}\n{self.data['piece1_type']}",
+            text=f"{self.data['piece1_type']}\n{self.data['piece2_type']}",
             column=10,
             row=1,
             colspan=2,
@@ -98,14 +99,14 @@ class Po_data_panel(CTkFrame):
         self.header_rows = 1
 
         # widgets
-        # -title (po number)
-        CTkLabel(
-            self,
-            text=f"PO# {self.data['po_num']}",
-            font=MENU_BUTTONS_FONT,
-            text_color=FOURTH_CLR,
-            anchor="w",
-        ).pack(fill="x")
+        # -title (po panel)
+        self.header_panel = Po_header_panel(
+            parent=self,
+            po_num=self.data["po_num"],
+            add_func=self.add_color,
+            edit_func=self.edit_po,
+            delete_func=self.delete_po,
+        )
 
         # -container widget for handle a little padding
         self.container = CTkFrame(self, fg_color=SECONDARY_CLR)
@@ -324,6 +325,59 @@ class Po_data_panel(CTkFrame):
             rowspan=self.data_rows,
         )
 
+    def add_color(self):
+        print("add color")
+
+    def edit_po(self):
+        print("edit po")
+
+    def delete_po(self):
+        print("delete po")
+
+
+class Po_header_panel(CTkFrame):
+    def __init__(self, parent, po_num, add_func, edit_func, delete_func):
+        super().__init__(master=parent, fg_color="transparent")
+        self.pack(fill="x", padx=5, pady=(5, 0))
+
+        # widgets
+        # -po number label
+        CTkLabel(
+            self,
+            text=f"PO# {po_num}",
+            font=MENU_BUTTONS_FONT,
+            text_color=FOURTH_CLR,
+            anchor="w",
+        ).pack(side="left")
+
+        # -buttons container
+        self.buttons_container = CTkFrame(self, fg_color="transparent")
+        self.buttons_container.pack(side="right")
+        # --buttons
+        # ---create icons images
+        delete_icon = CTkImage(
+            light_image=Image.open(r"lib\ico\delete_light.png"),
+            dark_image=Image.open(r"lib\ico\delete_dark.png"),
+            size=(15, 15),
+        )
+        edit_icon = CTkImage(
+            light_image=Image.open(r"lib\ico\edit_light.png"),
+            dark_image=Image.open(r"lib\ico\edit_dark.png"),
+            size=(15, 15),
+        )
+        add_icon = CTkImage(
+            light_image=Image.open(r"lib\ico\add_light.png"),
+            dark_image=Image.open(r"lib\ico\add_dark.png"),
+            size=(15, 15),
+        )
+
+        # ---buttons widgets
+        # ----delete button
+        Icon_button(self.buttons_container, icon=delete_icon, func=delete_func)
+        # ----edit button
+        Icon_button(self.buttons_container, icon=edit_icon, func=edit_func)
+        # ----add button
+        Icon_button(self.buttons_container, icon=add_icon, func=add_func)
 
 class Simple_label(CTkLabel):
     def __init__(self, parent, text, row, column, colspan=1, rowspan=1, font=PANEL_LABLE_FONT):
@@ -343,3 +397,19 @@ class Simple_label(CTkLabel):
             # padx=1,
             # pady=1,
         )
+
+
+class Icon_button(CTkButton):
+    def __init__(self, parent, icon, func):
+        super().__init__(
+            parent,
+            text="",
+            image=icon,
+            text_color=FOURTH_CLR,
+            fg_color="transparent",
+            hover_color=THIRD_CLR,
+            width=15,
+            height=15,
+            command=func,
+        )
+        self.pack(side="right", padx=2)
