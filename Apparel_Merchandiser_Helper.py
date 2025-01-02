@@ -1,6 +1,9 @@
-from customtkinter import CTk, set_appearance_mode
-from lib.main_frames import *
-from lib.menu import *
+from customtkinter import CTk, CTkButton, CTkLabel, set_appearance_mode
+from lib.main_frames import Create_style_frame, Paths_frame, View_styles_frame, Pricing_frame, Dummy_info_frame
+from lib.menu import Menu
+from lib.panels import Color_mode_panel
+from lib.database_funcs import DB_CREATE
+from settings import *
 from ctypes import windll  # to get the scale factor
 
 

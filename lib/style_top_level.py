@@ -1,8 +1,7 @@
-from customtkinter import *
+from customtkinter import CTkFrame, CTkToplevel, CTkLabel, CTkButton, CTkScrollableFrame, CTkImage
 from lib.panels import *
 from PIL import Image
 
-# from settings import *
 
 
 class View_style_top_level(CTkToplevel):

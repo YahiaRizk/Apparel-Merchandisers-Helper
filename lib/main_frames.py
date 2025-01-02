@@ -1,8 +1,18 @@
+from customtkinter import StringVar, CTkFrame, CTkLabel
 from CTkMessagebox import CTkMessagebox
-from lib.category_panels import *
+from lib.panels import Path_panel, Add_path_panel, Submit_panel, Buttons_panel
+from lib.category_panels import Main_info_panel, Fabric_panel
 from lib.style_top_level import View_style_top_level
-from lib.database_funcs import *
-from lib.table_panel import *
+from lib.table_panel import Table_panel
+from lib.database_funcs import (
+    DB_GET_PATHS_DATA,
+    DB_INSERT_PATH,
+    DB_SAVE_MAIN_INFO,
+    DB_GET_PATH,
+    DB_GET_TOP_LEVEL_DATA,
+    DB_DELETE_STYLE,
+)
+from settings import *
 import os
 
 
@@ -45,9 +55,7 @@ class Paths_frame(Main_frame):
 
     def init_parameters(self):
         # create dict contains string vars for every coustomer in database to use with entry
-        self.paths_vars = {
-            customer: StringVar(value=path) for customer, path in self.data.items()
-        }
+        self.paths_vars = {customer: StringVar(value=path) for customer, path in self.data.items()}
 
     def add_path(self):
         # get the customer name from the entry var
@@ -103,7 +111,7 @@ class Create_style_frame(Main_frame):
         # -Submit panel
         Submit_panel(
             parent=self,
-            submit_func= self.submit,
+            submit_func=self.submit,
             reset_func=self.reset,
         )
 
@@ -131,7 +139,7 @@ class Create_style_frame(Main_frame):
         DB_SAVE_MAIN_INFO(data)
 
         # get the needed data for make_folders_files
-        main_data = data[0] #dict
+        main_data = data[0]  # dict
         style_name = main_data["group_name"] if main_data["group_name"] else "Temp"
         customer = main_data["customer"]
         path = DB_GET_PATH(customer)
@@ -144,7 +152,7 @@ class Create_style_frame(Main_frame):
 
     def handle_type_var(self, *arg):
         # if garment type is piece
-        if (self.main_data_vars["garment_type"].get() == TYPE_OPT[2]):  
+        if self.main_data_vars["garment_type"].get() == TYPE_OPT[2]:
             # pack forget the second combobox for piece 2 type
             self.main_info_panel.piece_type.unpack_sec_combobox()
         else:
@@ -227,7 +235,7 @@ class View_styles_frame(Main_frame):
             main_data, pos_data = DB_GET_TOP_LEVEL_DATA(id)
 
             # create the top level to view style details
-            self.view_style_top_level = View_style_top_level(main_data= main_data, pos_data= pos_data)
+            self.view_style_top_level = View_style_top_level(main_data=main_data, pos_data=pos_data)
 
     def delete_style(self):
         # The following appraoch when delete_row method give error

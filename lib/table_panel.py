@@ -1,7 +1,7 @@
 from CTkTable import CTkTable
 from customtkinter import CTkScrollableFrame, CTkFrame
 from settings import *
-from lib.database_funcs import *
+from lib.database_funcs import DB_GET_TABLE_DATA
 
 
 class Table_panel(CTkFrame):

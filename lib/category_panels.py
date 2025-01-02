@@ -1,7 +1,8 @@
-from customtkinter import CTkScrollableFrame, StringVar, IntVar
-from lib.panels import *
+from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkScrollableFrame, StringVar, IntVar
+from lib.panels import Entry_panel, Combobox_panel
 from lib.Window_Separator import CTkWindowSeparator
 from lib.database_funcs import DB_GET_PATHS_DATA
+from settings import *
 
 
 class Category_panel(CTkFrame):  # for create style frame

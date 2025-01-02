@@ -9,7 +9,7 @@ from customtkinter import (
 from tkinter import filedialog
 from settings import *
 from lib.database_funcs import DB_UPDATE_PATH
-import tkinter.font as tkFont
+
 
 
 class Panel(CTkFrame):
