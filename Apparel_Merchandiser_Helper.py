@@ -3,6 +3,7 @@ from lib.main_frames import Create_style_frame, Paths_frame, View_styles_frame, 
 from lib.menu import Menu
 from lib.panels import Color_mode_panel
 from lib.database_funcs import DB_CREATE
+from lib.funcs import CENTER_WINDOW
 from settings import *
 from ctypes import windll  # to get the scale factor
 
@@ -11,12 +12,12 @@ class App(CTk):
     def __init__(self):
         # Setup
         super().__init__(fg_color=BLACK_CLR)
-        self.center_window()
+        CENTER_WINDOW(self)
         self._set_appearance_mode("dark")
         self.title("")
         self.iconbitmap("empty.ico")
-        self.state("zoomed")
-        self.resizable(False, False)
+        # self.state("zoomed")
+        # self.resizable(False, False)
 
         self.button= CTkButton(
             master=self,
@@ -52,17 +53,6 @@ class App(CTk):
         self.color_mode_panel = Color_mode_panel(self, self.toggle_mode)
 
         self.mainloop()
-
-    def center_window(self):
-        # window setup to place the window on the center
-        scale_factor = windll.shcore.GetScaleFactorForDevice(0) / 100
-        screen_width = self.winfo_screenwidth() * scale_factor
-        screen_height = self.winfo_screenheight() * scale_factor
-        window_width = WINDOW_WIDTH * scale_factor
-        window_height = WINDOW_HEIGHT * scale_factor
-        left_point = int((screen_width - window_width) / 2)
-        top_point = int((screen_height - window_height) / 2) - 100
-        self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{left_point}+{top_point}")
 
     def init_parameters(self):
         self.main_frame_funcs = {

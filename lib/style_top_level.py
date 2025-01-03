@@ -1,5 +1,6 @@
 from customtkinter import CTkFrame, CTkToplevel, CTkLabel, CTkButton, CTkScrollableFrame, CTkImage
 from lib.panels import *
+from lib.funcs import CENTER_WINDOW
 from PIL import Image
 
 
@@ -9,10 +10,11 @@ class View_style_top_level(CTkToplevel):
         super().__init__(fg_color=MAIN_CLR)
         # setup
         self.geometry(f"1200x750")
+        CENTER_WINDOW(self)
         self.title(f'Style "{main_data["group_name"]}" Details')
         self.attributes("-topmost", True)
         self.after(10, lambda: self.attributes("-topmost", False))
-        self.state("zoomed")
+        # self.state("zoomed")
 
         # data
         self.main_data = main_data
