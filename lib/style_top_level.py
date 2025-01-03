@@ -1,16 +1,16 @@
 from customtkinter import CTkFrame, CTkToplevel, CTkLabel, CTkButton, CTkScrollableFrame, CTkImage
-from lib.panels import *
+from lib.top_level_forms import Add_po_from, Top_level_form
+from lib.panels import Simple_button
 from lib.funcs import CENTER_WINDOW
+from settings import *
 from PIL import Image
-
 
 
 class View_style_top_level(CTkToplevel):
     def __init__(self, main_data, pos_data):
         super().__init__(fg_color=MAIN_CLR)
         # setup
-        self.geometry(f"1200x750")
-        CENTER_WINDOW(self)
+        CENTER_WINDOW(window=self, width=1200, height=750)
         self.title(f'Style "{main_data["group_name"]}" Details')
         self.attributes("-topmost", True)
         self.after(10, lambda: self.attributes("-topmost", False))
@@ -23,12 +23,27 @@ class View_style_top_level(CTkToplevel):
         # widgets
         # - main info panel
         self.main_info_panel = Main_info_panel(parent=self, data=self.main_data)
+
+        # - add po button
+        Simple_button(self, text="Add PO", func=self.add_po, side="top").pack(
+            anchor="w", ipady=0, ipadx=0
+        )
+
         # - rest of the data container
-        self.container = CTkScrollableFrame(self, fg_color="transparent")
+        self.container = CTkScrollableFrame(
+            self,
+            fg_color="transparent",
+            scrollbar_button_color=SECONDARY_CLR,
+            scrollbar_button_hover_color=THIRD_CLR,
+        )
         self.container.pack(fill="both", expand=True)
         # - pos data panels
         for po in self.pos_data:
             Po_data_panel(parent=self.container, data=po)
+
+    def add_po(self):
+        print("add po")
+        Add_po_from(parent=self)
 
 
 class Main_info_panel(CTkFrame):
@@ -379,6 +394,7 @@ class Po_header_panel(CTkFrame):
         Icon_button(self.buttons_container, icon=edit_icon, func=edit_func)
         # ----add button
         Icon_button(self.buttons_container, icon=add_icon, func=add_func)
+
 
 class Simple_label(CTkLabel):
     def __init__(self, parent, text, row, column, colspan=1, rowspan=1, font=PANEL_LABLE_FONT):

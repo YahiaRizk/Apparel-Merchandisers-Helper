@@ -276,7 +276,6 @@ class View_styles_frame(Main_frame):
     def archive_style(self):
         print("Archive")
 
-
 class Pricing_frame(Main_frame):
     def __init__(self, parent):
         super().__init__(parent=parent)
@@ -288,7 +287,6 @@ class Pricing_frame(Main_frame):
             text_color=FOURTH_CLR,
             font=APP_TITLE_FONT,
         ).pack(expand=True)
-
 
 class Dummy_info_frame(Main_frame):
     def __init__(self, parent):

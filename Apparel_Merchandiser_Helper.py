@@ -12,7 +12,7 @@ class App(CTk):
     def __init__(self):
         # Setup
         super().__init__(fg_color=BLACK_CLR)
-        CENTER_WINDOW(self)
+        CENTER_WINDOW(window=self, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
         self._set_appearance_mode("dark")
         self.title("")
         self.iconbitmap("empty.ico")
