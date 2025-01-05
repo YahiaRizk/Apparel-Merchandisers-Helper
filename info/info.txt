@@ -2,6 +2,7 @@ Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
 
 Style top level
+- Handle errors when choose other style in table
 - Handle add color to po:
 add button for add color,
 form top level to get the data from the user,
@@ -11,6 +12,7 @@ function to add the data to database.
 - Handle add po:
 Create a button to add po,
 top level form to get po data from user,
+    handel check double for price
 function to append the po panel to the layout,
 function to add the po data to the database.
 
