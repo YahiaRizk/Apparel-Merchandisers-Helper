@@ -37,9 +37,13 @@ class View_style_top_level(CTkToplevel):
             scrollbar_button_hover_color=THIRD_CLR,
         )
         self.container.pack(fill="both", expand=True)
+
         # - pos data panels
+        # -- po panels container
+        self.po_panels_container = CTkFrame(self.container, fg_color="transparent")
+        self.po_panels_container.pack(fill="x")
         for po in self.pos_data:
-            Po_data_panel(parent=self.container, data=po)
+            Po_data_panel(parent=self.po_panels_container, data=po)
 
     def add_po(self):
         print("add po")

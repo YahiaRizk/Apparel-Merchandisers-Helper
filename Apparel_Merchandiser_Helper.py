@@ -5,7 +5,6 @@ from lib.panels import Color_mode_panel
 from lib.database_funcs import DB_CREATE
 from lib.funcs import CENTER_WINDOW
 from settings import *
-from ctypes import windll  # to get the scale factor
 
 
 class App(CTk):

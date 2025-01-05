@@ -1,12 +1,10 @@
-from customtkinter import CTkToplevel
+from customtkinter import CTkToplevel, CTkLabel, CTkButton
+# from lib.panels import Simple_button
 from lib.funcs import CENTER_WINDOW
 from settings import *
 
 
 class Top_level_form(CTkToplevel):
-    # def __init__(self, parent, title):
-    #     super().__init__(master=parent)
-    #     self.title(title)
     def __init__(self, parent, title, width, height):
         super().__init__(master=parent, fg_color=MAIN_CLR)
         self.title(title)
@@ -15,6 +13,34 @@ class Top_level_form(CTkToplevel):
         self.attributes("-topmost", True)
         self.focus_set()
         self.grab_set()
+
+        # Widgets
+        # - title
+        CTkLabel(
+            self,
+            text=title,
+            font=APP_TITLE_FONT,
+            text_color=FOURTH_CLR
+        ).pack(fill="x", pady=10)
+
+        # -submit button
+        CTkButton(
+            self,
+            text="Submit",
+            fg_color=SECONDARY_CLR,
+            hover_color=THIRD_CLR,
+            text_color=FOURTH_CLR,
+            font=BUTTON_FONT,
+            width=100,
+            command=self.submit,
+        ).pack(side="bottom", pady=30)
+
+    def submit(self):
+        self.grab_release()
+        self.destroy()
+        
+
+
 
 class Add_po_from(Top_level_form):
     def __init__(self, parent):
