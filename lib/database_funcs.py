@@ -42,7 +42,7 @@ def DB_CREATE():
             )"""
     )
 
-    # create pos table
+    # create colors table
     cr.execute(
         """CREATE TABLE IF NOT EXISTS colors (
                 po_num INTEGER,
@@ -355,3 +355,28 @@ def DB_GET_TOP_LEVEL_DATA(id):
     db.close()
 
     return main_data, pos_data
+
+# add a new po to the database with one color
+def DB_ADD_PO(po_data, color_data):
+    # conntet to styles database
+    db= sqlite3.connect("DB/styles.db")
+    cr = db.cursor()
+
+    # insert the po data to pos table
+    cr.execute(
+        """INSERT INTO pos VALUES(
+                :po_num, :group_id, :smu, :style_name, :size_range, :ratio, :po_qty, :price, :shipping_date
+            )""",
+        po_data,
+    )
+
+    # insert the color data to colors table
+    cr.execute(
+        """INSERT INTO colors VALUES(
+                :po_num, :teams, :color_codes, :piece1_colors, :piece2_colors, :color_qtys
+            )""",
+        color_data,
+    )
+
+    db.commit()
+    db.close()

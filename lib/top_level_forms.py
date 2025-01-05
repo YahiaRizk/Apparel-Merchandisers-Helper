@@ -2,6 +2,7 @@ from customtkinter import CTkToplevel, CTkFrame, CTkLabel, CTkButton, StringVar
 from lib.panels import Entry_panel, Combobox_panel
 from lib.style_top_level_panels import Po_data_panel
 from lib.funcs import CENTER_WINDOW
+from lib.database_funcs import DB_ADD_PO
 from settings import *
 
 
@@ -169,12 +170,12 @@ class Add_po_form(Top_level_form):
         )
 
     def submit(self):
-        # get data
+        # get data suitable for po_data_panel
         po_data= {
             "po_num": int(self.po_vars["po_number"].get()) if self.po_vars["po_number"].get() else None,
             "group_id": self.id,
-            "smu": self.po_vars["smu"].get(),
-            "style_name": self.po_vars["style"].get().capitalize(),
+            "smu": self.po_vars["smu"].get().upper(),
+            "style_name": self.po_vars["style"].get().upper(),
             "size_range": self.po_vars["size_range"].get(),
             "ratio": self.po_vars["ratio"].get(),
             "po_qty": int(self.po_vars["po_qty"].get()) if self.po_vars["po_qty"].get() else 0,
@@ -183,22 +184,28 @@ class Add_po_form(Top_level_form):
         }
         color_data= {
             "po_num": po_data["po_num"],
-            "teams": [self.color_vars["team"].get().capitalize()],
-            "color_codes": [self.color_vars["color_code"].get().capitalize()],
-            "piece1_colors": [self.color_vars["piece1_color"].get().capitalize()],
-            "piece2_colors": [self.color_vars["piece2_color"].get().capitalize()],
+            "teams": [self.color_vars["team"].get().upper()],
+            "color_codes": [self.color_vars["color_code"].get().upper()],
+            "piece1_colors": [self.color_vars["piece1_color"].get().upper()],
+            "piece2_colors": [self.color_vars["piece2_color"].get().upper()],
             "color_qtys": [int(self.color_vars["color_qty"].get())] if self.color_vars["color_qty"].get() else [0],
         }
+        # merge data to create po_data_panel
         merged_data = {**po_data, **color_data}
-        
+        # create po_data_panel and add to po_panels_container
         Po_data_panel(
             parent=self.po_panels_container,
             data=merged_data,
         )
 
-
+        # convert color_data dict to suitable format for database(cancels the lists)
+        color_data={
+            key: value[0] if isinstance(value, list) else value for key, value in color_data.items()
+        }
 
         # add to database
-        # self.add_po(po_data, color_data)
+        DB_ADD_PO(po_data, color_data)
+        # print(color_data)
+
         # close window
         super().submit()
