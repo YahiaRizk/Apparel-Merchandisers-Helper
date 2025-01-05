@@ -339,7 +339,7 @@ def DB_GET_TOP_LEVEL_DATA(id):
             "smu": record[2],
             "size_range": record[3],
             "ratio": record[4],
-            "teams": record[5].split(","),
+            "teams": record[5].split(",") if record[5] else [""],
             "color_codes": record[6].split(","),
             "piece1_colors": record[7].split(","),
             "piece2_colors": record[8].split(","),

@@ -233,41 +233,43 @@ class Po_data_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-
+        # function return the index value if index is valid else empty string
+        def get_value(key, index):
+            return self.data[key][index] if index < len(self.data[key]) else ''
         # next 5 columns(team, color code, pc 1 color, pc 2 color, color qty)
         # need to be repeated for each data on the list
         for i in range(self.data_rows):
             Simple_label(
                 self.data_container,
-                text=self.data["teams"][i],
+                text=get_value("teams", i),
                 column=7,
                 row=self.header_rows + i,
                 colspan=2,
             )
             Simple_label(
                 self.data_container,
-                text=self.data["color_codes"][i],
+                text=get_value("color_codes", i),
                 column=9,
                 row=self.header_rows + i,
                 colspan=2,
             )
             Simple_label(
                 self.data_container,
-                text=self.data["piece1_colors"][i],
+                text=get_value("piece1_colors", i),
                 column=11,
                 row=self.header_rows + i,
                 colspan=2,
             )
             Simple_label(
                 self.data_container,
-                text=self.data["piece2_colors"][i],
+                text=get_value("piece2_colors", i),
                 column=13,
                 row=self.header_rows + i,
                 colspan=2,
             )
             Simple_label(
                 self.data_container,
-                text=self.data["color_qtys"][i],
+                text=get_value("color_qtys", i),
                 column=15,
                 row=self.header_rows + i,
                 colspan=2,
