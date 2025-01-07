@@ -49,6 +49,7 @@ class Entry_panel(Panel):
         label_width=95,
         entry_width=200,
         int_bool=False,
+        float_bool=False,
     ):
         super().__init__(parent=parent, label_str=label_str, label_width=label_width)
         self.data_var = data_var
@@ -71,11 +72,25 @@ class Entry_panel(Panel):
             self.old_value = ""
             self.entry.bind("<KeyRelease>", self.check_int)
 
+        # bind a function to entry if float_bool is true
+        if float_bool:
+            self.old_value = ""
+            self.entry.bind("<KeyRelease>", self.check_float)
+
     def check_int(self, event):
         if self.entry.get() == "":
             pass
         else:
             if self.entry.get().isdigit():
+                self.old_value = self.entry.get()
+            else:
+                self.data_var.set(self.old_value)
+
+    def check_float(self, event):
+        if self.entry.get() == "":
+            pass
+        else:
+            if self.entry.get().replace(".", "", 1).isdigit():
                 self.old_value = self.entry.get()
             else:
                 self.data_var.set(self.old_value)

@@ -126,6 +126,7 @@ class Add_po_form(Top_level_form):
             label_str="Cost Price:",
             data_var=self.po_vars["cost_price"],
             entry_width=100,
+            float_bool=True,
         )
         Entry_panel(
             parent=self.left_container,
@@ -177,7 +178,7 @@ class Add_po_form(Top_level_form):
             "size_range": self.po_vars["size_range"].get(),
             "ratio": self.po_vars["ratio"].get(),
             "po_qty": int(self.po_vars["po_qty"].get()) if self.po_vars["po_qty"].get() else 0,
-            "price": float(self.po_vars["cost_price"].get()) if self.po_vars["cost_price"].get() else 0.0,
+            "price": float(self.po_vars["cost_price"].get()) if self.po_vars["cost_price"].get() else 0.00,
             "shipping_date": self.po_vars["Shipping_date"].get(),
         }
         color_data= {
