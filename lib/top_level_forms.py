@@ -7,7 +7,7 @@ from settings import *
 
 
 class Top_level_form(CTkToplevel):
-    def __init__(self, parent, title, id, width, height):
+    def __init__(self, parent, title, width, height):
         super().__init__(master=parent, fg_color=MAIN_CLR)
         self.title(title)
         CENTER_WINDOW(window=self, width=width, height=height)
@@ -15,9 +15,6 @@ class Top_level_form(CTkToplevel):
         self.attributes("-topmost", True)
         self.focus_set()
         self.grab_set()
-
-        # data
-        self.id= id
 
         # Widgets
         # - title
@@ -47,10 +44,11 @@ class Top_level_form(CTkToplevel):
 
 class Add_po_form(Top_level_form):
     def __init__(self, parent, id, pos_container):
-        super().__init__(parent=parent, title="Add Purchase Order", id=id, width=500, height=600)
+        super().__init__(parent=parent, title="Add Purchase Order", width=500, height=600)
         
         # data
         self.init_parameters()
+        self.id= id
         self.po_panels_container= pos_container
 
         # widgets
@@ -209,3 +207,7 @@ class Add_po_form(Top_level_form):
 
         # close window
         super().submit()
+
+# class Add_color_form(Top_level_form):
+#     def __init__(self, parent, id):
+#         super().__init__(parent=parent, title="Add Color", id=id, width=300, height=400)

@@ -6,7 +6,6 @@ from lib.database_funcs import DB_CREATE
 from lib.funcs import CENTER_WINDOW
 from settings import *
 
-
 class App(CTk):
     def __init__(self):
         # Setup

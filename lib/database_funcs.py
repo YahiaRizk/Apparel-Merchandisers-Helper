@@ -46,11 +46,11 @@ def DB_CREATE():
     cr.execute(
         """CREATE TABLE IF NOT EXISTS colors (
                 po_num INTEGER,
-                team TEXT,
-                color_code TEXT,
-                piece1_color TEXT,
-                piece2_color TEXT,
-                color_qty INTEGER,
+                team TEXT DEFAULT '',
+                color_code TEXT DEFAULT '',
+                piece1_color TEXT DEFAULT '',
+                piece2_color TEXT DEFAULT '',
+                color_qty INTEGER ,
                 FOREIGN KEY (po_num) REFERENCES pos(po_num)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
@@ -305,9 +305,9 @@ def DB_GET_TOP_LEVEL_DATA(id):
         "piece2_type": data[6],
         "total_qty": data[7],
         "rcvd_date": data[8],
-        "fabric_types": data[9].split(","),
-        "fabric_descriptions": data[10].split(","),
-        "fabric_gsms": data[11].split(","),
+        "fabric_types": data[9].split(",") if data[9] else [""],
+        "fabric_descriptions": data[10].split(",") if data[10] else [""],
+        "fabric_gsms": data[11].split(",") if data[11] else [""],
     }
 
     cr.execute(
@@ -340,10 +340,10 @@ def DB_GET_TOP_LEVEL_DATA(id):
             "size_range": record[3],
             "ratio": record[4],
             "teams": record[5].split(",") if record[5] else [""],
-            "color_codes": record[6].split(","),
-            "piece1_colors": record[7].split(","),
-            "piece2_colors": record[8].split(","),
-            "color_qtys": list(map(int, record[9].split(","))),
+            "color_codes": record[6].split(",") if record[6] else [""],
+            "piece1_colors": record[7].split(",") if record[7] else [""],
+            "piece2_colors": record[8].split(",") if record[8] else [""],
+            "color_qtys": list(map(int, record[9].split(","))) if record[9] else [0],
             "po_qty": record[10],
             "price": record[11],
             "shipping_date": record[12],
@@ -360,6 +360,7 @@ def DB_GET_TOP_LEVEL_DATA(id):
 def DB_ADD_PO(po_data, color_data):
     # conntet to styles database
     db= sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
     cr = db.cursor()
 
     # insert the po data to pos table
