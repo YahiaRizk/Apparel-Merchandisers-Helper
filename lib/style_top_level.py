@@ -47,10 +47,7 @@ class View_style_top_level(CTkToplevel):
             Po_data_panel(parent=self.po_panels_container, data=po)
 
     def open_add_po_from(self):
-        Add_po_form(
-            # parent=self, id=self.main_data["group_id"], pos_container=self.po_panels_container
-            parent=self, callback_func=self.add_po
-        )
+        Add_po_form(parent=self, callback_func=self.add_po)
 
     def add_po(self, data):
         # manage the data get from the form (po_data, color_data)

@@ -1,4 +1,5 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkImage
+from lib.top_level_forms import Add_color_form
 from settings import *
 from PIL import Image
 
@@ -77,8 +78,8 @@ class Po_data_panel(CTkFrame):
         self.header_panel = Po_header_panel(
             parent=self,
             po_num=self.data["po_num"],
-            add_func=self.add_color,
-            edit_func=self.edit_po,
+            add_func=self.open_add_color_form,
+            edit_func=self.open_edit_po_form,
             delete_func=self.delete_po,
         )
 
@@ -102,7 +103,6 @@ class Po_data_panel(CTkFrame):
         self.create_po_data_widgets()
 
     def create_po_header_widgets(self):
-
         # po headers
         Simple_label(
             self.data_container,
@@ -301,11 +301,11 @@ class Po_data_panel(CTkFrame):
             rowspan=self.data_rows,
         )
 
-    def add_color(self):
+    def open_add_color_form(self):
         print("add color")
-        # Add_color_form(parent=self.data_container, po_num=self.data["po_num"])
+        Add_color_form(parent=self, callback_func=lambda data: print(data))
 
-    def edit_po(self):
+    def open_edit_po_form(self):
         print("edit po")
 
     def delete_po(self):

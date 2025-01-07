@@ -212,6 +212,14 @@ class Add_po_form(Top_level_form):
         )
 
 
-# class Add_color_form(Top_level_form):
-#     def __init__(self, parent, po_num):
-#         super().__init__(parent=parent, title="Add Color", id=id, width=300, height=400)
+class Add_color_form(Top_level_form):
+    def __init__(self, parent, callback_func):
+        super().__init__(
+            parent=parent, title="Add Color", callback_func=callback_func, width=300, height=400
+        )
+
+        # data
+        # self.init_parameters()
+
+        # widgets
+    
