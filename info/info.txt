@@ -12,7 +12,6 @@ function to add the data to database.
 - Handle delete po 
 
 - Handle add po:
-    handel check double for price
     handel not add null po and try to prevent auto add po
 
 

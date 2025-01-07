@@ -303,6 +303,7 @@ class Po_data_panel(CTkFrame):
 
     def add_color(self):
         print("add color")
+        # Add_color_form(parent=self.data_container, po_num=self.data["po_num"])
 
     def edit_po(self):
         print("edit po")
