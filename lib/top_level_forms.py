@@ -41,6 +41,40 @@ class Top_level_form(CTkToplevel):
     def get_data(self):
         raise NotImplementedError
 
+    def create_color_widgets(self, container, color_vars):
+        Combobox_panel(
+            parent=container,
+            label_str1="Team:",
+            data_var1=color_vars["team"],
+            options1=TEAMS_OPT,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="Color Code:",
+            data_var=color_vars["color_code"],
+            entry_width=100,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="Piece1 Color:",
+            data_var=color_vars["piece1_color"],
+            entry_width=100,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="Piece2 Color:",
+            data_var=color_vars["piece2_color"],
+            entry_width=100,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="Color Qty:",
+            int_bool=True,
+            entry_width=100,
+            data_var=color_vars["color_qty"],
+        )
+
+
     def submit(self):
         data = self.get_data()
         self.callback_func(data)
@@ -69,7 +103,7 @@ class Add_po_form(Top_level_form):
         self.right_container.pack(side="right", fill="both", expand=True)
         # - po widgets and color widgets
         self.create_po_widgets()
-        self.create_color_widgets()
+        self.create_color_widgets(self.right_container, self.color_vars)
 
     def init_parameters(self):
         self.po_vars = {
@@ -178,39 +212,6 @@ class Add_po_form(Top_level_form):
             entry_width=100,
         )
 
-    def create_color_widgets(self):
-        Combobox_panel(
-            parent=self.right_container,
-            label_str1="Team:",
-            data_var1=self.color_vars["team"],
-            options1=TEAMS_OPT,
-        )
-        Entry_panel(
-            parent=self.right_container,
-            label_str="Color Code:",
-            data_var=self.color_vars["color_code"],
-            entry_width=100,
-        )
-        Entry_panel(
-            parent=self.right_container,
-            label_str="Piece1 Color:",
-            data_var=self.color_vars["piece1_color"],
-            entry_width=100,
-        )
-        Entry_panel(
-            parent=self.right_container,
-            label_str="Piece2 Color:",
-            data_var=self.color_vars["piece2_color"],
-            entry_width=100,
-        )
-        Entry_panel(
-            parent=self.right_container,
-            label_str="Color Qty:",
-            int_bool=True,
-            entry_width=100,
-            data_var=self.color_vars["color_qty"],
-        )
-
 
 class Add_color_form(Top_level_form):
     def __init__(self, parent, callback_func):
@@ -222,4 +223,15 @@ class Add_color_form(Top_level_form):
         # self.init_parameters()
 
         # widgets
+
+    def init_parameters(self):
+        self.color_vars = {
+            "team": StringVar(),
+            "color_code": StringVar(),
+            "piece1_color": StringVar(),
+            "piece2_color": StringVar(),
+            "color_qty": StringVar(),
+        }
     
+    def get_data(self):
+        return super().get_data
