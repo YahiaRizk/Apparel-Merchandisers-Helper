@@ -74,7 +74,6 @@ class Top_level_form(CTkToplevel):
             data_var=color_vars["color_qty"],
         )
 
-
     def submit(self):
         data = self.get_data()
         self.callback_func(data)
@@ -220,9 +219,10 @@ class Add_color_form(Top_level_form):
         )
 
         # data
-        # self.init_parameters()
+        self.init_parameters()
 
         # widgets
+        self.create_color_widgets(self, self.color_vars)
 
     def init_parameters(self):
         self.color_vars = {
@@ -232,6 +232,17 @@ class Add_color_form(Top_level_form):
             "piece2_color": StringVar(),
             "color_qty": StringVar(),
         }
-    
+
     def get_data(self):
-        return super().get_data
+        color_data = {
+            "teams": self.color_vars["team"].get().upper(),
+            "color_codes": self.color_vars["color_code"].get().upper(),
+            "piece1_colors": self.color_vars["piece1_color"].get().upper(),
+            "piece2_colors": self.color_vars["piece2_color"].get().upper(),
+            "color_qtys": (
+                int(self.color_vars["color_qty"].get())
+                if self.color_vars["color_qty"].get()
+                else [0]
+            ),
+        }
+        return color_data
