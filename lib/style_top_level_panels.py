@@ -101,6 +101,7 @@ class Po_data_panel(CTkFrame):
         self.create_po_header_widgets()
         # -po data widgets
         self.create_po_data_widgets()
+        self.update_rowspan()
 
     def create_po_header_widgets(self):
         # po headers
@@ -309,7 +310,32 @@ class Po_data_panel(CTkFrame):
         self.data_rows += 1
         # create the color row widgets
         self.create_color_row_widgts(self.data_rows, color_data)
+        # update rowspan for po data widgets
+        self.update_rowspan()
 
+    def update_rowspan(self):
+        # Track processed starting columns
+        processed_columns= set()
+        # put desired widgets in one list
+        widgets= list(self.data_container.children.values())[:9] + list(self.data_container.children.values())[17:]
+
+        for widgt in widgets:
+            # Get the grid info
+            info= widgt.grid_info()
+            # Get the starting column for the widget
+            start_column= info.get("column", 0)
+            # get the current widget column span
+            col_span= info.get("colspan", 1)
+            # only update widgts that are not already processed
+            if start_column not in processed_columns:
+                # update the rowspan for the widget
+                # info["rowspan"] = self.data_rows
+                # update the processed columns
+                processed_columns.update(range(start_column, start_column + col_span))
+                widgt.grid(row=info.get("row", 0), column=start_column, rowspan=self.data_rows, columnspan=col_span, sticky="nsew")
+
+
+        
     def open_add_color_form(self):
         Add_color_form(parent=self, callback_func=self.add_color)
 
