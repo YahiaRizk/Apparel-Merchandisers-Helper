@@ -4,7 +4,6 @@ from settings import *
 from PIL import Image
 
 
-
 class Main_info_panel(CTkFrame):
     def __init__(self, parent, data):
         super().__init__(parent, fg_color="transparent")
@@ -101,7 +100,6 @@ class Po_data_panel(CTkFrame):
         self.create_po_header_widgets()
         # -po data widgets
         self.create_po_data_widgets()
-        self.update_rowspan()
 
     def create_po_header_widgets(self):
         # po headers
@@ -311,31 +309,38 @@ class Po_data_panel(CTkFrame):
         # create the color row widgets
         self.create_color_row_widgts(self.data_rows, color_data)
         # update rowspan for po data widgets
-        self.update_rowspan()
+        # self.update_rowspan() #Hold for now
 
-    def update_rowspan(self):
-        # Track processed starting columns
-        processed_columns= set()
-        # put desired widgets in one list
-        widgets= list(self.data_container.children.values())[:9] + list(self.data_container.children.values())[17:]
+    # def update_rowspan(self):
+    #     # Track processed starting columns
+    #     processed_columns = set()
+    #     # put desired widgets in one list
+    #     widgets = (
+    #         list(self.data_container.children.values())[:9]
+    #         + list(self.data_container.children.values())[17:]
+    #     )
 
-        for widgt in widgets:
-            # Get the grid info
-            info= widgt.grid_info()
-            # Get the starting column for the widget
-            start_column= info.get("column", 0)
-            # get the current widget column span
-            col_span= info.get("colspan", 1)
-            # only update widgts that are not already processed
-            if start_column not in processed_columns:
-                # update the rowspan for the widget
-                # info["rowspan"] = self.data_rows
-                # update the processed columns
-                processed_columns.update(range(start_column, start_column + col_span))
-                widgt.grid(row=info.get("row", 0), column=start_column, rowspan=self.data_rows, columnspan=col_span, sticky="nsew")
+    #     for widgt in widgets:
+    #         # Get the grid info
+    #         info = widgt.grid_info()
+    #         # Get the starting column for the widget
+    #         start_column = info.get("column", 0)
+    #         # get the current widget column span
+    #         col_span = info.get("colspan", 1)
+    #         # only update widgts that are not already processed
+    #         if start_column not in processed_columns:
+    #             # update the rowspan for the widget
+    #             # info["rowspan"] = self.data_rows
+    #             # update the processed columns
+    #             processed_columns.update(range(start_column, start_column + col_span))
+    #             widgt.grid(
+    #                 row=info.get("row", 0),
+    #                 column=start_column,
+    #                 rowspan=self.data_rows - self.header_rows,
+    #                 columnspan=col_span,
+    #                 sticky="nsew",
+    #             )
 
-
-        
     def open_add_color_form(self):
         Add_color_form(parent=self, callback_func=self.add_color)
 
@@ -346,10 +351,10 @@ class Po_data_panel(CTkFrame):
         print("delete po")
 
     # function return the index value if index is valid else empty string
-    def get_value(self,value, index):
+    def get_value(self, value, index):
         # check if the value is a list if not return the value
-        if  isinstance(value, list):
-            return value[index] if index < len(value) else ''
+        if isinstance(value, list):
+            return value[index] if index < len(value) else ""
         else:
             return value
 
@@ -433,5 +438,3 @@ class Icon_button(CTkButton):
             command=func,
         )
         self.pack(side="right", padx=2)
-
-
