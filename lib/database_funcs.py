@@ -271,6 +271,17 @@ def DB_DELETE_STYLE(id):
     db.commit()
     db.close()
 
+def DB_DELETE_PO(po_num):
+    # Create/connect to data base
+    db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
+    # Create a cursor
+    cr = db.cursor()
+
+    cr.execute("DELETE FROM pos WHERE po_num = ?", (po_num,))
+
+    db.commit()
+    db.close()
 
 def DB_GET_TOP_LEVEL_DATA(id):
     # Create/connect to data base

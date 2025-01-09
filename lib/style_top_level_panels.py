@@ -1,6 +1,7 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkImage
+from CTkMessagebox import CTkMessagebox
 from lib.top_level_forms import Add_color_form
-from lib.database_funcs import DB_ADD_COLOR
+from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO
 from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES, GET_VALUE_IF_NOT_LIST
 from settings import *
 from PIL import Image
@@ -356,7 +357,31 @@ class Po_data_panel(CTkFrame):
         print("edit po")
 
     def delete_po(self):
-        print("delete po")
+        # give confirm message before delete
+        msg = CTkMessagebox(
+            title="Warning!",
+            message=f"PO# '{self.data['po_num']}' will be deleted permanently,\nAre you sure ?",
+            wraplength=400,
+            option_1="Yes",
+            option_2="No",
+            icon="warning",
+            text_color=FOURTH_CLR,
+            fg_color=MAIN_CLR,
+            bg_color=BLACK_CLR,
+            button_color=(SECONDARY_CLR, SECONDARY_CLR),
+            button_hover_color=THIRD_CLR,
+            button_text_color=FOURTH_CLR,
+            title_color=FOURTH_CLR,
+            cancel_button_color=FOURTH_CLR,
+            justify="center",
+        )
+
+        # Check if the user approved delete
+        if msg.get() == "Yes":
+            # unpack the po from layout
+            self.destroy()
+            # delete po from database
+            DB_DELETE_PO(self.data["po_num"])
 
 class Po_header_panel(CTkFrame):
     def __init__(self, parent, po_num, add_func, edit_func, delete_func):

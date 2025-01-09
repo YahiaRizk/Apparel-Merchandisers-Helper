@@ -3,9 +3,7 @@ Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
 Style top level
 - Handle add color to po:
-form top level to get the data from the user,
-function to add the data row to the po layout,
-function to add the data to database.
+    handel span common data rows to span the additional color row
 
 - Handle edite po
 
