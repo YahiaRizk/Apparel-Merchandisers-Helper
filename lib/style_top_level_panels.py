@@ -1,5 +1,7 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkImage
 from lib.top_level_forms import Add_color_form
+from lib.database_funcs import DB_ADD_COLOR
+from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES, GET_VALUE_IF_NOT_LIST
 from settings import *
 from PIL import Image
 
@@ -267,35 +269,35 @@ class Po_data_panel(CTkFrame):
     def create_color_row_widgts(self, row_index, data):
         Simple_label(
             self.data_container,
-            text=self.get_value(data["teams"], row_index),
+            text=GET_VALUE_IF_NOT_LIST(data["teams"], row_index),
             column=7,
             row=self.header_rows + row_index,
             colspan=2,
         )
         Simple_label(
             self.data_container,
-            text=self.get_value(data["color_codes"], row_index),
+            text=GET_VALUE_IF_NOT_LIST(data["color_codes"], row_index),
             column=9,
             row=self.header_rows + row_index,
             colspan=2,
         )
         Simple_label(
             self.data_container,
-            text=self.get_value(data["piece1_colors"], row_index),
+            text=GET_VALUE_IF_NOT_LIST(data["piece1_colors"], row_index),
             column=11,
             row=self.header_rows + row_index,
             colspan=2,
         )
         Simple_label(
             self.data_container,
-            text=self.get_value(data["piece2_colors"], row_index),
+            text=GET_VALUE_IF_NOT_LIST(data["piece2_colors"], row_index),
             column=13,
             row=self.header_rows + row_index,
             colspan=2,
         )
         Simple_label(
             self.data_container,
-            text=self.get_value(data["color_qtys"], row_index),
+            text=GET_VALUE_IF_NOT_LIST(data["color_qtys"], row_index),
             column=15,
             row=self.header_rows + row_index,
             colspan=2,
@@ -304,6 +306,7 @@ class Po_data_panel(CTkFrame):
     def add_color(self, color_data):
         # add po number to the returned color data
         color_data["po_num"] = self.data["po_num"]
+
         # increase the row count
         self.data_rows += 1
         # create the color row widgets
@@ -311,35 +314,40 @@ class Po_data_panel(CTkFrame):
         # update rowspan for po data widgets
         # self.update_rowspan() #Hold for now
 
-    # def update_rowspan(self):
-    #     # Track processed starting columns
-    #     processed_columns = set()
-    #     # put desired widgets in one list
-    #     widgets = (
-    #         list(self.data_container.children.values())[:9]
-    #         + list(self.data_container.children.values())[17:]
-    #     )
+        # convert color_data dict to suitable format for database(cancels the lists)
+        color_data= CANCEL_LISTS_FROM_DICT_VALUES(color_data)
+        # add to database
+        DB_ADD_COLOR(color_data)
 
-    #     for widgt in widgets:
-    #         # Get the grid info
-    #         info = widgt.grid_info()
-    #         # Get the starting column for the widget
-    #         start_column = info.get("column", 0)
-    #         # get the current widget column span
-    #         col_span = info.get("colspan", 1)
-    #         # only update widgts that are not already processed
-    #         if start_column not in processed_columns:
-    #             # update the rowspan for the widget
-    #             # info["rowspan"] = self.data_rows
-    #             # update the processed columns
-    #             processed_columns.update(range(start_column, start_column + col_span))
-    #             widgt.grid(
-    #                 row=info.get("row", 0),
-    #                 column=start_column,
-    #                 rowspan=self.data_rows - self.header_rows,
-    #                 columnspan=col_span,
-    #                 sticky="nsew",
-    #             )
+    def update_rowspan(self):
+        """# Track processed starting columns
+        processed_columns = set()
+        # put desired widgets in one list
+        widgets = (
+            list(self.data_container.children.values())[:9]
+            + list(self.data_container.children.values())[17:]
+        )
+        for widgt in widgets:
+            # Get the grid info
+            info = widgt.grid_info()
+            # Get the starting column for the widget
+            start_column = info.get("column", 0)
+            # get the current widget column span
+            col_span = info.get("colspan", 1)
+            # only update widgts that are not already processed
+            if start_column not in processed_columns:
+                # update the rowspan for the widget
+                # info["rowspan"] = self.data_rows
+                # update the processed columns
+                processed_columns.update(range(start_column, start_column + col_span))
+                widgt.grid(
+                    row=info.get("row", 0),
+                    column=start_column,
+                    rowspan=self.data_rows - self.header_rows,
+                    columnspan=col_span,
+                    sticky="nsew",
+                )
+        """
 
     def open_add_color_form(self):
         Add_color_form(parent=self, callback_func=self.add_color)
@@ -349,15 +357,6 @@ class Po_data_panel(CTkFrame):
 
     def delete_po(self):
         print("delete po")
-
-    # function return the index value if index is valid else empty string
-    def get_value(self, value, index):
-        # check if the value is a list if not return the value
-        if isinstance(value, list):
-            return value[index] if index < len(value) else ""
-        else:
-            return value
-
 
 class Po_header_panel(CTkFrame):
     def __init__(self, parent, po_num, add_func, edit_func, delete_func):

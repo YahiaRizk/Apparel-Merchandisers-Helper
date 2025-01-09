@@ -3,7 +3,7 @@ from lib.style_top_level_panels import Main_info_panel, Po_data_panel
 from lib.top_level_forms import Add_po_form
 from lib.panels import Simple_button
 from lib.database_funcs import DB_ADD_PO
-from lib.funcs import CENTER_WINDOW
+from lib.funcs import CENTER_WINDOW, CANCEL_LISTS_FROM_DICT_VALUES
 from settings import *
 
 
@@ -63,9 +63,7 @@ class View_style_top_level(CTkToplevel):
         )
 
         # convert color_data dict to suitable format for database(cancels the lists)
-        color_data = {
-            key: value[0] if isinstance(value, list) else value for key, value in color_data.items()
-        }
+        color_data = CANCEL_LISTS_FROM_DICT_VALUES(color_data)
 
         # add to database
         DB_ADD_PO(po_data, color_data)
