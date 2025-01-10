@@ -204,7 +204,7 @@ class Po_data_panel(CTkFrame):
 
     def create_po_data_widgets(self):
         # first 4 columns(style, smu, size range, ratio)
-        Simple_label(
+        self.style_col=Simple_label(
             self.data_container,
             text=self.data["style_name"],
             column=0,
@@ -212,14 +212,14 @@ class Po_data_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-        Simple_label(
+        self.smu_col=Simple_label(
             self.data_container,
             text=self.data["smu"],
             column=2,
             row=self.header_rows,
             rowspan=self.data_rows,
         )
-        Simple_label(
+        self.size_range_col=Simple_label(
             self.data_container,
             text=self.data["size_range"],
             column=3,
@@ -227,7 +227,7 @@ class Po_data_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-        Simple_label(
+        self.ratio_col=Simple_label(
             self.data_container,
             text=self.data["ratio"],
             column=5,
@@ -242,7 +242,7 @@ class Po_data_panel(CTkFrame):
             self.create_color_row_widgts(i, self.data)
 
         # last 3 columns(po total qty, price, shipping date)
-        Simple_label(
+        self.po_qty_col=Simple_label(
             self.data_container,
             text=self.data["po_qty"],
             column=17,
@@ -250,7 +250,7 @@ class Po_data_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-        Simple_label(
+        self.price_col=Simple_label(
             self.data_container,
             text=f"{self.data['price']} $",
             column=19,
@@ -258,7 +258,7 @@ class Po_data_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-        Simple_label(
+        self.shipping_date_col=Simple_label(
             self.data_container,
             text=self.data["shipping_date"],
             column=21,
@@ -313,7 +313,7 @@ class Po_data_panel(CTkFrame):
         # create the color row widgets
         self.create_color_row_widgts(self.data_rows, color_data)
         # update rowspan for po data widgets
-        # self.update_rowspan() #Hold for now
+        self.update_rowspan() #Hold for now
 
         # convert color_data dict to suitable format for database(cancels the lists)
         color_data= CANCEL_LISTS_FROM_DICT_VALUES(color_data)
@@ -321,34 +321,14 @@ class Po_data_panel(CTkFrame):
         DB_ADD_COLOR(color_data)
 
     def update_rowspan(self):
-        """# Track processed starting columns
-        processed_columns = set()
-        # put desired widgets in one list
-        widgets = (
-            list(self.data_container.children.values())[:9]
-            + list(self.data_container.children.values())[17:]
-        )
-        for widgt in widgets:
-            # Get the grid info
-            info = widgt.grid_info()
-            # Get the starting column for the widget
-            start_column = info.get("column", 0)
-            # get the current widget column span
-            col_span = info.get("colspan", 1)
-            # only update widgts that are not already processed
-            if start_column not in processed_columns:
-                # update the rowspan for the widget
-                # info["rowspan"] = self.data_rows
-                # update the processed columns
-                processed_columns.update(range(start_column, start_column + col_span))
-                widgt.grid(
-                    row=info.get("row", 0),
-                    column=start_column,
-                    rowspan=self.data_rows - self.header_rows,
-                    columnspan=col_span,
-                    sticky="nsew",
-                )
-        """
+        # update grid layout for po data
+        self.style_col.grid(row=self.header_rows, column=0, rowspan=self.data_rows, sticky="nsew")
+        self.smu_col.grid(row=self.header_rows, column=2, rowspan=self.data_rows, sticky="nsew")
+        self.size_range_col.grid(row=self.header_rows, column=3, rowspan=self.data_rows, sticky="nsew")
+        self.ratio_col.grid(row=self.header_rows, column=5, rowspan=self.data_rows, sticky="nsew")
+        self.po_qty_col.grid(row=self.header_rows, column=17, rowspan=self.data_rows, sticky="nsew")
+        self.price_col.grid(row=self.header_rows, column=19, rowspan=self.data_rows, sticky="nsew")
+        self.shipping_date_col.grid(row=self.header_rows, column=21, rowspan=self.data_rows, sticky="nsew")
 
     def open_add_color_form(self):
         Add_color_form(parent=self, callback_func=self.add_color)
