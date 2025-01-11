@@ -14,6 +14,7 @@ BUTTON_FONT = ("Calibri", 20)
 SMALL_BUTTON_FONT = ("Calibri", 16)
 MENU_BUTTONS_FONT = ("Calibri", 20, "bold")
 TABLE_HEADER_FONT = ("Calibri", 18, "bold")
+ICON_BUTTON_FONT = ("Calibri", 12, "bold")
 
 # Window setting
 WINDOW_WIDTH = 1152

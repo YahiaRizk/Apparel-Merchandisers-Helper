@@ -401,12 +401,11 @@ class Po_header_panel(CTkFrame):
 
         # ---buttons widgets
         # ----delete button
-        Icon_button(self.buttons_container, icon=delete_icon, func=delete_func)
+        Icon_button(self.buttons_container, icon=delete_icon, text="Delete PO", func=delete_func)
         # ----edit button
-        Icon_button(self.buttons_container, icon=edit_icon, func=edit_func)
+        Icon_button(self.buttons_container, icon=edit_icon, text="Edit PO Data", func=edit_func)
         # ----add button
-        Icon_button(self.buttons_container, icon=add_icon, func=add_func)
-
+        Icon_button(self.buttons_container, icon=add_icon, text="Add Color", func=add_func)
 
 class Simple_label(CTkLabel):
     def __init__(self, parent, text, row, column, colspan=1, rowspan=1, font=PANEL_LABLE_FONT):
@@ -429,10 +428,11 @@ class Simple_label(CTkLabel):
 
 
 class Icon_button(CTkButton):
-    def __init__(self, parent, icon, func):
+    def __init__(self, parent, icon, text, func):
         super().__init__(
             parent,
-            text="",
+            text=text,
+            font=ICON_BUTTON_FONT,
             image=icon,
             text_color=FOURTH_CLR,
             fg_color="transparent",

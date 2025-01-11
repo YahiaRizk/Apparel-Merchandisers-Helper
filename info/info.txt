@@ -2,12 +2,19 @@ Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
 
 Style top level
-- Handle add color to po:
-    handel span common data rows to span the additional color row
+- Handle edite color:
+    download icon
+    add button icon to header
+    make the top level form
+    callback function to handel the layout and database
 
-- Handle edite po
+- Handle delete color:
+    download icon
+    add button icon to header
+    make the top level form
+    callback function to handel the layout and database
 
-- Handle delete po 
+- Handle edite po:
 
 - Handle add po:
     handel not add null po and try to prevent auto add po
