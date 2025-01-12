@@ -20,7 +20,8 @@ ICON_BUTTON_FONT = ("Calibri", 12, "bold")
 WINDOW_WIDTH = 1152
 WINDOW_HEIGHT = 650
 
-# variables
+
+# data variables
 CUSTOMER_OPT = ["NBA", "NFL"]
 BRAND_TEAM_OPT = ["Brand", "Team"]
 TEAMS_OPT = ["CB", "BC", "LL", "MH", "NY", "SA", "GW", "SA"]

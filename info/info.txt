@@ -2,26 +2,32 @@ Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
 
 Style top level
-- Handle edite color:
-    download icon
-    add button icon to header
-    make the top level form
-    callback function to handel the layout and database
+    - Handle edite color:
+        download icon
+        add button icon to header
+        make the top level form
+        callback function to handel the layout and database
 
-- Handle delete color:
-    download icon
-    add button icon to header
-    make the top level form
-    callback function to handel the layout and database
+    - Handle delete color:
+        download icon
+        add button icon to header
+        make the top level form
+        callback function to handel the layout and database
 
-- Handle edite po:
-
-- Handle add po:
-    handel not add null po and try to prevent auto add po
-
+    - Handle edite po:
+        make the top level form
+        callback function to handel the layout and database
 
 
+    - Handle add po:
+        handel not add null po and try to prevent auto add po
 
+
+General
+    - Add function in funcs.py to color the title bar and add it to main window and top level windows
+        reverse the color hex code to add it to 0x00
+        make a variable in setting to track dark and light mode
+        change the var in the theme panel 
 
 
 
