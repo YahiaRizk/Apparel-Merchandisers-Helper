@@ -2,6 +2,7 @@ Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
 
 Style top level
+    - refactor create color row:
     - Handle edite color:
         download icon
         add button icon to header

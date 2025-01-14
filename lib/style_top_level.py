@@ -1,5 +1,5 @@
 from customtkinter import CTkFrame, CTkToplevel, CTkScrollableFrame
-from lib.style_top_level_panels import Main_info_panel, Po_data_panel
+from lib.style_top_level_panels import Main_info_panel, Po_panel
 from lib.top_level_forms import Add_po_form
 from lib.panels import Simple_button
 from lib.database_funcs import DB_ADD_PO
@@ -44,7 +44,7 @@ class View_style_top_level(CTkToplevel):
         self.po_panels_container = CTkFrame(self.container, fg_color="transparent")
         self.po_panels_container.pack(fill="x")
         for po in self.pos_data:
-            Po_data_panel(parent=self.po_panels_container, data=po)
+            Po_panel(parent=self.po_panels_container, data=po)
 
     def open_add_po_from(self):
         Add_po_form(parent=self, callback_func=self.add_po)
@@ -57,7 +57,7 @@ class View_style_top_level(CTkToplevel):
         # merge data to create po_data_panel
         merged_data = {**po_data, **color_data}
         # create po_data_panel and add to po_panels_container
-        Po_data_panel(
+        Po_panel(
             parent=self.po_panels_container,
             data=merged_data,
         )

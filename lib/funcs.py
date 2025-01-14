@@ -17,6 +17,8 @@ def CANCEL_LISTS_FROM_DICT_VALUES(dict):
 def GET_VALUE_IF_NOT_LIST(value, index):
     # check if the value is a list if not return the value
     if isinstance(value, list):
+        # check if the index is less than the length of the list
+        # becaue some times the len of color codes is larger than the other so we avoid index error
         return value[index] if index < len(value) else ""
     else:
         return value

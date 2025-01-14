@@ -64,7 +64,7 @@ class Main_info_panel(CTkFrame):
         Simple_label(self, text=self.data["rcvd_date"], column=19, row=1, colspan=2, rowspan=2)
 
 
-class Po_data_panel(CTkFrame):
+class Po_panel(CTkFrame):
     def __init__(self, parent, data):
         super().__init__(parent, fg_color="transparent")
         self.pack(fill="x", pady=2)
@@ -239,7 +239,7 @@ class Po_data_panel(CTkFrame):
         # next 5 columns(team, color code, pc 1 color, pc 2 color, color qty)
         # need to be repeated for each data on the list
         for i in range(self.data_rows):
-            self.create_color_row_widgts(i, self.data)
+            PO_color_row_panel(parent=self.data_container, data=self.data, row_index=i)
 
         # last 3 columns(po total qty, price, shipping date)
         self.po_qty_col=Simple_label(
@@ -267,43 +267,6 @@ class Po_data_panel(CTkFrame):
             rowspan=self.data_rows,
         )
 
-    def create_color_row_widgts(self, row_index, data):
-        Simple_label(
-            self.data_container,
-            text=GET_VALUE_IF_NOT_LIST(data["teams"], row_index),
-            column=7,
-            row=self.header_rows + row_index,
-            colspan=2,
-        )
-        Simple_label(
-            self.data_container,
-            text=GET_VALUE_IF_NOT_LIST(data["color_codes"], row_index),
-            column=9,
-            row=self.header_rows + row_index,
-            colspan=2,
-        )
-        Simple_label(
-            self.data_container,
-            text=GET_VALUE_IF_NOT_LIST(data["piece1_colors"], row_index),
-            column=11,
-            row=self.header_rows + row_index,
-            colspan=2,
-        )
-        Simple_label(
-            self.data_container,
-            text=GET_VALUE_IF_NOT_LIST(data["piece2_colors"], row_index),
-            column=13,
-            row=self.header_rows + row_index,
-            colspan=2,
-        )
-        Simple_label(
-            self.data_container,
-            text=GET_VALUE_IF_NOT_LIST(data["color_qtys"], row_index),
-            column=15,
-            row=self.header_rows + row_index,
-            colspan=2,
-        )
-
     def add_color(self, color_data):
         # add po number to the returned color data
         color_data["po_num"] = self.data["po_num"]
@@ -311,7 +274,7 @@ class Po_data_panel(CTkFrame):
         # increase the row count
         self.data_rows += 1
         # create the color row widgets
-        self.create_color_row_widgts(self.data_rows, color_data)
+        PO_color_row_panel(parent=self.data_container, data=color_data, row_index=self.data_rows)
         # update rowspan for po data widgets
         self.update_rowspan() #Hold for now
 
@@ -406,6 +369,53 @@ class Po_header_panel(CTkFrame):
         Icon_button(self.buttons_container, icon=edit_icon, text="Edit PO Data", func=edit_func)
         # ----add button
         Icon_button(self.buttons_container, icon=add_icon, text="Add Color", func=add_func)
+
+class PO_color_row_panel(CTkFrame):
+    def __init__(self, parent, data, row_index, header_rows=1):
+        super().__init__(master=parent, fg_color="transparent")
+        self.grid(column=7, row=row_index + header_rows, columnspan=10, sticky="nsew")
+
+        # data
+        self.data = data
+        self.row_index = row_index
+
+        # grid layout
+        self.columnconfigure((0,1,2,3,4), weight=1, uniform="a")
+
+        # widgets
+        self.create_color_widgets()
+
+    def create_color_widgets(self):
+        Simple_label(
+            self,
+            text=GET_VALUE_IF_NOT_LIST(self.data["teams"], self.row_index),
+            column=0,
+            row=0,
+        )
+        Simple_label(
+            self,
+            text=GET_VALUE_IF_NOT_LIST(self.data["color_codes"], self.row_index),
+            column=1,
+            row=0,
+        )
+        Simple_label(
+            self,
+            text=GET_VALUE_IF_NOT_LIST(self.data["piece1_colors"], self.row_index),
+            column=2,
+            row=0,
+        )
+        Simple_label(
+            self,
+            text=GET_VALUE_IF_NOT_LIST(self.data["piece2_colors"], self.row_index),
+            column=3,
+            row=0,
+        )
+        Simple_label(
+            self,
+            text=GET_VALUE_IF_NOT_LIST(self.data["color_qtys"], self.row_index),
+            column=4,
+            row=0,
+        )
 
 class Simple_label(CTkLabel):
     def __init__(self, parent, text, row, column, colspan=1, rowspan=1, font=PANEL_LABLE_FONT):
