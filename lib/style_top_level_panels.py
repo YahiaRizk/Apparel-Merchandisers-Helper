@@ -379,43 +379,59 @@ class PO_color_row_panel(CTkFrame):
         self.data = data
         self.row_index = row_index
 
-        # grid layout
-        self.columnconfigure((0,1,2,3,4), weight=1, uniform="a")
+        # configure grid layout
+        self.columnconfigure((0, 1, 2, 3, 4), weight=1, uniform="a")
 
         # widgets
         self.create_color_widgets()
 
     def create_color_widgets(self):
-        Simple_label(
-            self,
-            text=GET_VALUE_IF_NOT_LIST(self.data["teams"], self.row_index),
-            column=0,
-            row=0,
-        )
-        Simple_label(
-            self,
-            text=GET_VALUE_IF_NOT_LIST(self.data["color_codes"], self.row_index),
-            column=1,
-            row=0,
-        )
-        Simple_label(
-            self,
-            text=GET_VALUE_IF_NOT_LIST(self.data["piece1_colors"], self.row_index),
-            column=2,
-            row=0,
-        )
-        Simple_label(
-            self,
-            text=GET_VALUE_IF_NOT_LIST(self.data["piece2_colors"], self.row_index),
-            column=3,
-            row=0,
-        )
-        Simple_label(
-            self,
-            text=GET_VALUE_IF_NOT_LIST(self.data["color_qtys"], self.row_index),
-            column=4,
-            row=0,
-        )
+        # bind hover events to child widgets
+        labels = [
+            Simple_label(
+                self,
+                text=GET_VALUE_IF_NOT_LIST(self.data["teams"], self.row_index),
+                column=0,
+                row=0,
+            ),
+            Simple_label(
+                self,
+                text=GET_VALUE_IF_NOT_LIST(self.data["color_codes"], self.row_index),
+                column=1,
+                row=0,
+            ),
+            Simple_label(
+                self,
+                text=GET_VALUE_IF_NOT_LIST(self.data["piece1_colors"], self.row_index),
+                column=2,
+                row=0,
+            ),
+            Simple_label(
+                self,
+                text=GET_VALUE_IF_NOT_LIST(self.data["piece2_colors"], self.row_index),
+                column=3,
+                row=0,
+            ),
+            Simple_label(
+                self,
+                text=GET_VALUE_IF_NOT_LIST(self.data["color_qtys"], self.row_index),
+                column=4,
+                row=0,
+            ),
+        ]
+
+        # bind hover events
+        for label in labels:
+            label.bind("<Enter>", self.on_enter)
+            label.bind("<Leave>", self.on_leave)
+
+    def on_enter(self, event):
+        self.configure(fg_color=THIRD_CLR)
+
+
+    def on_leave(self, event):
+        self.configure(fg_color="transparent")
+
 
 class Simple_label(CTkLabel):
     def __init__(self, parent, text, row, column, colspan=1, rowspan=1, font=PANEL_LABLE_FONT):
