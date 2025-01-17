@@ -204,7 +204,7 @@ class Po_panel(CTkFrame):
 
     def create_po_data_widgets(self):
         # first 4 columns(style, smu, size range, ratio)
-        self.style_col=Simple_label(
+        self.style_col = Simple_label(
             self.data_container,
             text=self.data["style_name"],
             column=0,
@@ -212,14 +212,14 @@ class Po_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-        self.smu_col=Simple_label(
+        self.smu_col = Simple_label(
             self.data_container,
             text=self.data["smu"],
             column=2,
             row=self.header_rows,
             rowspan=self.data_rows,
         )
-        self.size_range_col=Simple_label(
+        self.size_range_col = Simple_label(
             self.data_container,
             text=self.data["size_range"],
             column=3,
@@ -227,7 +227,7 @@ class Po_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-        self.ratio_col=Simple_label(
+        self.ratio_col = Simple_label(
             self.data_container,
             text=self.data["ratio"],
             column=5,
@@ -242,7 +242,7 @@ class Po_panel(CTkFrame):
             PO_color_row_panel(parent=self.data_container, data=self.data, row_index=i)
 
         # last 3 columns(po total qty, price, shipping date)
-        self.po_qty_col=Simple_label(
+        self.po_qty_col = Simple_label(
             self.data_container,
             text=self.data["po_qty"],
             column=17,
@@ -250,7 +250,7 @@ class Po_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-        self.price_col=Simple_label(
+        self.price_col = Simple_label(
             self.data_container,
             text=f"{self.data['price']} $",
             column=19,
@@ -258,7 +258,7 @@ class Po_panel(CTkFrame):
             colspan=2,
             rowspan=self.data_rows,
         )
-        self.shipping_date_col=Simple_label(
+        self.shipping_date_col = Simple_label(
             self.data_container,
             text=self.data["shipping_date"],
             column=21,
@@ -276,10 +276,10 @@ class Po_panel(CTkFrame):
         # create the color row widgets
         PO_color_row_panel(parent=self.data_container, data=color_data, row_index=self.data_rows)
         # update rowspan for po data widgets
-        self.update_rowspan() #Hold for now
+        self.update_rowspan()  # Hold for now
 
         # convert color_data dict to suitable format for database(cancels the lists)
-        color_data= CANCEL_LISTS_FROM_DICT_VALUES(color_data)
+        color_data = CANCEL_LISTS_FROM_DICT_VALUES(color_data)
         # add to database
         DB_ADD_COLOR(color_data)
 
@@ -287,11 +287,15 @@ class Po_panel(CTkFrame):
         # update grid layout for po data
         self.style_col.grid(row=self.header_rows, column=0, rowspan=self.data_rows, sticky="nsew")
         self.smu_col.grid(row=self.header_rows, column=2, rowspan=self.data_rows, sticky="nsew")
-        self.size_range_col.grid(row=self.header_rows, column=3, rowspan=self.data_rows, sticky="nsew")
+        self.size_range_col.grid(
+            row=self.header_rows, column=3, rowspan=self.data_rows, sticky="nsew"
+        )
         self.ratio_col.grid(row=self.header_rows, column=5, rowspan=self.data_rows, sticky="nsew")
         self.po_qty_col.grid(row=self.header_rows, column=17, rowspan=self.data_rows, sticky="nsew")
         self.price_col.grid(row=self.header_rows, column=19, rowspan=self.data_rows, sticky="nsew")
-        self.shipping_date_col.grid(row=self.header_rows, column=21, rowspan=self.data_rows, sticky="nsew")
+        self.shipping_date_col.grid(
+            row=self.header_rows, column=21, rowspan=self.data_rows, sticky="nsew"
+        )
 
     def open_add_color_form(self):
         Add_color_form(parent=self, callback_func=self.add_color)
@@ -325,6 +329,7 @@ class Po_panel(CTkFrame):
             self.destroy()
             # delete po from database
             DB_DELETE_PO(self.data["po_num"])
+
 
 class Po_header_panel(CTkFrame):
     def __init__(self, parent, po_num, add_func, edit_func, delete_func):
@@ -370,6 +375,7 @@ class Po_header_panel(CTkFrame):
         # ----add button
         Icon_button(self.buttons_container, icon=add_icon, text="Add Color", func=add_func)
 
+
 class PO_color_row_panel(CTkFrame):
     def __init__(self, parent, data, row_index, header_rows=1):
         super().__init__(master=parent, fg_color="transparent")
@@ -378,6 +384,8 @@ class PO_color_row_panel(CTkFrame):
         # data
         self.data = data
         self.row_index = row_index
+        self.is_hovered = False
+        self.is_clicked = False
 
         # configure grid layout
         self.columnconfigure((0, 1, 2, 3, 4), weight=1, uniform="a")
@@ -386,7 +394,7 @@ class PO_color_row_panel(CTkFrame):
         self.create_color_widgets()
 
     def create_color_widgets(self):
-        # bind hover events to child widgets
+        # make a list of labels 
         labels = [
             Simple_label(
                 self,
@@ -420,17 +428,70 @@ class PO_color_row_panel(CTkFrame):
             ),
         ]
 
-        # bind hover events
+        # bind hover events to labels
         for label in labels:
             label.bind("<Enter>", self.on_enter)
             label.bind("<Leave>", self.on_leave)
+        # bind click events to labels
+        for label in labels:
+            label.bind("<Button-1>", self.on_click)
 
     def on_enter(self, event):
-        self.configure(fg_color=THIRD_CLR)
+        # change the color of the row
+        if not self.is_hovered:
+            self.is_hovered= True
+            self.configure(fg_color=THIRD_CLR)
+            print("hover")
+        # check if the row is not already hovered
+        # if not self.is_hovered:
+        #     # set the is_hoverd to True
+        #     self.is_hovered= True
+        #     # create the edit icon image
+        #     edit_icon = CTkImage(
+        #         light_image=Image.open(r"lib\ico\edit_light.png"),
+        #         dark_image=Image.open(r"lib\ico\edit_dark.png"),
+        #         size=(15, 15),
+        #     )
+        #     # create the edit button
+        #     self.edit_button= Icon_button(
+        #         self,
+        #         icon=edit_icon,
+        #         text="",
+        #         func=lambda: print("edit"),
+        #         pos_method="place",
+        #     )
+        #     self.edit_button.place(relx=0.03, rely=.5, anchor="center")
+        #     # create the delete icon image
+        #     delete_icon = CTkImage(
+        #         light_image=Image.open(r"lib\ico\delete_light.png"),
+        #         dark_image=Image.open(r"lib\ico\delete_dark.png"),
+        #         size=(15, 15),
+        #     )
+        #     # create the edit button
+        #     self.delete_button= Icon_button(
+        #         self,
+        #         icon=delete_icon,
+        #         text="",
+        #         func=lambda: print("delete"),
+        #         pos_method="place",
+        #     )
+        #     self.delete_button.place(relx=.97, rely=.5, anchor="center")
 
+    def on_click(self, event):
+        if not self.is_clicked:
+            self.is_clicked= True
+        else:
+            self.is_clicked= False
 
     def on_leave(self, event):
-        self.configure(fg_color="transparent")
+        if self.is_hovered:
+            self.is_hovered= False
+            print("unhover")
+            self.configure(fg_color="transparent")
+        # if not self.is_clicked:
+        #     self.is_hovered= False
+        #     self.edit_button.destroy()
+        #     self.delete_button.destroy()
 
 
 class Simple_label(CTkLabel):
@@ -439,7 +500,7 @@ class Simple_label(CTkLabel):
             parent,
             text=text,
             font=font,
-            # fg_color=SECONDARY_CLR,
+            fg_color="red",
             text_color=FOURTH_CLR,
         )
         self.grid(
@@ -448,13 +509,13 @@ class Simple_label(CTkLabel):
             columnspan=colspan,
             rowspan=rowspan,
             sticky="nsew",
-            # padx=1,
+            padx=3,
             # pady=1,
         )
 
 
 class Icon_button(CTkButton):
-    def __init__(self, parent, icon, text, func):
+    def __init__(self, parent, icon, text, func, pos_method="pack"):
         super().__init__(
             parent,
             text=text,
@@ -467,4 +528,6 @@ class Icon_button(CTkButton):
             height=15,
             command=func,
         )
-        self.pack(side="right", padx=2)
+        if pos_method == "pack":
+            self.pack(side="right", padx=2)
+
