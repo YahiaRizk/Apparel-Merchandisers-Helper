@@ -46,7 +46,7 @@ class Table_panel(CTkFrame):
             text_color=FOURTH_CLR,
             header_color=MAIN_CLR,
             hover= True,
-            hover_color= THIRD_CLR,
+            hover_color= HOVER_COLOR,
             corner_radius=6,
             width=1,
             height=60,

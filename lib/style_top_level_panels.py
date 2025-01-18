@@ -384,8 +384,8 @@ class PO_color_row_panel(CTkFrame):
         # data
         self.data = data
         self.row_index = row_index
-        self.is_hovered = False
-        self.is_clicked = False
+        # self.is_hovered = False
+        self.is_selected = False
 
         # configure grid layout
         self.columnconfigure((0, 1, 2, 3, 4), weight=1, uniform="a")
@@ -437,62 +437,61 @@ class PO_color_row_panel(CTkFrame):
             label.bind("<Button-1>", self.on_click)
 
     def on_enter(self, event):
-        # change the color of the row
-        if not self.is_hovered:
-            self.is_hovered= True
-            self.configure(fg_color=THIRD_CLR)
-            print("hover")
-        # check if the row is not already hovered
-        # if not self.is_hovered:
-        #     # set the is_hoverd to True
-        #     self.is_hovered= True
-        #     # create the edit icon image
-        #     edit_icon = CTkImage(
-        #         light_image=Image.open(r"lib\ico\edit_light.png"),
-        #         dark_image=Image.open(r"lib\ico\edit_dark.png"),
-        #         size=(15, 15),
-        #     )
-        #     # create the edit button
-        #     self.edit_button= Icon_button(
-        #         self,
-        #         icon=edit_icon,
-        #         text="",
-        #         func=lambda: print("edit"),
-        #         pos_method="place",
-        #     )
-        #     self.edit_button.place(relx=0.03, rely=.5, anchor="center")
-        #     # create the delete icon image
-        #     delete_icon = CTkImage(
-        #         light_image=Image.open(r"lib\ico\delete_light.png"),
-        #         dark_image=Image.open(r"lib\ico\delete_dark.png"),
-        #         size=(15, 15),
-        #     )
-        #     # create the edit button
-        #     self.delete_button= Icon_button(
-        #         self,
-        #         icon=delete_icon,
-        #         text="",
-        #         func=lambda: print("delete"),
-        #         pos_method="place",
-        #     )
-        #     self.delete_button.place(relx=.97, rely=.5, anchor="center")
+        # check if the row is not selected
+        if not self.is_selected:
+            self.configure(fg_color=HOVER_COLOR)
 
     def on_click(self, event):
-        if not self.is_clicked:
-            self.is_clicked= True
+        # check if the row is not already selected
+        if not self.is_selected:
+            # set the is_selected to True
+            self.is_selected= True
+            # change the color of the row
+            self.configure(fg_color=THIRD_CLR)
+            # create the edit icon image
+            edit_icon = CTkImage(
+                light_image=Image.open(r"lib\ico\edit_light.png"),
+                dark_image=Image.open(r"lib\ico\edit_dark.png"),
+                size=(15, 15),
+            )
+            # create the edit button
+            self.edit_button= Icon_button(
+                self,
+                icon=edit_icon,
+                text="",
+                func=lambda: print("edit"),
+                pos_method="place",
+            )
+            self.edit_button.place(relx=0.03, rely=.5, anchor="center")
+            # create the delete icon image
+            delete_icon = CTkImage(
+                light_image=Image.open(r"lib\ico\delete_light.png"),
+                dark_image=Image.open(r"lib\ico\delete_dark.png"),
+                size=(15, 15),
+            )
+            # create the edit button
+            self.delete_button= Icon_button(
+                self,
+                icon=delete_icon,
+                text="",
+                func=lambda: print("delete"),
+                pos_method="place",
+            )
+            self.delete_button.place(relx=.97, rely=.5, anchor="center")
         else:
-            self.is_clicked= False
+            # set the is_selected to False
+            self.is_selected= False
+            # change the color of the row
+            self.configure(fg_color="transparent")
+            # destroy the edit button
+            self.edit_button.destroy()
+            # destroy the delete button
+            self.delete_button.destroy()
 
     def on_leave(self, event):
-        if self.is_hovered:
-            self.is_hovered= False
-            print("unhover")
+        # check if the row is not selected 
+        if not self.is_selected:
             self.configure(fg_color="transparent")
-        # if not self.is_clicked:
-        #     self.is_hovered= False
-        #     self.edit_button.destroy()
-        #     self.delete_button.destroy()
-
 
 class Simple_label(CTkLabel):
     def __init__(self, parent, text, row, column, colspan=1, rowspan=1, font=PANEL_LABLE_FONT):
@@ -500,7 +499,6 @@ class Simple_label(CTkLabel):
             parent,
             text=text,
             font=font,
-            fg_color="red",
             text_color=FOURTH_CLR,
         )
         self.grid(
@@ -509,8 +507,6 @@ class Simple_label(CTkLabel):
             columnspan=colspan,
             rowspan=rowspan,
             sticky="nsew",
-            padx=3,
-            # pady=1,
         )
 
 
