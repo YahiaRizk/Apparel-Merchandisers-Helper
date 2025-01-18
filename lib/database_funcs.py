@@ -112,7 +112,9 @@ def DB_CREATE():
             )"""
     )
 
-    cr.executemany("INSERT OR IGNORE INTO paths VALUES (?, ?)", [(customer,'') for customer in CUSTOMER_OPT])
+    cr.executemany(
+        "INSERT OR IGNORE INTO paths VALUES (?, ?)", [(customer, "") for customer in CUSTOMER_OPT]
+    )
 
     db.commit()
     db.close()
@@ -220,7 +222,7 @@ def DB_GET_PATH(customer):
     cr = db.cursor()
 
     # get the data from database
-    cr.execute("SELECT path FROM paths WHERE customer = ?",(customer,))
+    cr.execute("SELECT path FROM paths WHERE customer = ?", (customer,))
     result = cr.fetchone()
 
     db.commit()
@@ -237,7 +239,7 @@ def DB_INSERT_PATH(customer):
 
     # try to insert the customer and return true otherwise return false
     try:
-        cr.execute("INSERT INTO paths VALUES (?, ?)",(customer, ""))
+        cr.execute("INSERT INTO paths VALUES (?, ?)", (customer, ""))
         db.commit()
         db.close()
         return True
@@ -271,6 +273,7 @@ def DB_DELETE_STYLE(id):
     db.commit()
     db.close()
 
+
 def DB_DELETE_PO(po_num):
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
@@ -282,6 +285,7 @@ def DB_DELETE_PO(po_num):
 
     db.commit()
     db.close()
+
 
 def DB_GET_TOP_LEVEL_DATA(id):
     # Create/connect to data base
@@ -301,7 +305,8 @@ def DB_GET_TOP_LEVEL_DATA(id):
             LEFT JOIN 
                 fabrics AS f ON g.group_id = f.group_id
             WHERE g.group_id = ?
-            GROUP BY g.group_id""", (id,)
+            GROUP BY g.group_id""",
+        (id,),
     )
 
     data = cr.fetchone()
@@ -338,7 +343,8 @@ def DB_GET_TOP_LEVEL_DATA(id):
             GROUP BY 
                 p.po_num, style_name, smu, size_range, ratio,
                 po_qty, cost_price, shipping_date
-                """, (id,)
+                """,
+        (id,),
     )
 
     data = cr.fetchall()
@@ -367,10 +373,11 @@ def DB_GET_TOP_LEVEL_DATA(id):
 
     return main_data, pos_data
 
+
 # add a new po to the database with one color
 def DB_ADD_PO(po_data, color_data):
     # conntet to styles database
-    db= sqlite3.connect("DB/styles.db")
+    db = sqlite3.connect("DB/styles.db")
     db.execute("PRAGMA foreign_keys = ON;")
     cr = db.cursor()
 
@@ -393,9 +400,10 @@ def DB_ADD_PO(po_data, color_data):
     db.commit()
     db.close()
 
+
 def DB_ADD_COLOR(color_data):
     # conntet to styles database
-    db= sqlite3.connect("DB/styles.db")
+    db = sqlite3.connect("DB/styles.db")
     db.execute("PRAGMA foreign_keys = ON;")
     cr = db.cursor()
 
@@ -405,6 +413,22 @@ def DB_ADD_COLOR(color_data):
                 :po_num, :teams, :color_codes, :piece1_colors, :piece2_colors, :color_qtys
             )""",
         color_data,
+    )
+
+    db.commit()
+    db.close()
+
+
+def DB_DELETE_COLOR(po_num, color_code, team=""):
+    # conntet to styles database
+    db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
+    cr = db.cursor()
+
+    # delete the color data from colors table
+    cr.execute(
+        "DELETE FROM colors WHERE po_num = ? AND color_code = ? AND team = ?",
+        (po_num, color_code, team),
     )
 
     db.commit()

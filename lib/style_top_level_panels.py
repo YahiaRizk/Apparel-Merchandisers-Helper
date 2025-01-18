@@ -1,7 +1,7 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkImage
 from CTkMessagebox import CTkMessagebox
 from lib.top_level_forms import Add_color_form
-from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO
+from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO, DB_DELETE_COLOR
 from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES, GET_VALUE_IF_NOT_LIST
 from settings import *
 from PIL import Image
@@ -267,6 +267,9 @@ class Po_panel(CTkFrame):
             rowspan=self.data_rows,
         )
 
+    def open_add_color_form(self):
+        Add_color_form(parent=self, callback_func=self.add_color)
+
     def add_color(self, color_data):
         # add po number to the returned color data
         color_data["po_num"] = self.data["po_num"]
@@ -296,9 +299,6 @@ class Po_panel(CTkFrame):
         self.shipping_date_col.grid(
             row=self.header_rows, column=21, rowspan=self.data_rows, sticky="nsew"
         )
-
-    def open_add_color_form(self):
-        Add_color_form(parent=self, callback_func=self.add_color)
 
     def open_edit_po_form(self):
         print("edit po")
@@ -384,8 +384,8 @@ class PO_color_row_panel(CTkFrame):
         # data
         self.data = data
         self.row_index = row_index
-        # self.is_hovered = False
         self.is_selected = False
+
 
         # configure grid layout
         self.columnconfigure((0, 1, 2, 3, 4), weight=1, uniform="a")
@@ -394,7 +394,7 @@ class PO_color_row_panel(CTkFrame):
         self.create_color_widgets()
 
     def create_color_widgets(self):
-        # make a list of labels 
+        # make a list of labels
         labels = [
             Simple_label(
                 self,
@@ -445,7 +445,7 @@ class PO_color_row_panel(CTkFrame):
         # check if the row is not already selected
         if not self.is_selected:
             # set the is_selected to True
-            self.is_selected= True
+            self.is_selected = True
             # change the color of the row
             self.configure(fg_color=THIRD_CLR)
             # create the edit icon image
@@ -455,14 +455,14 @@ class PO_color_row_panel(CTkFrame):
                 size=(15, 15),
             )
             # create the edit button
-            self.edit_button= Icon_button(
+            self.edit_button = Icon_button(
                 self,
                 icon=edit_icon,
                 text="",
                 func=lambda: print("edit"),
                 pos_method="place",
             )
-            self.edit_button.place(relx=0.03, rely=.5, anchor="center")
+            self.edit_button.place(relx=0.03, rely=0.5, anchor="center")
             # create the delete icon image
             delete_icon = CTkImage(
                 light_image=Image.open(r"lib\ico\delete_light.png"),
@@ -470,17 +470,17 @@ class PO_color_row_panel(CTkFrame):
                 size=(15, 15),
             )
             # create the edit button
-            self.delete_button= Icon_button(
+            self.delete_button = Icon_button(
                 self,
                 icon=delete_icon,
                 text="",
-                func=lambda: print("delete"),
+                func=self.delete,
                 pos_method="place",
             )
-            self.delete_button.place(relx=.97, rely=.5, anchor="center")
+            self.delete_button.place(relx=0.97, rely=0.5, anchor="center")
         else:
             # set the is_selected to False
-            self.is_selected= False
+            self.is_selected = False
             # change the color of the row
             self.configure(fg_color="transparent")
             # destroy the edit button
@@ -489,9 +489,28 @@ class PO_color_row_panel(CTkFrame):
             self.delete_button.destroy()
 
     def on_leave(self, event):
-        # check if the row is not selected 
+        # check if the row is not selected
         if not self.is_selected:
             self.configure(fg_color="transparent")
+
+    def delete(self):
+        # get the parent po panel
+        parent_po_panel = self.master.master.master
+        # check if this row in not the last row in po panel
+        if parent_po_panel.data_rows > 1:
+            # decrease the row count in po panel
+            parent_po_panel.data_rows -= 1
+            # update rowspan for po data widgets
+            parent_po_panel.update_rowspan()
+            # delete the color from database
+            DB_DELETE_COLOR(
+                self.data["po_num"],
+                self.data["color_codes"][self.row_index],
+                self.data["teams"][self.row_index],
+            )
+            # delete the row
+            self.destroy()
+
 
 class Simple_label(CTkLabel):
     def __init__(self, parent, text, row, column, colspan=1, rowspan=1, font=PANEL_LABLE_FONT):
@@ -526,4 +545,3 @@ class Icon_button(CTkButton):
         )
         if pos_method == "pack":
             self.pack(side="right", padx=2)
-
