@@ -42,7 +42,7 @@ class Top_level_form(CTkToplevel):
         raise NotImplementedError
 
     def create_color_widgets(self, container, color_vars):
-        Combobox_panel(
+        self.team_widget = Combobox_panel(
             parent=container,
             label_str1="Team:",
             data_var1=color_vars["team"],
@@ -235,14 +235,54 @@ class Add_color_form(Top_level_form):
 
     def get_data(self):
         color_data = {
-            "teams": self.color_vars["team"].get().upper(),
-            "color_codes": self.color_vars["color_code"].get().upper(),
-            "piece1_colors": self.color_vars["piece1_color"].get().upper(),
-            "piece2_colors": self.color_vars["piece2_color"].get().upper(),
-            "color_qtys": (
-                int(self.color_vars["color_qty"].get())
-                if self.color_vars["color_qty"].get()
-                else [0]
+            "team": self.color_vars["team"].get().upper(),
+            "color_code": self.color_vars["color_code"].get().upper(),
+            "piece1_color": self.color_vars["piece1_color"].get().upper(),
+            "piece2_color": self.color_vars["piece2_color"].get().upper(),
+            "color_qty": (
+                int(self.color_vars["color_qty"].get()) if self.color_vars["color_qty"].get() else 0
+            ),
+        }
+        return color_data
+
+
+class Edit_color_form(Top_level_form):
+    def __init__(self, parent, callback_func, color_data):
+        super().__init__(
+            parent=parent, title="Edit Color", callback_func=callback_func, width=300, height=400
+        )
+
+        # data
+        self.init_parameters()
+        self.color_vars["team"].set(color_data["team"])
+        self.color_vars["color_code"].set(color_data["color_code"])
+        self.color_vars["piece1_color"].set(color_data["piece1_color"])
+        self.color_vars["piece2_color"].set(color_data["piece2_color"])
+        self.color_vars["color_qty"].set(color_data["color_qty"])
+
+        # widgets
+        self.create_color_widgets(self, self.color_vars)
+        # make the team combobox diabled
+        self.team_widget.combobox1.configure(state="disabled")
+
+
+    def init_parameters(self):
+        self.color_vars = {
+            "team": StringVar(),
+            "color_code": StringVar(),
+            "piece1_color": StringVar(),
+            "piece2_color": StringVar(),
+            "color_qty": StringVar(),
+        }
+
+    def get_data(self):
+        color_data = {
+            "team": self.color_vars["team"].get().upper(),
+            "color_code": self.color_vars["color_code"].get().upper(),
+            "piece1_color": self.color_vars["piece1_color"].get().upper(),
+            "piece2_color": self.color_vars["piece2_color"].get().upper(),
+            "color_qty": (
+                int(self.color_vars["color_qty"].get()) if self.color_vars["color_qty"].get() else 0
             ),
         }
         return color_data

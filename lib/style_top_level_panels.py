@@ -1,8 +1,8 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkImage
 from CTkMessagebox import CTkMessagebox
-from lib.top_level_forms import Add_color_form
-from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO, DB_DELETE_COLOR
-from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES, GET_VALUE_IF_NOT_LIST
+from lib.top_level_forms import Add_color_form, Edit_color_form
+from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO, DB_DELETE_COLOR, DB_UPDATE_COLOR
+from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES
 from settings import *
 from PIL import Image
 
@@ -239,7 +239,16 @@ class Po_panel(CTkFrame):
         # next 5 columns(team, color code, pc 1 color, pc 2 color, color qty)
         # need to be repeated for each data on the list
         for i in range(self.data_rows):
-            PO_color_row_panel(parent=self.data_container, data=self.data, row_index=i)
+            # get the color data for each row
+            color_data= {
+                "po_num": self.data["po_num"],
+                "team": self.data["teams"][i],
+                "color_code": self.data["color_codes"][i],
+                "piece1_color": self.data["piece1_colors"][i],
+                "piece2_color": self.data["piece2_colors"][i],
+                "color_qty": self.data["color_qtys"][i],
+            }
+            PO_color_row_panel(parent=self.data_container, data=color_data, row_index=i)
 
         # last 3 columns(po total qty, price, shipping date)
         self.po_qty_col = Simple_label(
@@ -383,7 +392,6 @@ class PO_color_row_panel(CTkFrame):
 
         # data
         self.data = data
-        self.row_index = row_index
         self.is_selected = False
 
 
@@ -391,49 +399,49 @@ class PO_color_row_panel(CTkFrame):
         self.columnconfigure((0, 1, 2, 3, 4), weight=1, uniform="a")
 
         # widgets
-        self.create_color_widgets()
+        self.create_color_widgets(self.data)
 
-    def create_color_widgets(self):
+    def create_color_widgets(self, color_data):
         # make a list of labels
-        labels = [
+        self.labels = [
             Simple_label(
                 self,
-                text=GET_VALUE_IF_NOT_LIST(self.data["teams"], self.row_index),
+                text=color_data["team"],
                 column=0,
                 row=0,
             ),
             Simple_label(
                 self,
-                text=GET_VALUE_IF_NOT_LIST(self.data["color_codes"], self.row_index),
+                text=color_data["color_code"],
                 column=1,
                 row=0,
             ),
             Simple_label(
                 self,
-                text=GET_VALUE_IF_NOT_LIST(self.data["piece1_colors"], self.row_index),
+                text=color_data["piece1_color"],
                 column=2,
                 row=0,
             ),
             Simple_label(
                 self,
-                text=GET_VALUE_IF_NOT_LIST(self.data["piece2_colors"], self.row_index),
+                text=color_data["piece2_color"],
                 column=3,
                 row=0,
             ),
             Simple_label(
                 self,
-                text=GET_VALUE_IF_NOT_LIST(self.data["color_qtys"], self.row_index),
+                text=color_data["color_qty"],
                 column=4,
                 row=0,
             ),
         ]
 
         # bind hover events to labels
-        for label in labels:
+        for label in self.labels:
             label.bind("<Enter>", self.on_enter)
             label.bind("<Leave>", self.on_leave)
         # bind click events to labels
-        for label in labels:
+        for label in self.labels:
             label.bind("<Button-1>", self.on_click)
 
     def on_enter(self, event):
@@ -441,7 +449,7 @@ class PO_color_row_panel(CTkFrame):
         if not self.is_selected:
             self.configure(fg_color=HOVER_COLOR)
 
-    def on_click(self, event):
+    def on_click(self, event=None):
         # check if the row is not already selected
         if not self.is_selected:
             # set the is_selected to True
@@ -459,7 +467,7 @@ class PO_color_row_panel(CTkFrame):
                 self,
                 icon=edit_icon,
                 text="",
-                func=lambda: print("edit"),
+                func=self.open_edit_color_form,
                 pos_method="place",
             )
             self.edit_button.place(relx=0.03, rely=0.5, anchor="center")
@@ -493,6 +501,31 @@ class PO_color_row_panel(CTkFrame):
         if not self.is_selected:
             self.configure(fg_color="transparent")
 
+    def open_edit_color_form(self):
+        # create the edit color form
+        Edit_color_form(
+            parent=self,
+            callback_func=self.edit_color,
+            color_data=self.data,
+        )
+
+    def edit_color(self, color_data):
+        # add po number to the returned color data from form
+        color_data["po_num"] = self.data["po_num"]
+        # destroy the old labels
+        for label in self.labels:
+            label.destroy()
+        # create the new labels
+        self.create_color_widgets(color_data)
+        # remake the select effect
+        self.is_selected = False
+        self.on_click()
+        # update the color in the database
+        DB_UPDATE_COLOR(color_data)
+
+
+
+
     def delete(self):
         # get the parent po panel
         parent_po_panel = self.master.master.master
@@ -505,8 +538,8 @@ class PO_color_row_panel(CTkFrame):
             # delete the color from database
             DB_DELETE_COLOR(
                 self.data["po_num"],
-                self.data["color_codes"][self.row_index],
-                self.data["teams"][self.row_index],
+                self.data["color_code"],
+                self.data["team"],
             )
             # delete the row
             self.destroy()

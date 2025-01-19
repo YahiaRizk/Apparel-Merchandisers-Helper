@@ -1,19 +1,16 @@
 Color palette link --> https://colorhunt.co/palette/181c143c3d37697565ecdfcc
 
+Table panel
+    fix selcet row color to be different from hover color
+
 
 Style top level
-    - refactor create color row:
     - Handle edite color:
-        download icon
-        add button icon to header
         make the top level form
+            fix that team name is invisible
         callback function to handel the layout and database
 
-    - Handle delete color:
-        download icon
-        add button icon to header
-        make the top level form
-        callback function to handel the layout and database
+    - Handle change number of grid rows when increase or decrease the count of the color row
 
     - Handle edite po:
         make the top level form

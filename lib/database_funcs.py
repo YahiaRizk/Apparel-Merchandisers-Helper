@@ -410,8 +410,29 @@ def DB_ADD_COLOR(color_data):
     # insert the color data to colors table
     cr.execute(
         """INSERT INTO colors VALUES(
-                :po_num, :teams, :color_codes, :piece1_colors, :piece2_colors, :color_qtys
+                :po_num, :team, :color_code, :piece1_color, :piece2_color, :color_qty
             )""",
+        color_data,
+    )
+
+    db.commit()
+    db.close()
+
+
+def DB_UPDATE_COLOR(color_data):
+    # conntet to styles database
+    db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
+    cr = db.cursor()
+
+    # update the color data to colors table
+    cr.execute(
+        """UPDATE colors SET
+                color_code = :color_code,
+                piece1_color = :piece1_color,
+                piece2_color = :piece2_color,
+                color_qty = :color_qty
+            WHERE po_num = :po_num AND team = :team""",
         color_data,
     )
 

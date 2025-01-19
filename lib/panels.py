@@ -165,6 +165,8 @@ class Combobox_panel(Panel):
     ):
         super().__init__(parent=parent, label_str=label_str1, label_width=label_width)
 
+        self.data_var1 = data_var1
+
         # widgets
         self.combobox1 = CTkComboBox(
             self,
@@ -175,7 +177,7 @@ class Combobox_panel(Panel):
             fg_color=THIRD_CLR,
             button_color=SECONDARY_CLR,
             border_width=0,
-            variable=data_var1,
+            variable=self.data_var1,
             # justify= 'center'
         )
         self.combobox1.pack(side="left")
