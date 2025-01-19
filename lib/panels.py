@@ -162,6 +162,7 @@ class Combobox_panel(Panel):
         options2=None,
         data_var2=None,
         width=90,
+        state="normal",
     ):
         super().__init__(parent=parent, label_str=label_str1, label_width=label_width)
 
@@ -178,6 +179,8 @@ class Combobox_panel(Panel):
             button_color=SECONDARY_CLR,
             border_width=0,
             variable=self.data_var1,
+            state=state,
+            text_color_disabled= FOURTH_CLR,
             # justify= 'center'
         )
         self.combobox1.pack(side="left")

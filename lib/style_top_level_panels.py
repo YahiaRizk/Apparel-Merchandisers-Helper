@@ -240,7 +240,7 @@ class Po_panel(CTkFrame):
         # need to be repeated for each data on the list
         for i in range(self.data_rows):
             # get the color data for each row
-            color_data= {
+            color_data = {
                 "po_num": self.data["po_num"],
                 "team": self.data["teams"][i],
                 "color_code": self.data["color_codes"][i],
@@ -394,7 +394,6 @@ class PO_color_row_panel(CTkFrame):
         self.data = data
         self.is_selected = False
 
-
         # configure grid layout
         self.columnconfigure((0, 1, 2, 3, 4), weight=1, uniform="a")
 
@@ -522,9 +521,6 @@ class PO_color_row_panel(CTkFrame):
         self.on_click()
         # update the color in the database
         DB_UPDATE_COLOR(color_data)
-
-
-
 
     def delete(self):
         # get the parent po panel
