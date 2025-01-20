@@ -242,6 +242,7 @@ class Po_panel(CTkFrame):
             # get the color data for each row
             color_data = {
                 "po_num": self.data["po_num"],
+                "color_id": self.data["color_ids"][i],
                 "team": self.data["teams"][i],
                 "color_code": self.data["color_codes"][i],
                 "piece1_color": self.data["piece1_colors"][i],
@@ -285,15 +286,18 @@ class Po_panel(CTkFrame):
 
         # increase the row count
         self.data_rows += 1
+
+        # convert color_data dict to suitable format for database(cancels the lists)
+        color_data = CANCEL_LISTS_FROM_DICT_VALUES(color_data)
+        # add to color data to database and get the color id
+        color_id = DB_ADD_COLOR(color_data)
+        # add color id to the returned color data
+        color_data["color_id"] = color_id
+
         # create the color row widgets
         PO_color_row_panel(parent=self.data_container, data=color_data, row_index=self.data_rows)
         # update rowspan for po data widgets
         self.update_rowspan()  # Hold for now
-
-        # convert color_data dict to suitable format for database(cancels the lists)
-        color_data = CANCEL_LISTS_FROM_DICT_VALUES(color_data)
-        # add to database
-        DB_ADD_COLOR(color_data)
 
     def update_rowspan(self):
         # update grid layout for po data
@@ -509,8 +513,9 @@ class PO_color_row_panel(CTkFrame):
         )
 
     def edit_color(self, color_data):
-        # add po number to the returned color data from form
+        # add po number and color id to the returned color data from form
         color_data["po_num"] = self.data["po_num"]
+        color_data["color_id"] = self.data["color_id"]
         # destroy the old labels
         for label in self.labels:
             label.destroy()
