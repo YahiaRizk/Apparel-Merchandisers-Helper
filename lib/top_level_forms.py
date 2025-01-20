@@ -262,9 +262,6 @@ class Edit_color_form(Top_level_form):
 
         # widgets
         self.create_color_widgets(self, self.color_vars)
-        # make the team combobox diabled
-        self.team_widget.combobox1.configure(state="disabled")
-
 
     def init_parameters(self):
         self.color_vars = {

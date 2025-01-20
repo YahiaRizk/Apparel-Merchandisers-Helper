@@ -45,6 +45,7 @@ def DB_CREATE():
     # create colors table
     cr.execute(
         """CREATE TABLE IF NOT EXISTS colors (
+                color_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 po_num INTEGER,
                 team TEXT DEFAULT '',
                 color_code TEXT DEFAULT '',
@@ -326,9 +327,11 @@ def DB_GET_TOP_LEVEL_DATA(id):
         "fabric_gsms": data[11].split(",") if data[11] else [""],
     }
 
+    # get the pos data from pos table and colors table
     cr.execute(
         """SELECT 
                 p.po_num, style_name, smu, size_range, ratio,
+                GROUP_CONCAT(color_id),
                 GROUP_CONCAT(team), 
                 GROUP_CONCAT(color_code), 
                 GROUP_CONCAT(piece1_color), 
@@ -348,6 +351,7 @@ def DB_GET_TOP_LEVEL_DATA(id):
     )
 
     data = cr.fetchall()
+
     # convert the data into dict
     pos_data = [
         {
@@ -356,14 +360,15 @@ def DB_GET_TOP_LEVEL_DATA(id):
             "smu": record[2],
             "size_range": record[3],
             "ratio": record[4],
-            "teams": record[5].split(",") if record[5] else [""],
-            "color_codes": record[6].split(",") if record[6] else [""],
-            "piece1_colors": record[7].split(",") if record[7] else [""],
-            "piece2_colors": record[8].split(",") if record[8] else [""],
-            "color_qtys": list(map(int, record[9].split(","))) if record[9] else [0],
-            "po_qty": record[10],
-            "price": record[11],
-            "shipping_date": record[12],
+            "color_ids": record[5].split(",") if record[5] else [""],
+            "teams": record[6].split(",") if record[6] else [""],
+            "color_codes": record[7].split(",") if record[7] else [""],
+            "piece1_colors": record[8].split(",") if record[8] else [""],
+            "piece2_colors": record[9].split(",") if record[9] else [""],
+            "color_qtys": list(map(int, record[10].split(","))) if record[10] else [0],
+            "po_qty": record[11],
+            "price": record[12],
+            "shipping_date": record[13],
         }
         for record in data
     ]
@@ -391,11 +396,12 @@ def DB_ADD_PO(po_data, color_data):
 
     # insert the color data to colors table
     cr.execute(
-        """INSERT INTO colors VALUES(
-                :po_num, :teams, :color_codes, :piece1_colors, :piece2_colors, :color_qtys
+        """INSERT INTO colors (po_num, team, color_code, piece1_color, piece2_color, color_qty) 
+            VALUES(:po_num, :team, :color_code, :piece1_color, :piece2_color, :color_qty
             )""",
         color_data,
     )
+
 
     db.commit()
     db.close()
@@ -409,14 +415,19 @@ def DB_ADD_COLOR(color_data):
 
     # insert the color data to colors table
     cr.execute(
-        """INSERT INTO colors VALUES(
-                :po_num, :team, :color_code, :piece1_color, :piece2_color, :color_qty
+        """INSERT INTO colors (po_num, team, color_code, piece1_color, piece2_color, color_qty) 
+            VALUES(:po_num, :team, :color_code, :piece1_color, :piece2_color, :color_qty
             )""",
         color_data,
     )
+    # Get the last inserted color_id
+    color_id = cr.lastrowid
 
     db.commit()
     db.close()
+
+    return color_id
+
 
 
 def DB_UPDATE_COLOR(color_data):
@@ -428,11 +439,13 @@ def DB_UPDATE_COLOR(color_data):
     # update the color data to colors table
     cr.execute(
         """UPDATE colors SET
+                team = :team,
                 color_code = :color_code,
                 piece1_color = :piece1_color,
                 piece2_color = :piece2_color,
                 color_qty = :color_qty
-            WHERE po_num = :po_num AND team = :team""",
+            WHERE color_id = :color_id
+            """,
         color_data,
     )
 
