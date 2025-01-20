@@ -82,4 +82,5 @@ class Table_panel(CTkFrame):
         # select clicked row
         self.table.select_row(event["row"])
         # Change selected row color
-        # self.table.edit_row(event['row'], fg_color= THIRD_CLR)
+        # self.table.edit_row(event['row'], fg_color= THIRD_CLR) #change the color unselect the row
+
