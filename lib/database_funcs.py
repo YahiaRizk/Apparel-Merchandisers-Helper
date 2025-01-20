@@ -429,7 +429,6 @@ def DB_ADD_COLOR(color_data):
     return color_id
 
 
-
 def DB_UPDATE_COLOR(color_data):
     # conntet to styles database
     db = sqlite3.connect("DB/styles.db")
@@ -453,7 +452,7 @@ def DB_UPDATE_COLOR(color_data):
     db.close()
 
 
-def DB_DELETE_COLOR(po_num, color_code, team=""):
+def DB_DELETE_COLOR(color_id):
     # conntet to styles database
     db = sqlite3.connect("DB/styles.db")
     db.execute("PRAGMA foreign_keys = ON;")
@@ -461,8 +460,8 @@ def DB_DELETE_COLOR(po_num, color_code, team=""):
 
     # delete the color data from colors table
     cr.execute(
-        "DELETE FROM colors WHERE po_num = ? AND color_code = ? AND team = ?",
-        (po_num, color_code, team),
+        "DELETE FROM colors WHERE color_id = ?",
+        (color_id),
     )
 
     db.commit()

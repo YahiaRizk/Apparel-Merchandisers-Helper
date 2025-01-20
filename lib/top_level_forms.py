@@ -41,6 +41,59 @@ class Top_level_form(CTkToplevel):
     def get_data(self):
         raise NotImplementedError
 
+    def create_po_widgets(self, container, po_vars):
+        Entry_panel(
+            parent=container,
+            label_str="PO Number:",
+            data_var=po_vars["po_number"],
+            entry_width=100,
+            int_bool=True,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="SMU:",
+            data_var=po_vars["smu"],
+            entry_width=100,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="Style:",
+            data_var=po_vars["style"],
+            entry_width=100,
+        )
+        Combobox_panel(
+            parent=container,
+            label_str1="Size Range:",
+            data_var1=po_vars["size_range"],
+            options1=SIZE_SCALES_OPT,
+        )
+        Combobox_panel(
+            parent=container,
+            label_str1="Ratio:",
+            data_var1=po_vars["ratio"],
+            options1=RATIO_OPT,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="PO Qty:",
+            data_var=po_vars["po_qty"],
+            int_bool=True,
+            entry_width=100,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="Cost Price:",
+            data_var=po_vars["cost_price"],
+            entry_width=100,
+            float_bool=True,
+        )
+        Entry_panel(
+            parent=container,
+            label_str="Shipping Date:",
+            data_var=po_vars["Shipping_date"],
+            entry_width=100,
+        )
+
     def create_color_widgets(self, container, color_vars):
         self.team_widget = Combobox_panel(
             parent=container,
@@ -101,7 +154,7 @@ class Add_po_form(Top_level_form):
         self.right_container = CTkFrame(self, fg_color="transparent")
         self.right_container.pack(side="right", fill="both", expand=True)
         # - po widgets and color widgets
-        self.create_po_widgets()
+        self.create_po_widgets(self.left_container, self.po_vars)
         self.create_color_widgets(self.right_container, self.color_vars)
 
     def init_parameters(self):
@@ -157,59 +210,6 @@ class Add_po_form(Top_level_form):
         }
 
         return po_data, color_data
-
-    def create_po_widgets(self):
-        Entry_panel(
-            parent=self.left_container,
-            label_str="PO Number:",
-            data_var=self.po_vars["po_number"],
-            entry_width=100,
-            int_bool=True,
-        )
-        Entry_panel(
-            parent=self.left_container,
-            label_str="SMU:",
-            data_var=self.po_vars["smu"],
-            entry_width=100,
-        )
-        Entry_panel(
-            parent=self.left_container,
-            label_str="Style:",
-            data_var=self.po_vars["style"],
-            entry_width=100,
-        )
-        Combobox_panel(
-            parent=self.left_container,
-            label_str1="Size Range:",
-            data_var1=self.po_vars["size_range"],
-            options1=SIZE_SCALES_OPT,
-        )
-        Combobox_panel(
-            parent=self.left_container,
-            label_str1="Ratio:",
-            data_var1=self.po_vars["ratio"],
-            options1=RATIO_OPT,
-        )
-        Entry_panel(
-            parent=self.left_container,
-            label_str="PO Qty:",
-            data_var=self.po_vars["po_qty"],
-            int_bool=True,
-            entry_width=100,
-        )
-        Entry_panel(
-            parent=self.left_container,
-            label_str="Cost Price:",
-            data_var=self.po_vars["cost_price"],
-            entry_width=100,
-            float_bool=True,
-        )
-        Entry_panel(
-            parent=self.left_container,
-            label_str="Shipping Date:",
-            data_var=self.po_vars["Shipping_date"],
-            entry_width=100,
-        )
 
 
 class Add_color_form(Top_level_form):

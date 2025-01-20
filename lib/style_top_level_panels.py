@@ -537,11 +537,7 @@ class PO_color_row_panel(CTkFrame):
             # update rowspan for po data widgets
             parent_po_panel.update_rowspan()
             # delete the color from database
-            DB_DELETE_COLOR(
-                self.data["po_num"],
-                self.data["color_code"],
-                self.data["team"],
-            )
+            DB_DELETE_COLOR(self.data['color_id'])
             # delete the row
             self.destroy()
 
