@@ -426,6 +426,8 @@ def DB_ADD_COLOR(color_data):
     db.commit()
     db.close()
 
+    return color_id
+
 
 def DB_UPDATE_COLOR(color_data):
     # conntet to styles database

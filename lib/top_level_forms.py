@@ -211,6 +211,62 @@ class Add_po_form(Top_level_form):
 
         return po_data, color_data
 
+class Edit_po_form(Top_level_form):
+    def __init__(self, parent, callback_func, po_data):
+        super().__init__(
+            parent=parent,
+            title="Edit PO",
+            callback_func=callback_func,
+            width=300,
+            height=550,
+        )
+
+        # data
+        self.init_parameters()
+        self.po_vars["po_number"].set(po_data["po_num"])
+        self.po_vars["smu"].set(po_data["smu"])
+        self.po_vars["style"].set(po_data["style_name"])
+        self.po_vars["size_range"].set(po_data["size_range"])
+        self.po_vars["ratio"].set(po_data["ratio"])
+        self.po_vars["po_qty"].set(po_data["po_qty"])
+        self.po_vars["cost_price"].set(po_data["price"])
+        self.po_vars["Shipping_date"].set(po_data["shipping_date"])
+
+        # widgets
+        # - po widgets and color widgets
+        self.create_po_widgets(self, self.po_vars)
+    
+    def init_parameters(self):
+        self.po_vars = {
+            "po_number": StringVar(),
+            "smu": StringVar(),
+            "style": StringVar(),
+            "size_range": StringVar(),
+            "ratio": StringVar(),
+            "po_qty": StringVar(),
+            "cost_price": StringVar(),
+            "Shipping_date": StringVar(),
+        }
+
+    def get_data(self):
+        # get data suitable for po_data_panel
+        po_data = {
+            "po_num": (
+                int(self.po_vars["po_number"].get()) if self.po_vars["po_number"].get() else None
+            ),
+            "smu": self.po_vars["smu"].get().upper(),
+            "style_name": self.po_vars["style"].get().upper(),
+            "size_range": self.po_vars["size_range"].get(),
+            "ratio": self.po_vars["ratio"].get(),
+            "po_qty": int(self.po_vars["po_qty"].get()) if self.po_vars["po_qty"].get() else 0,
+            "price": (
+                float(self.po_vars["cost_price"].get())
+                if self.po_vars["cost_price"].get()
+                else 0.00
+            ),
+            "shipping_date": self.po_vars["Shipping_date"].get(),
+        }
+        return po_data
 
 class Add_color_form(Top_level_form):
     def __init__(self, parent, callback_func):

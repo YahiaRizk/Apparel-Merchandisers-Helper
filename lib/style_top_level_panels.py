@@ -1,6 +1,6 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkImage
 from CTkMessagebox import CTkMessagebox
-from lib.top_level_forms import Add_color_form, Edit_color_form
+from lib.top_level_forms import Add_color_form, Edit_color_form, Edit_po_form
 from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO, DB_DELETE_COLOR, DB_UPDATE_COLOR
 from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES
 from settings import *
@@ -314,7 +314,11 @@ class Po_panel(CTkFrame):
         )
 
     def open_edit_po_form(self):
-        print("edit po")
+        Edit_po_form(parent=self, callback_func=self.edit_po, po_data=self.data)
+
+    def edit_po(self, po_data):
+        print(po_data)
+
 
     def delete_po(self):
         # give confirm message before delete
