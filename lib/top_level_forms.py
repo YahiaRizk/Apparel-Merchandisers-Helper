@@ -42,7 +42,7 @@ class Top_level_form(CTkToplevel):
         raise NotImplementedError
 
     def create_po_widgets(self, container, po_vars):
-        Entry_panel(
+        self.po_num_widget = Entry_panel(
             parent=container,
             label_str="PO Number:",
             data_var=po_vars["po_number"],
@@ -235,6 +235,7 @@ class Edit_po_form(Top_level_form):
         # widgets
         # - po widgets and color widgets
         self.create_po_widgets(self, self.po_vars)
+        self.po_num_widget.entry.configure(state="disabled")
     
     def init_parameters(self):
         self.po_vars = {
