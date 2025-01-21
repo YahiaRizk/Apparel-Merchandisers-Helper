@@ -415,6 +415,9 @@ def DB_UPDATE_PO(po_data):
         po_data,
     )
 
+    db.commit()
+    db.close()
+
 def DB_DELETE_PO(po_num):
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
