@@ -1,7 +1,7 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkImage
 from CTkMessagebox import CTkMessagebox
 from lib.top_level_forms import Add_color_form, Edit_color_form, Edit_po_form
-from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO, DB_DELETE_COLOR, DB_UPDATE_COLOR
+from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO, DB_DELETE_COLOR, DB_UPDATE_COLOR, DB_UPDATE_PO
 from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES
 from settings import *
 from PIL import Image
@@ -317,7 +317,19 @@ class Po_panel(CTkFrame):
         Edit_po_form(parent=self, callback_func=self.edit_po, po_data=self.data)
 
     def edit_po(self, po_data):
-        print(po_data)
+        # update po data in the layout
+        self.style_col.configure(text=po_data["style_name"])
+        self.smu_col.configure(text=po_data["smu"])
+        self.size_range_col.configure(text=po_data["size_range"])
+        self.ratio_col.configure(text=po_data["ratio"])
+        self.po_qty_col.configure(text=po_data["po_qty"])
+        self.price_col.configure(text=f"{po_data['price']} $")
+        self.shipping_date_col.configure(text=po_data["shipping_date"])
+
+        # add gorup id to po returned data to be suitable for database
+        po_data["group_id"] = self.data["group_id"]
+        # update po data in the database
+        DB_UPDATE_PO(po_data)
 
 
     def delete_po(self):

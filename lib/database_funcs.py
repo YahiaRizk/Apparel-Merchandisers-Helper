@@ -275,19 +275,6 @@ def DB_DELETE_STYLE(id):
     db.close()
 
 
-def DB_DELETE_PO(po_num):
-    # Create/connect to data base
-    db = sqlite3.connect("DB/styles.db")
-    db.execute("PRAGMA foreign_keys = ON;")
-    # Create a cursor
-    cr = db.cursor()
-
-    cr.execute("DELETE FROM pos WHERE po_num = ?", (po_num,))
-
-    db.commit()
-    db.close()
-
-
 def DB_GET_TOP_LEVEL_DATA(id):
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
@@ -355,6 +342,7 @@ def DB_GET_TOP_LEVEL_DATA(id):
     # convert the data into dict
     pos_data = [
         {
+            "group_id": id,
             "po_num": record[0],
             "style_name": record[1],
             "smu": record[2],
@@ -406,6 +394,38 @@ def DB_ADD_PO(po_data, color_data):
     db.commit()
     db.close()
 
+def DB_UPDATE_PO(po_data):
+    # Create/connect to data base
+    db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
+    # Create a cursor
+    cr = db.cursor()
+
+    cr.execute(
+        """UPDATE pos SET 
+                smu = :smu,
+                style_name = :style_name,
+                size_range = :size_range,
+                ratio = :ratio,
+                po_qty = :po_qty,
+                cost_price = :price,
+                shipping_date = :shipping_date
+            WHERE po_num = :po_num
+            """,
+        po_data,
+    )
+
+def DB_DELETE_PO(po_num):
+    # Create/connect to data base
+    db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
+    # Create a cursor
+    cr = db.cursor()
+
+    cr.execute("DELETE FROM pos WHERE po_num = ?", (po_num,))
+
+    db.commit()
+    db.close()
 
 def DB_ADD_COLOR(color_data):
     # conntet to styles database
