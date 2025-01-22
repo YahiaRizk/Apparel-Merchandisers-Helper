@@ -385,14 +385,17 @@ def DB_ADD_PO(po_data, color_data):
     # insert the color data to colors table
     cr.execute(
         """INSERT INTO colors (po_num, team, color_code, piece1_color, piece2_color, color_qty) 
-            VALUES(:po_num, :team, :color_code, :piece1_color, :piece2_color, :color_qty
+            VALUES(:po_num, :teams, :color_codes, :piece1_colors, :piece2_colors, :color_qtys
             )""",
         color_data,
     )
-
+    # Get the last inserted color_id
+    color_id = cr.lastrowid
 
     db.commit()
     db.close()
+
+    return color_id
 
 def DB_UPDATE_PO(po_data):
     # Create/connect to data base
