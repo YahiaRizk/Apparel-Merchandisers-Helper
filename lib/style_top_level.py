@@ -56,10 +56,13 @@ class View_style_top_level(CTkToplevel):
         po_data["group_id"] = self.main_data["group_id"]
         # convert color_data dict to suitable format for database(cancels the lists)
         no_list_color_data = CANCEL_LISTS_FROM_DICT_VALUES(color_data)
-        # add to database and get the color id as return
-        color_id = DB_ADD_PO(po_data, no_list_color_data)
+        # add to database and get the color id and updated po_qty as return
+        color_id, po_qty = DB_ADD_PO(po_data, no_list_color_data)
         # add color id to the returned color data
         color_data["color_ids"] = [color_id]
+        # add po_qty to the returned po data
+        po_data["po_qty"] = po_qty
+        
 
         # merge data to create po_data_panel
         merged_data = {**po_data, **color_data}

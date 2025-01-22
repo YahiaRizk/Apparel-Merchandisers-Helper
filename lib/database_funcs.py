@@ -71,30 +71,84 @@ def DB_CREATE():
             )"""
     )
 
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (3, 44315, '2T-4T', 1000)")
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (3, 44316, '4-7', 1500)")
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (3, 44317, '8-16', 2000)")
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (1, 54317, '8-16', 3000)")
-    # cr.execute("INSERT INTO pos (group_id, po_num, size_range, po_qty) VALUES (2, 54318, '8-16', 4000)")
+    # create triggers
+    # -update po_qty on insert, update and delete
+    cr.execute(
+        """
+        CREATE TRIGGER IF NOT EXISTS update_po_qty_on_insert_color
+        AFTER INSERT ON colors
+        BEGIN
+            UPDATE pos SET po_qty = (
+                SELECT SUM(color_qty)
+                FROM colors
+                WHERE po_num = NEW.po_num
+            ) WHERE po_num = NEW.po_num;
+        END;
+        """
+    )
+    cr.execute(
+        """CREATE TRIGGER IF NOT EXISTS update_po_qty_on_update_color
+        AFTER UPDATE ON colors
+        BEGIN
+            UPDATE pos SET po_qty = (
+                SELECT SUM(color_qty)
+                FROM colors
+                WHERE po_num = NEW.po_num
+            ) WHERE po_num = NEW.po_num;
+        END;
+        """
+    )
+    cr.execute(
+        """CREATE TRIGGER IF NOT EXISTS update_po_qty_on_delete_color
+        AFTER DELETE ON colors
+        BEGIN
+            UPDATE pos SET po_qty = (
+                SELECT SUM(color_qty)
+                FROM colors
+                WHERE po_num = OLD.po_num
+            ) WHERE po_num = OLD.po_num;
+        END;
+        """
+    )
 
-    # cr.execute("INSERT INTO colors VALUES (44315, 'LL', 'PUBK', 'PUR', 'BLK', 500)")
-    # cr.execute("INSERT INTO colors VALUES (44315, 'BC', 'KLBK', 'KLY', 'BLK', 500)")
-    # cr.execute("INSERT INTO colors VALUES (44315, 'LL', 'RDBK', 'RED', 'BLK', 500)")
-
-    # cr.execute("INSERT INTO colors VALUES (44316, 'LL', 'PUBK', 'PUR', 'BLK', 500)")
-    # cr.execute("INSERT INTO colors VALUES (44316, 'BC', 'KLBK', 'KLY', 'BLK', 500)")
-    # cr.execute("INSERT INTO colors VALUES (44316, 'LL', 'RDBK', 'RED', 'BLK', 500)")
-
-    # cr.execute("INSERT INTO colors VALUES (44317, 'LL', 'PUBK', 'PUR', 'BLK', 500)")
-    # cr.execute("INSERT INTO colors VALUES (44317, 'BC', 'KLBK', 'KLY', 'BLK', 500)")
-    # cr.execute("INSERT INTO colors VALUES (44317, 'LL', 'RDBK', 'RED', 'BLK', 500)")
-
-    # cr.execute("INSERT INTO colors VALUES (54317, NULL, 'SND', 'SND', 'SND', 500)")
-
-    # cr.execute("INSERT INTO colors VALUES (54318, NULL, 'RED', 'RED', 'RED', 500)")
-
-    # cr.execute("INSERT INTO colors VALUES (54318, '', 'BLK', 'BLK', 'BLK', 500)")
-    # cr.execute("ALTER TABLE style_group RENAME brand TO customer")
+    # -update style_group total_qty on insert, update and delete po
+    cr.execute(
+        """
+        CREATE TRIGGER IF NOT EXISTS update_total_qty_on_insert_po
+        AFTER INSERT ON pos
+        BEGIN
+            UPDATE style_group SET total_qty = (
+                SELECT SUM(po_qty)
+                FROM pos
+                WHERE group_id = NEW.group_id
+            ) WHERE group_id = NEW.group_id;
+        END;
+        """
+    )
+    cr.execute(
+        """CREATE TRIGGER IF NOT EXISTS update_total_qty_on_update_po
+        AFTER UPDATE ON pos
+        BEGIN
+            UPDATE style_group SET total_qty = (
+                SELECT SUM(po_qty)
+                FROM pos
+                WHERE group_id = NEW.group_id
+            ) WHERE group_id = NEW.group_id;
+        END;
+        """
+    )
+    cr.execute(
+        """CREATE TRIGGER IF NOT EXISTS update_total_qty_on_delete_po
+        AFTER DELETE ON pos
+        BEGIN
+            UPDATE style_group SET total_qty = (
+                SELECT SUM(po_qty)
+                FROM pos
+                WHERE group_id = OLD.group_id
+            ) WHERE group_id = OLD.group_id;
+        END;
+        """
+    )
 
     db.commit()
     db.close()
@@ -391,11 +445,15 @@ def DB_ADD_PO(po_data, color_data):
     )
     # Get the last inserted color_id
     color_id = cr.lastrowid
+    # get the new po_qty from pos table after adding the color(with trigger)
+    cr.execute("SELECT po_qty FROM pos WHERE po_num = ?", (po_data["po_num"],))
+    po_qty = cr.fetchone()[0]
 
     db.commit()
     db.close()
 
-    return color_id
+    return color_id, po_qty
+
 
 def DB_UPDATE_PO(po_data):
     # Create/connect to data base
@@ -421,6 +479,7 @@ def DB_UPDATE_PO(po_data):
     db.commit()
     db.close()
 
+
 def DB_DELETE_PO(po_num):
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
@@ -432,6 +491,7 @@ def DB_DELETE_PO(po_num):
 
     db.commit()
     db.close()
+
 
 def DB_ADD_COLOR(color_data):
     # conntet to styles database
@@ -487,7 +547,7 @@ def DB_DELETE_COLOR(color_id):
     # delete the color data from colors table
     cr.execute(
         "DELETE FROM colors WHERE color_id = ?",
-        (color_id),
+        (color_id,),
     )
 
     db.commit()

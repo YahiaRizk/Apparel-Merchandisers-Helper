@@ -331,7 +331,6 @@ class Po_panel(CTkFrame):
         # update po data in the database
         DB_UPDATE_PO(po_data)
 
-
     def delete_po(self):
         # give confirm message before delete
         msg = CTkMessagebox(
