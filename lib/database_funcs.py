@@ -552,3 +552,32 @@ def DB_DELETE_COLOR(color_id):
 
     db.commit()
     db.close()
+
+
+def DB_GET_TOTALS(po_num, group_id):
+    # Create/connect to data base
+    db = sqlite3.connect("DB/styles.db")
+    db.execute("PRAGMA foreign_keys = ON;")
+    # Create a cursor
+    cr = db.cursor()
+
+    cr.execute(
+        "SELECT po_qty FROM pos WHERE po_num = ?",
+        (po_num,),
+    )
+    po_qty = cr.fetchone()
+
+    cr.execute(
+        "SELECT total_qty FROM style_group WHERE group_id = ?",
+        (group_id,),
+    )
+    total_qty = cr.fetchone()
+
+    result = (po_qty[0], total_qty[0])
+
+    db.commit()
+    db.close()
+
+    return result
+
+
