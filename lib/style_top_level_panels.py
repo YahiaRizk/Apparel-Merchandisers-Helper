@@ -241,6 +241,7 @@ class Po_panel(CTkFrame):
         for i in range(self.data_rows):
             # get the color data for each row
             color_data = {
+                "group_id": self.data["group_id"],
                 "po_num": self.data["po_num"],
                 "color_id": self.data["color_ids"][i],
                 "team": self.data["teams"][i],
@@ -281,8 +282,9 @@ class Po_panel(CTkFrame):
         Add_color_form(parent=self, callback_func=self.add_color)
 
     def add_color(self, color_data):
-        # add po number to the returned color data
+        # add po number and group_id to the returned color data
         color_data["po_num"] = self.data["po_num"]
+        color_data["group_id"] = self.data["group_id"]
 
         # increase the row count
         self.data_rows += 1
@@ -298,6 +300,13 @@ class Po_panel(CTkFrame):
         PO_color_row_panel(parent=self.data_container, data=color_data, row_index=self.data_rows)
         # update rowspan for po data widgets
         self.update_rowspan()  # Hold for now
+
+        # update totals in the layout
+        # -get the po total and group total after updateing in database
+        po_total, group_total = DB_GET_TOTALS(po_num=self.data["po_num"], group_id=self.data["group_id"])
+        # -update po total and group total in the layout
+        self.po_qty_col.configure(text=po_total)
+        self.winfo_toplevel().main_info_panel.total_qty_col.configure(text=group_total)
 
     def update_rowspan(self):
         # update grid layout for po data
@@ -331,14 +340,11 @@ class Po_panel(CTkFrame):
         # update po data in the database
         DB_UPDATE_PO(po_data)
 
-
-        print(self.winfo_toplevel())
         # update group total qty in the layout
         # -get the updated total_qty for the group from database
         total_qty = DB_GET_TOTALS(group_id=self.data["group_id"])[1]
         # -update total_qty in the layout
         self.winfo_toplevel().main_info_panel.total_qty_col.configure(text=total_qty)
-
 
     def delete_po(self):
         # give confirm message before delete
@@ -557,6 +563,13 @@ class PO_color_row_panel(CTkFrame):
         # update the color in the database
         DB_UPDATE_COLOR(color_data)
 
+        # update totals in the layout
+        # -get the po total and group total after updateing in database
+        po_total, group_total = DB_GET_TOTALS(po_num=self.data["po_num"], group_id=self.data["group_id"])
+        # -update po total and group total in the layout
+        self.master.master.master.po_qty_col.configure(text=po_total)
+        self.winfo_toplevel().main_info_panel.total_qty_col.configure(text=group_total)
+
     def delete(self):
         # get the parent po panel
         parent_po_panel = self.master.master.master
@@ -568,8 +581,18 @@ class PO_color_row_panel(CTkFrame):
             parent_po_panel.update_rowspan()
             # delete the color from database
             DB_DELETE_COLOR(self.data['color_id'])
+
+            # update totals in the layout
+            # -get the po total and group total after updateing in database
+            po_total, group_total = DB_GET_TOTALS(po_num=self.data["po_num"], group_id=self.data["group_id"])
+            # -update po total and group total in the layout
+            self.master.master.master.po_qty_col.configure(text=po_total)
+            self.winfo_toplevel().main_info_panel.total_qty_col.configure(text=group_total)
+
             # delete the row
             self.destroy()
+
+
 
 
 class Simple_label(CTkLabel):
