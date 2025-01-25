@@ -331,6 +331,15 @@ class Po_panel(CTkFrame):
         # update po data in the database
         DB_UPDATE_PO(po_data)
 
+
+        print(self.winfo_toplevel())
+        # update group total qty in the layout
+        # -get the updated total_qty for the group from database
+        total_qty = DB_GET_TOTALS(group_id=self.data["group_id"])[1]
+        # -update total_qty in the layout
+        self.winfo_toplevel().main_info_panel.total_qty_col.configure(text=total_qty)
+
+
     def delete_po(self):
         # give confirm message before delete
         msg = CTkMessagebox(
@@ -359,13 +368,11 @@ class Po_panel(CTkFrame):
             DB_DELETE_PO(self.data["po_num"])
 
             # update group total qty in the layout
-            # get the updated total_qty for the group from database
+            # -get the updated total_qty for the group from database
             total_qty = DB_GET_TOTALS(group_id=self.data["group_id"])[1]
 
-            # update total_qty in the layout
-            # print(self.master.master)
-            print(GET_ROOT_PARENT(self))
-            GET_ROOT_PARENT(self).main_panel.view_style_top_level.main_info_panel.total_qty_col.configure(text=total_qty)
+            # -update total_qty in the layout
+            self.winfo_toplevel().main_info_panel.total_qty_col.configure(text=total_qty)
 
 class Po_header_panel(CTkFrame):
     def __init__(self, parent, po_num, add_func, edit_func, delete_func):
