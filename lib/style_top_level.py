@@ -2,7 +2,7 @@ from customtkinter import CTkFrame, CTkToplevel, CTkScrollableFrame
 from lib.style_top_level_panels import Main_info_panel, Po_panel
 from lib.top_level_forms import Add_po_form
 from lib.panels import Simple_button
-from lib.database_funcs import DB_ADD_PO
+from lib.database_funcs import DB_ADD_PO, DB_GET_TOTALS
 from lib.funcs import CENTER_WINDOW, CANCEL_LISTS_FROM_DICT_VALUES
 from settings import *
 
@@ -62,6 +62,12 @@ class View_style_top_level(CTkToplevel):
         color_data["color_ids"] = [color_id]
         # add po_qty to the returned po data
         po_data["po_qty"] = po_qty
+
+        # update main info panel data in the layout
+        # - get the updated group_style total_qty from database
+        group_style_total_qty = DB_GET_TOTALS(po_data["po_num"], po_data["group_id"])[1]
+        # update total_qty in the layout
+        self.main_info_panel.total_qty_col.configure(text=group_style_total_qty)
         
 
         # merge data to create po_data_panel

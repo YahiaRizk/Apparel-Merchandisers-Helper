@@ -554,7 +554,7 @@ def DB_DELETE_COLOR(color_id):
     db.close()
 
 
-def DB_GET_TOTALS(po_num, group_id):
+def DB_GET_TOTALS(po_num= '', group_id= ''):
     # Create/connect to data base
     db = sqlite3.connect("DB/styles.db")
     db.execute("PRAGMA foreign_keys = ON;")
@@ -573,7 +573,7 @@ def DB_GET_TOTALS(po_num, group_id):
     )
     total_qty = cr.fetchone()
 
-    result = (po_qty[0], total_qty[0])
+    result = (po_qty[0] if po_qty else po_qty, total_qty[0] if total_qty else total_qty)
 
     db.commit()
     db.close()

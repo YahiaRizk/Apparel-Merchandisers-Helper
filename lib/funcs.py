@@ -22,3 +22,9 @@ def GET_VALUE_IF_NOT_LIST(value, index):
         return value[index] if index < len(value) else ""
     else:
         return value
+    
+
+def GET_ROOT_PARENT(widget):
+    while widget and widget.master:
+        widget = widget.master
+    return widget

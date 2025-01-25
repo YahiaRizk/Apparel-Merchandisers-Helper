@@ -1,8 +1,8 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkImage
 from CTkMessagebox import CTkMessagebox
 from lib.top_level_forms import Add_color_form, Edit_color_form, Edit_po_form
-from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO, DB_DELETE_COLOR, DB_UPDATE_COLOR, DB_UPDATE_PO
-from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES
+from lib.database_funcs import DB_ADD_COLOR, DB_DELETE_PO, DB_DELETE_COLOR, DB_UPDATE_COLOR, DB_UPDATE_PO, DB_GET_TOTALS
+from lib.funcs import CANCEL_LISTS_FROM_DICT_VALUES, GET_ROOT_PARENT
 from settings import *
 from PIL import Image
 
@@ -60,7 +60,7 @@ class Main_info_panel(CTkFrame):
         Simple_label(
             self, text="\n".join(self.data["fabric_gsms"]), column=15, row=1, colspan=2, rowspan=2
         )
-        Simple_label(self, text=self.data["total_qty"], column=17, row=1, colspan=2, rowspan=2)
+        self.total_qty_col = Simple_label(self, text=self.data["total_qty"], column=17, row=1, colspan=2, rowspan=2)
         Simple_label(self, text=self.data["rcvd_date"], column=19, row=1, colspan=2, rowspan=2)
 
 
@@ -358,6 +358,14 @@ class Po_panel(CTkFrame):
             # delete po from database
             DB_DELETE_PO(self.data["po_num"])
 
+            # update group total qty in the layout
+            # get the updated total_qty for the group from database
+            total_qty = DB_GET_TOTALS(group_id=self.data["group_id"])[1]
+
+            # update total_qty in the layout
+            # print(self.master.master)
+            print(GET_ROOT_PARENT(self))
+            GET_ROOT_PARENT(self).main_panel.view_style_top_level.main_info_panel.total_qty_col.configure(text=total_qty)
 
 class Po_header_panel(CTkFrame):
     def __init__(self, parent, po_num, add_func, edit_func, delete_func):
